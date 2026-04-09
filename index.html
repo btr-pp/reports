@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PTT Stock 分析報告索引</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  h1 {
+    color: #58a6ff;
+    font-size: 1.8em;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    color: #8b949e;
+    margin-bottom: 8px;
+  }
+  .stats {
+    color: #8b949e;
+    font-size: 0.9em;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #30363d;
+  }
+  .report-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .report-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #e6edf3;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .report-link:hover {
+    border-color: #58a6ff;
+    background: #1c2333;
+  }
+  .date {
+    color: #58a6ff;
+    font-weight: 600;
+    font-size: 1.05em;
+    min-width: 120px;
+  }
+  .title {
+    color: #8b949e;
+    font-size: 0.95em;
+  }
+  .badge {
+    font-size: 0.7em;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-left: auto;
+  }
+  .badge.new {
+    background: #1b4332;
+    color: #3fb950;
+  }
+  .empty {
+    color: #8b949e;
+    text-align: center;
+    padding: 60px 0;
+    font-size: 1.1em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>PTT Stock 分析報告</h1>
+  <div class="subtitle">推文語意分析 + 海龜通道技術分析</div>
+  <div class="stats">共 0 份報告 | 尚無報告</div>
+  <div class="report-list">
+    <div class="empty">尚無報告，請先執行分析並部署。</div>
+  </div>
+</div>
+</body>
+</html>
