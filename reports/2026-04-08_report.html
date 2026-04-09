@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>PTT Stock 整合分析報告 — 2026-04-08</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: "Microsoft JhengHei", sans-serif; margin: 0; padding: 20px; background: #0d1117; color: #e6edf3; }
+  h1 { color: #58a6ff; margin-bottom: 5px; }
+  h2 { color: #e6edf3; border-bottom: 1px solid #30363d; padding-bottom: 8px; margin-top: 30px; }
+  .subtitle { color: #8b949e; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+  th { background: #161b22; color: #8b949e; font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 2px solid #30363d; }
+  td { padding: 8px 12px; border-bottom: 1px solid #21262d; }
+  tr:hover { background: #161b22; }
+  td.detail { color: #8b949e; font-size: 0.85em; max-width: 300px; }
+  .bullish { color: #3fb950; font-weight: 600; }
+  .bearish { color: #f85149; font-weight: 600; }
+  .neutral { color: #d29922; }
+  .charts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(480px, 1fr)); gap: 16px; margin-top: 15px; }
+  .chart-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; }
+  .chart-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .chart-title { font-weight: 600; font-size: 1.05em; }
+  .tag { font-size: 0.75em; padding: 2px 8px; border-radius: 12px; font-weight: 600; }
+  .tag.bullish { background: #1b4332; color: #3fb950; }
+  .tag.bearish { background: #461220; color: #f85149; }
+  .tag.neutral { background: #2d2000; color: #d29922; }
+  .legend { display: flex; gap: 16px; margin: 10px 0; font-size: 0.85em; color: #8b949e; }
+  .legend span::before { content: ''; display: inline-block; width: 20px; height: 3px; margin-right: 4px; vertical-align: middle; }
+  .leg-close::before { background: #00b4d8; }
+  .leg-u20::before { background: rgba(229,69,96,0.8); border-top: 2px dashed rgba(229,69,96,0.8); }
+  .leg-l20::before { background: rgba(82,183,136,0.8); border-top: 2px dashed rgba(82,183,136,0.8); }
+  .leg-10::before { background: rgba(255,209,102,0.5); border-top: 2px dashed rgba(255,209,102,0.5); }
+</style>
+</head>
+<body>
+
+<h1>PTT Stock 整合分析報告</h1>
+<div class="subtitle">2026-04-08 | 推文語意分析 + 海龜通道（20/10）</div>
+
+<h2>推薦股票總覽</h2>
+<table>
+<tr>
+  <th>代碼</th><th>名稱</th><th>推文情緒</th>
+  <th>收盤價</th><th>20日高</th><th>20日低</th><th>通道位置</th><th>技術訊號</th>
+  <th>說明</th>
+</tr>
+<tr>
+  <td>2330</td>
+  <td>台積電</td>
+  <td class="bullish">極度看多</td>
+  <td>1860.0</td>
+  <td>1950.0</td>
+  <td>1760.0</td>
+  <td>53%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤中】大漲近5%，搓合價從1900拉到1950收最高，多數人認為2000以下是禮物，法說會前看好，年底目標喊到2500-3000。【盤後】盤後ADR續強至1975，多人預期明天回2000+，後天營收為催化劑，「七巨頭只是GG打工仔」，定投正二信仰堅定。盤中47多/4空，盤後23多/0空。</td>
+</tr>
+<tr>
+  <td>2454</td>
+  <td>聯發科</td>
+  <td class="neutral">多空分歧</td>
+  <td>1470.0</td>
+  <td>1815.0</td>
+  <td>1430.0</td>
+  <td>10%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail">【盤中】看多(26多/7空)，早盤弱勢被罵爛，午後急拉漲近100元，尾盤搓漲停，從絕望到狂喜的劇烈反轉。【盤後】看空(0多/6空/2中性)，被多人罵垃圾股，跌多彈少、反彈不如台積電，外資投信同步賣超，持有者急欲出脫。盤中盤後情緒劇烈反轉，需注意。</td>
+</tr>
+<tr>
+  <td>1717</td>
+  <td>長興化工</td>
+  <td class="bullish">極度看多</td>
+  <td>61.0</td>
+  <td>68.9</td>
+  <td>57.4</td>
+  <td>31%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤中】7多/0空，開盤買進即漲停鎖死，多人興奮慶祝。</td>
+</tr>
+<tr>
+  <td>6944</td>
+  <td>兆聯實業</td>
+  <td class="bullish">看多</td>
+  <td>896.0</td>
+  <td>896.0</td>
+  <td>716.0</td>
+  <td>100%</td>
+  <td class="bullish">突破買進</td>
+  <td class="detail">【盤中】5多/0空，台積電亞利桑那水資源題材，漲停，長線持有者喊目標上千。</td>
+</tr>
+<tr>
+  <td>6190</td>
+  <td>萬泰科技</td>
+  <td class="bullish">看多</td>
+  <td>55.5</td>
+  <td>61.0</td>
+  <td>46.0</td>
+  <td>63%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤中】4多/0空，低軌道衛星概念股，最低價補漲邏輯，目標70以上。</td>
+</tr>
+<tr>
+  <td>2317</td>
+  <td>鴻海</td>
+  <td class="bearish">極度看空</td>
+  <td>192.0</td>
+  <td>220.0</td>
+  <td>187.5</td>
+  <td>14%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail">【盤中】極度看空(4多/23空)，今日最慘個股，200元關卡過不去、外資持續出貨、與廣達/台達電對比極弱。【盤後】偏多但消息可靠性存疑(1多/1中性)，傳聞大戶老蘇買進，可能是萬海誤傳。盤中共識強烈看空。</td>
+</tr>
+<tr>
+  <td>2344</td>
+  <td>華邦電</td>
+  <td class="bearish">極度看空</td>
+  <td>89.4</td>
+  <td>129.5</td>
+  <td>85.2</td>
+  <td>9%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail">【盤中】極度看空(0多/8空)，「華崩」暱稱深入人心，記憶體族群中最弱，全數看空無一看多。【盤後】多空分歧(1多/1空)，有人認為跌深應反彈漲停。</td>
+</tr>
+<tr>
+  <td>8299</td>
+  <td>群聯</td>
+  <td class="bearish">看空</td>
+  <td>1570.0</td>
+  <td>2080.0</td>
+  <td>1475.0</td>
+  <td>16%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail">【盤中】偏空(6多/7空)，早盤開高走低被罵，午盤雖接近漲停但多方信心不足，營收未開、籌碼差、與愷俠對比弱勢。【盤後】看空(0多/1空)，凱俠大漲但群聯被忽視，相對弱勢。</td>
+</tr>
+<tr>
+  <td>3661</td>
+  <td>世芯-KY</td>
+  <td class="bearish">看空</td>
+  <td>2705.0</td>
+  <td>3515.0</td>
+  <td>2480.0</td>
+  <td>22%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤中】偏空(2多/3空)，持有者反覆抱怨漲不動，信心不足。【盤後】看空(0多/5空/1中性)，被罵垃圾股、弱勢股代表，多人質疑為何要買。</td>
+</tr>
+<tr>
+  <td>3711</td>
+  <td>日月光投控</td>
+  <td class="bearish">看空</td>
+  <td>352.0</td>
+  <td>385.0</td>
+  <td>318.5</td>
+  <td>50%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤中】看空，被罵「勞賽」。</td>
+</tr>
+<tr>
+  <td>3413</td>
+  <td>京鼎</td>
+  <td class="bearish">看空</td>
+  <td>293.0</td>
+  <td>326.0</td>
+  <td>288.0</td>
+  <td>13%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail">【盤中】看空，回300又要烙賽。</td>
+</tr>
+<tr>
+  <td>2412</td>
+  <td>中華電</td>
+  <td class="bearish">看空</td>
+  <td>134.0</td>
+  <td>137.5</td>
+  <td>133.0</td>
+  <td>22%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤後】看空(0多/2空)，牛皮股，持有者抱怨「沒有任何進展」，套牢等解套。</td>
+</tr>
+<tr>
+  <td>1402</td>
+  <td>遠東新</td>
+  <td class="bearish">看空</td>
+  <td>26.5</td>
+  <td>28.9</td>
+  <td>25.6</td>
+  <td>28%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤後】看空(0多/1空)，大盤大漲日唯一收綠，考慮停損。</td>
+</tr>
+<tr>
+  <td>6024</td>
+  <td>群益台灣精選高息</td>
+  <td class="bearish">看空</td>
+  <td>56.8</td>
+  <td>57.4</td>
+  <td>53.0</td>
+  <td>86%</td>
+  <td class="bullish">通道上緣</td>
+  <td class="detail">【盤後】看空(0多/3空)，ETF表現不佳，持有者失望。</td>
+</tr>
+<tr>
+  <td>9951</td>
+  <td>皇田</td>
+  <td class="bearish">看空</td>
+  <td>53.2</td>
+  <td>55.2</td>
+  <td>52.6</td>
+  <td>23%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤後】看空(0多/1空)，營收好但股價不漲。</td>
+</tr>
+<tr>
+  <td>4736</td>
+  <td>泰博</td>
+  <td class="bearish">看空</td>
+  <td>122.0</td>
+  <td>130.0</td>
+  <td>121.0</td>
+  <td>11%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail">【盤後】看空(0多/1空)，營收好但股價不漲。</td>
+</tr>
+<tr>
+  <td>2382</td>
+  <td>廣達</td>
+  <td class="bullish">看多</td>
+  <td>289.0</td>
+  <td>307.5</td>
+  <td>275.5</td>
+  <td>42%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤後】看多(1多/0空)，營收表現驚人（3628億），正面評價。</td>
+</tr>
+<tr>
+  <td>2887</td>
+  <td>台新金</td>
+  <td class="bullish">看多</td>
+  <td>24.4</td>
+  <td>25.2</td>
+  <td>23.1</td>
+  <td>60%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤後】看多(1多/0空)，特別股殖利率5%+受推薦。</td>
+</tr>
+<tr>
+  <td>7813</td>
+  <td>瑞芯微</td>
+  <td class="bullish">看多</td>
+  <td>93.4</td>
+  <td>152.5</td>
+  <td>86.8</td>
+  <td>10%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail">【盤後】看多(1多/0空)，單日暴漲56%，市場驚嘆，短線極強但需注意追高風險。</td>
+</tr>
+<tr>
+  <td>1314</td>
+  <td>中石化</td>
+  <td class="neutral">中性</td>
+  <td>8.3</td>
+  <td>9.8</td>
+  <td>8.1</td>
+  <td>13%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail">【盤後】中性(0多/0空/1中性)，有重訊公布，但推文僅詢問未表態。</td>
+</tr>
+<tr>
+  <td>2233</td>
+  <td>宇隆</td>
+  <td class="bullish">看多</td>
+  <td>215.0</td>
+  <td>253.0</td>
+  <td>208.5</td>
+  <td>15%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail">【盤中】潛力股，同一人連喊三次「昇龍拳」形容漲勢越來越猛。</td>
+</tr>
+<tr>
+  <td>3324</td>
+  <td>雙鴻</td>
+  <td class="bullish">看多</td>
+  <td>918.0</td>
+  <td>1115.0</td>
+  <td>875.0</td>
+  <td>18%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail">【盤中】潛力股，漲停大逆轉，散熱族群。</td>
+</tr>
+<tr>
+  <td>6239</td>
+  <td>力成</td>
+  <td class="bullish">看多</td>
+  <td>192.0</td>
+  <td>220.0</td>
+  <td>185.5</td>
+  <td>19%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail">【盤中】潛力股，漲停，封測族群。</td>
+</tr>
+<tr>
+  <td>6830</td>
+  <td>—</td>
+  <td class="bullish">看多</td>
+  <td>602.0</td>
+  <td>662.0</td>
+  <td>333.0</td>
+  <td>82%</td>
+  <td class="bullish">通道上緣</td>
+  <td class="detail">【盤中】潛力股，連續漲停，成本拉開。</td>
+</tr>
+<tr>
+  <td>6285</td>
+  <td>啟碁</td>
+  <td class="bullish">看多</td>
+  <td>197.0</td>
+  <td>216.5</td>
+  <td>151.0</td>
+  <td>70%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤中】潛力股，持續噴漲，低軌道衛星相關。</td>
+</tr>
+<tr>
+  <td>3037</td>
+  <td>欣興</td>
+  <td class="bullish">看多</td>
+  <td>564.0</td>
+  <td>620.0</td>
+  <td>410.0</td>
+  <td>73%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤中】潛力股，漲停，PCB龍頭。</td>
+</tr>
+<tr>
+  <td>2376</td>
+  <td>技嘉</td>
+  <td class="bullish">看多</td>
+  <td>222.5</td>
+  <td>251.0</td>
+  <td>216.5</td>
+  <td>17%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail">【盤中】潛力股，接近漲停，AI伺服器概念。</td>
+</tr>
+<tr>
+  <td>3388</td>
+  <td>崇越電</td>
+  <td class="bullish">看多</td>
+  <td>65.8</td>
+  <td>72.0</td>
+  <td>62.0</td>
+  <td>38%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤中】潛力股，有人賣飛後悔，暗示持續走強。</td>
+</tr>
+<tr>
+  <td>3017</td>
+  <td>奇鋐</td>
+  <td class="bullish">看多</td>
+  <td>2030.0</td>
+  <td>2310.0</td>
+  <td>1665.0</td>
+  <td>57%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">【盤中】潛力股，越來越高沒什麼跌，散熱族群穩健。</td>
+</tr>
+
+</table>
+
+<h2>海龜通道圖表</h2>
+<div class="legend">
+  <span class="leg-close">收盤價</span>
+  <span class="leg-u20">20日上軌</span>
+  <span class="leg-l20">20日下軌</span>
+  <span class="leg-10">10日上/下軌</span>
+</div>
+<div class="charts-grid">
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2330 台積電</span>
+    <span class="tag bullish">極度看多</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_2330" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2454 聯發科</span>
+    <span class="tag neutral">多空分歧</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_2454" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">1717 長興化工</span>
+    <span class="tag bullish">極度看多</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_1717" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">6944 兆聯實業</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag bullish">突破買進</span>
+  </div>
+  <canvas id="chart_6944" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">6190 萬泰科技</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_6190" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2317 鴻海</span>
+    <span class="tag bearish">極度看空</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_2317" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2344 華邦電</span>
+    <span class="tag bearish">極度看空</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_2344" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">8299 群聯</span>
+    <span class="tag bearish">看空</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_8299" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">3661 世芯-KY</span>
+    <span class="tag bearish">看空</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_3661" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">3711 日月光投控</span>
+    <span class="tag bearish">看空</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_3711" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">3413 京鼎</span>
+    <span class="tag bearish">看空</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_3413" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2412 中華電</span>
+    <span class="tag bearish">看空</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_2412" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">1402 遠東新</span>
+    <span class="tag bearish">看空</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_1402" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">6024 群益台灣精選高息</span>
+    <span class="tag bearish">看空</span>
+    <span class="tag bullish">通道上緣</span>
+  </div>
+  <canvas id="chart_6024" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">9951 皇田</span>
+    <span class="tag bearish">看空</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_9951" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">4736 泰博</span>
+    <span class="tag bearish">看空</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_4736" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2382 廣達</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_2382" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2887 台新金</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_2887" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">7813 瑞芯微</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_7813" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">1314 中石化</span>
+    <span class="tag neutral">中性</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_1314" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2233 宇隆</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_2233" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">3324 雙鴻</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_3324" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">6239 力成</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_6239" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">6830 —</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag bullish">通道上緣</span>
+  </div>
+  <canvas id="chart_6830" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">6285 啟碁</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_6285" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">3037 欣興</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_3037" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2376 技嘉</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_2376" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">3388 崇越電</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_3388" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">3017 奇鋐</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_3017" height="200"></canvas>
+</div>
+
+</div>
+
+<script>
+
+// --- 2330 台積電 ---
+new Chart(document.getElementById('chart_2330'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [1835.0, 1835.0, 1835.0, 1835.0, 1880.0, 1925.0, 1935.0, 1975.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2010.0, 1995.0, 1980.0, 1960.0, 1960.0, 1950.0, 1950.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [1835.0, 1835.0, 1835.0, 1835.0, 1880.0, 1925.0, 1935.0, 1975.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2010.0, 1995.0, 1980.0, 1960.0, 1960.0, 1950.0, 1950.0, 1950.0, 1950.0, 1915.0, 1910.0, 1910.0, 1910.0, 1910.0, 1880.0, 1875.0, 1875.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [1785.0, 1765.0, 1780.0, 1815.0, 1880.0, 1915.0, 1900.0, 1965.0, 2015.0, 1995.0, 1975.0, 1935.0, 1865.0, 1900.0, 1890.0, 1810.0, 1850.0, 1940.0, 1885.0, 1865.0, 1845.0, 1870.0, 1905.0, 1850.0, 1840.0, 1810.0, 1810.0, 1845.0, 1840.0, 1820.0, 1780.0, 1760.0, 1855.0, 1810.0, 1860.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [1745.0, 1745.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1815.0, 1840.0, 1865.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1785.0, 1785.0, 1785.0, 1785.0, 1785.0, 1780.0, 1760.0, 1760.0, 1760.0, 1760.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [1655.0, 1655.0, 1680.0, 1680.0, 1680.0, 1680.0, 1710.0, 1725.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1760.0, 1760.0, 1760.0, 1760.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2330 台積電', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2454 聯發科 ---
+new Chart(document.getElementById('chart_2454'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [1820.0, 1820.0, 1820.0, 1870.0, 1870.0, 1870.0, 1880.0, 1880.0, 1880.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1945.0, 1910.0, 1815.0, 1815.0, 1815.0, 1815.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [1820.0, 1820.0, 1820.0, 1870.0, 1870.0, 1870.0, 1880.0, 1880.0, 1880.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1975.0, 1945.0, 1910.0, 1815.0, 1815.0, 1815.0, 1815.0, 1815.0, 1815.0, 1815.0, 1745.0, 1745.0, 1745.0, 1745.0, 1715.0, 1715.0, 1665.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [1800.0, 1770.0, 1710.0, 1830.0, 1845.0, 1855.0, 1795.0, 1825.0, 1870.0, 1945.0, 1900.0, 1815.0, 1720.0, 1775.0, 1765.0, 1665.0, 1705.0, 1765.0, 1785.0, 1720.0, 1710.0, 1730.0, 1730.0, 1680.0, 1700.0, 1625.0, 1620.0, 1620.0, 1590.0, 1585.0, 1510.0, 1490.0, 1465.0, 1465.0, 1470.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [1465.0, 1525.0, 1685.0, 1685.0, 1685.0, 1685.0, 1685.0, 1685.0, 1690.0, 1690.0, 1690.0, 1690.0, 1715.0, 1715.0, 1715.0, 1610.0, 1610.0, 1610.0, 1610.0, 1610.0, 1610.0, 1610.0, 1610.0, 1610.0, 1610.0, 1600.0, 1600.0, 1600.0, 1590.0, 1545.0, 1505.0, 1490.0, 1460.0, 1445.0, 1430.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [1415.0, 1415.0, 1425.0, 1450.0, 1450.0, 1450.0, 1450.0, 1450.0, 1450.0, 1450.0, 1465.0, 1525.0, 1685.0, 1685.0, 1685.0, 1610.0, 1610.0, 1610.0, 1610.0, 1610.0, 1610.0, 1610.0, 1610.0, 1610.0, 1610.0, 1600.0, 1600.0, 1600.0, 1590.0, 1545.0, 1505.0, 1490.0, 1460.0, 1445.0, 1430.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2454 聯發科', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 1717 長興化工 ---
+new Chart(document.getElementById('chart_1717'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 70.9000015258789, 70.5999984741211, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 70.4000015258789, 68.9000015258789, 68.9000015258789, 68.9000015258789, 68.9000015258789], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [70.5999984741211, 70.5999984741211, 70.5999984741211, 70.5999984741211, 70.5999984741211, 70.5999984741211, 64.5, 63.900001525878906, 63.900001525878906, 69.0, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 72.19999694824219, 70.4000015258789, 68.5, 68.5, 68.5, 68.9000015258789, 68.9000015258789, 68.9000015258789, 68.9000015258789, 68.9000015258789, 68.9000015258789, 68.9000015258789, 68.9000015258789, 68.9000015258789, 68.9000015258789, 65.4000015258789], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [59.79999923706055, 57.0, 54.099998474121094, 54.70000076293945, 55.400001525878906, 56.79999923706055, 59.20000076293945, 63.099998474121094, 62.79999923706055, 69.0, 67.80000305175781, 65.0999984741211, 59.400001525878906, 61.29999923706055, 62.79999923706055, 57.599998474121094, 58.29999923706055, 63.79999923706055, 63.400001525878906, 64.69999694824219, 63.599998474121094, 63.70000076293945, 62.900001525878906, 62.70000076293945, 66.69999694824219, 62.0, 60.20000076293945, 62.5, 61.599998474121094, 61.70000076293945, 60.29999923706055, 57.599998474121094, 60.0, 61.900001525878906, 61.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [55.70000076293945, 55.70000076293945, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 54.5, 54.599998474121094, 54.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 57.400001525878906, 58.099998474121094, 58.099998474121094, 58.099998474121094, 58.099998474121094, 58.099998474121094, 57.5, 57.5, 57.5, 57.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [48.20000076293945, 48.20000076293945, 52.0, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 54.5, 54.599998474121094, 54.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094, 56.599998474121094], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '1717 長興化工', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 6944 兆聯實業 ---
+new Chart(document.getElementById('chart_6944'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07", "2026-04-08"],
+    datasets: [
+      { label: '20日上軌', data: [803.0, 803.0, 803.0, 803.0, 803.0, 803.0, 803.0, 783.0, 783.0, 774.0, 774.0, 774.0, 774.0, 774.0, 774.0, 774.0, 774.0, 774.0, 796.0, 826.0, 826.0, 826.0, 853.0, 853.0, 858.0, 858.0, 858.0, 858.0, 858.0, 858.0, 858.0, 858.0, 858.0, 858.0, 858.0, 896.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [760.0, 760.0, 755.0, 739.0, 739.0, 738.0, 724.0, 713.0, 742.0, 774.0, 774.0, 774.0, 774.0, 774.0, 774.0, 774.0, 774.0, 774.0, 796.0, 826.0, 826.0, 826.0, 853.0, 853.0, 858.0, 858.0, 858.0, 858.0, 858.0, 858.0, 858.0, 858.0, 858.0, 858.0, 829.0, 896.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [693.0, 678.0, 677.0, 697.0, 667.0, 677.0, 685.0, 701.0, 728.0, 766.0, 730.0, 718.0, 667.0, 733.0, 752.0, 690.0, 727.0, 743.0, 787.0, 786.0, 800.0, 785.0, 831.0, 839.0, 826.0, 789.0, 776.0, 785.0, 777.0, 800.0, 769.0, 759.0, 810.0, 780.0, 815.0, 896.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [677.0, 676.0, 658.0, 658.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 663.0, 663.0, 663.0, 663.0, 663.0, 663.0, 663.0, 663.0, 678.0, 678.0, 678.0, 716.0, 736.0, 736.0, 771.0, 751.0, 751.0, 747.0, 747.0, 747.0, 747.0, 747.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [677.0, 676.0, 658.0, 658.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 655.0, 663.0, 663.0, 663.0, 663.0, 663.0, 663.0, 663.0, 663.0, 678.0, 678.0, 678.0, 716.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '6944 兆聯實業', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 6190 萬泰科技 ---
+new Chart(document.getElementById('chart_6190'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [59.5, 59.5, 59.5, 59.5, 59.5, 59.5, 59.5, 59.5, 59.5, 59.5, 59.5, 59.5, 59.5, 59.5, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 56.70000076293945, 56.70000076293945, 56.70000076293945, 57.20000076293945, 57.20000076293945, 57.20000076293945, 57.20000076293945, 57.20000076293945, 57.20000076293945, 59.0, 59.0, 59.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [59.5, 59.5, 59.5, 59.5, 52.5, 51.599998474121094, 51.70000076293945, 51.70000076293945, 51.79999923706055, 51.79999923706055, 53.0, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 51.900001525878906, 52.5, 56.70000076293945, 56.70000076293945, 56.70000076293945, 57.20000076293945, 57.20000076293945, 57.20000076293945, 57.20000076293945, 57.20000076293945, 57.20000076293945, 59.0, 59.0, 59.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [49.849998474121094, 48.29999923706055, 48.650001525878906, 48.099998474121094, 47.349998474121094, 47.400001525878906, 50.900001525878906, 51.599998474121094, 50.20000076293945, 51.099998474121094, 52.599998474121094, 50.900001525878906, 47.650001525878906, 49.099998474121094, 48.599998474121094, 44.0, 46.54999923706055, 51.20000076293945, 51.0, 50.29999923706055, 50.29999923706055, 50.0, 51.900001525878906, 56.0, 54.29999923706055, 54.29999923706055, 52.5, 54.900001525878906, 52.20000076293945, 55.0, 53.29999923706055, 54.20000076293945, 55.29999923706055, 53.20000076293945, 55.5], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.650001525878906, 46.650001525878906, 46.650001525878906, 46.650001525878906, 46.650001525878906, 46.650001525878906, 46.650001525878906, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 46.0, 47.54999923706055, 49.75, 49.75, 49.75, 49.95000076293945, 50.20000076293945, 50.900001525878906, 50.900001525878906, 50.900001525878906], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 46.150001525878906, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75, 43.75], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '6190 萬泰科技', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2317 鴻海 ---
+new Chart(document.getElementById('chart_2317'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [237.5, 235.0, 235.0, 235.0, 235.0, 235.0, 235.0, 233.5, 247.0, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 241.0, 240.0, 228.0, 228.0, 223.5, 220.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [231.5, 231.5, 231.5, 231.5, 231.5, 227.5, 231.0, 232.5, 247.0, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 253.5, 241.0, 240.0, 228.0, 228.0, 223.5, 220.0, 220.0, 220.0, 218.5, 217.5, 217.5, 216.5, 213.5, 207.5, 206.0, 206.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [219.0, 215.5, 215.0, 218.5, 221.0, 227.0, 228.5, 232.0, 246.5, 243.0, 239.0, 229.0, 217.0, 224.0, 223.0, 210.5, 209.5, 219.0, 214.5, 214.5, 216.5, 212.0, 210.0, 205.0, 203.0, 196.0, 195.0, 200.0, 200.5, 199.5, 194.0, 187.5, 197.0, 193.0, 192.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [213.5, 213.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 216.5, 216.5, 216.5, 206.0, 206.0, 206.0, 206.0, 206.0, 206.0, 206.0, 206.0, 205.0, 200.5, 195.0, 194.0, 194.0, 194.0, 194.0, 193.0, 187.5, 187.5, 187.5, 187.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [213.5, 213.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 210.5, 206.0, 206.0, 206.0, 206.0, 206.0, 206.0, 206.0, 206.0, 205.0, 200.5, 195.0, 194.0, 194.0, 194.0, 194.0, 193.0, 187.5, 187.5, 187.5, 187.5], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2317 鴻海', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2344 華邦電 ---
+new Chart(document.getElementById('chart_2344'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 127.0, 127.0, 127.0, 127.0, 127.0, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 123.5, 124.0, 124.0, 127.0, 127.0, 127.0, 127.0, 127.0, 127.0, 127.0, 127.0, 127.0, 127.0, 125.0, 126.0, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 125.5, 124.5, 109.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [108.5, 102.5, 97.80000305175781, 107.5, 103.5, 105.5, 115.0, 122.0, 118.0, 122.5, 124.5, 112.5, 104.0, 112.0, 106.5, 101.0, 105.5, 114.0, 109.0, 109.0, 117.0, 123.5, 128.0, 122.0, 110.0, 107.5, 99.5, 98.19999694824219, 96.0, 92.4000015258789, 93.0, 90.19999694824219, 93.0999984741211, 91.80000305175781, 89.4000015258789], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [99.4000015258789, 99.4000015258789, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 101.0, 101.5, 101.5, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 101.5, 97.0, 97.0, 96.0, 87.19999694824219, 87.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [96.5, 96.5, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 87.19999694824219, 87.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2344 華邦電', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 8299 群聯 ---
+new Chart(document.getElementById('chart_8299'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2275.0, 2275.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2275.0, 2275.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2015.0, 1945.0, 1945.0, 1980.0, 2070.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2015.0, 1995.0, 1870.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [2055.0, 2020.0, 1895.0, 1925.0, 1825.0, 1855.0, 1925.0, 2070.0, 1925.0, 1890.0, 1920.0, 1755.0, 1705.0, 1800.0, 1770.0, 1605.0, 1745.0, 1890.0, 1810.0, 1800.0, 1980.0, 1945.0, 1975.0, 1960.0, 1915.0, 1800.0, 1685.0, 1725.0, 1650.0, 1565.0, 1605.0, 1500.0, 1650.0, 1555.0, 1570.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [1935.0, 1935.0, 1820.0, 1820.0, 1795.0, 1795.0, 1795.0, 1795.0, 1795.0, 1795.0, 1795.0, 1755.0, 1610.0, 1610.0, 1610.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1695.0, 1620.0, 1620.0, 1620.0, 1485.0, 1485.0, 1475.0, 1475.0, 1475.0, 1475.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [1530.0, 1530.0, 1660.0, 1690.0, 1740.0, 1765.0, 1795.0, 1795.0, 1795.0, 1795.0, 1795.0, 1755.0, 1610.0, 1610.0, 1610.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1485.0, 1485.0, 1475.0, 1475.0, 1475.0, 1475.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '8299 群聯', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 3661 世芯-KY ---
+new Chart(document.getElementById('chart_3661'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [3740.0, 3735.0, 3735.0, 3735.0, 3735.0, 3665.0, 3665.0, 3665.0, 3665.0, 3665.0, 3665.0, 3665.0, 3665.0, 3665.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3515.0, 3515.0, 3515.0, 3515.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [3665.0, 3665.0, 3665.0, 3665.0, 3475.0, 3425.0, 3470.0, 3495.0, 3515.0, 3530.0, 3530.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3535.0, 3415.0, 3415.0, 3415.0, 3515.0, 3515.0, 3515.0, 3515.0, 3515.0, 3515.0, 3515.0, 3515.0, 3515.0, 3515.0, 3335.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [3385.0, 3245.0, 3115.0, 3285.0, 3300.0, 3380.0, 3330.0, 3430.0, 3480.0, 3490.0, 3440.0, 3355.0, 3120.0, 3270.0, 3310.0, 2995.0, 3060.0, 3365.0, 3315.0, 3190.0, 3125.0, 3190.0, 3300.0, 3220.0, 3375.0, 3190.0, 3110.0, 3150.0, 3065.0, 3040.0, 2750.0, 2485.0, 2730.0, 2705.0, 2705.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3090.0, 3090.0, 3090.0, 3090.0, 3120.0, 3120.0, 3120.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 3005.0, 3085.0, 3085.0, 3065.0, 2970.0, 2745.0, 2480.0, 2480.0, 2480.0, 2480.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 3040.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2980.0, 2970.0, 2745.0, 2480.0, 2480.0, 2480.0, 2480.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '3661 世芯-KY', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 3711 日月光投控 ---
+new Chart(document.getElementById('chart_3711'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [317.5, 317.5, 317.5, 330.0, 359.0, 359.0, 376.0, 383.0, 392.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 382.0, 377.5, 366.0, 366.0, 375.5, 375.5], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [317.5, 317.5, 317.5, 330.0, 359.0, 359.0, 376.0, 383.0, 392.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 394.0, 382.0, 377.5, 357.0, 363.0, 363.0, 363.0, 363.0, 363.0, 363.0, 366.0, 366.0, 366.0, 366.0, 366.0, 375.5, 375.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [302.5, 284.0, 304.5, 327.0, 344.0, 354.5, 349.0, 381.5, 389.0, 387.5, 370.5, 359.5, 327.5, 353.5, 342.0, 320.0, 335.5, 345.5, 335.0, 341.5, 337.5, 342.0, 357.5, 347.0, 344.0, 329.5, 332.5, 352.0, 359.0, 353.5, 353.5, 328.5, 361.0, 361.0, 352.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [288.5, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 298.0, 316.5, 325.5, 325.5, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0, 318.5, 318.5, 318.5, 318.5, 318.5, 318.5, 318.5, 318.5, 318.5, 318.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [261.5, 261.5, 275.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 279.0, 298.0, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0, 308.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '3711 日月光投控', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 3413 京鼎 ---
+new Chart(document.getElementById('chart_3413'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 316.5, 316.5, 316.5, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 326.0, 326.0, 326.0, 326.0, 326.0, 326.0, 326.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [315.0, 315.0, 315.0, 315.0, 315.0, 301.0, 316.5, 316.5, 316.5, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 325.0, 317.0, 312.5, 312.0, 312.0, 313.5, 313.5, 313.5, 313.5, 324.0, 326.0, 326.0, 326.0, 326.0, 326.0, 326.0, 326.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [292.0, 284.0, 281.5, 294.5, 291.5, 289.0, 312.5, 310.5, 314.0, 316.0, 309.5, 302.5, 290.0, 298.5, 310.0, 294.5, 304.5, 310.0, 305.0, 305.0, 308.0, 302.5, 307.0, 305.0, 301.0, 297.0, 300.0, 323.5, 311.5, 311.0, 303.5, 289.0, 295.0, 293.5, 293.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [276.5, 276.5, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 291.0, 291.0, 291.0, 291.0, 291.0, 291.0, 288.0, 288.0, 288.0, 288.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [272.5, 272.5, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 275.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0, 287.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '3413 京鼎', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2412 中華電 ---
+new Chart(document.getElementById('chart_2412'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [134.5, 134.5, 134.5, 134.5, 134.5, 134.5, 135.0, 135.5, 136.0, 136.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 137.5, 137.5, 137.5, 137.5], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [134.5, 134.5, 134.5, 134.5, 134.5, 134.5, 135.0, 135.5, 136.0, 136.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 138.0, 137.5, 137.5, 137.5, 137.5, 137.5, 137.5, 137.5, 137.5, 137.5, 137.5, 137.5, 137.0, 136.5, 136.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [133.0, 132.5, 133.0, 132.0, 132.5, 133.0, 135.0, 135.5, 136.0, 134.0, 138.0, 138.0, 135.5, 137.0, 136.5, 136.0, 135.0, 135.5, 136.0, 136.0, 136.5, 137.0, 137.5, 135.5, 134.0, 134.0, 134.0, 135.0, 134.5, 134.0, 134.0, 133.0, 134.0, 134.0, 134.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [133.0, 132.5, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.5, 133.5, 134.0, 134.0, 134.0, 134.5, 134.5, 134.5, 134.5, 134.5, 134.0, 133.0, 133.0, 133.0, 133.0, 133.0, 133.0, 133.0, 133.0, 133.0, 133.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [132.5, 132.5, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.0, 132.5, 133.0, 133.0, 133.0, 133.0, 133.0, 133.0, 133.0, 133.0, 133.0, 133.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2412 中華電', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 1402 遠東新 ---
+new Chart(document.getElementById('chart_1402'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [29.299999237060547, 29.299999237060547, 29.299999237060547, 29.299999237060547, 29.299999237060547, 29.299999237060547, 29.299999237060547, 29.299999237060547, 29.299999237060547, 29.299999237060547, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 29.700000762939453, 29.700000762939453, 29.700000762939453, 29.700000762939453, 29.700000762939453], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [29.299999237060547, 29.299999237060547, 29.299999237060547, 29.299999237060547, 28.700000762939453, 28.600000381469727, 28.700000762939453, 28.700000762939453, 28.700000762939453, 28.850000381469727, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 31.649999618530273, 29.700000762939453, 29.700000762939453, 29.700000762939453, 29.700000762939453, 29.700000762939453, 28.850000381469727, 28.850000381469727, 28.600000381469727, 28.049999237060547, 27.549999237060547, 27.350000381469727, 27.200000762939453, 27.299999237060547, 27.299999237060547, 27.299999237060547], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [28.200000762939453, 28.600000381469727, 28.0, 28.350000381469727, 28.0, 28.399999618530273, 28.200000762939453, 28.200000762939453, 28.450000762939453, 28.799999237060547, 29.149999618530273, 29.100000381469727, 28.299999237060547, 27.899999618530273, 29.25, 28.700000762939453, 28.600000381469727, 28.450000762939453, 27.950000762939453, 27.299999237060547, 27.299999237060547, 27.049999237060547, 26.850000381469727, 26.700000762939453, 26.399999618530273, 25.899999618530273, 26.100000381469727, 25.950000762939453, 26.399999618530273, 26.25, 26.299999237060547, 26.299999237060547, 27.149999618530273, 26.649999618530273, 26.549999237060547], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.700000762939453, 27.700000762939453, 27.799999237060547, 27.799999237060547, 27.950000762939453, 27.799999237060547, 27.799999237060547, 27.799999237060547, 27.799999237060547, 27.799999237060547, 27.799999237060547, 27.299999237060547, 27.100000381469727, 27.0, 26.75, 26.399999618530273, 26.350000381469727, 25.799999237060547, 25.700000762939453, 25.649999618530273, 25.649999618530273, 25.649999618530273, 25.649999618530273, 25.649999618530273, 25.649999618530273, 25.649999618530273, 25.649999618530273], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.25, 27.700000762939453, 27.299999237060547, 27.100000381469727, 27.0, 26.75, 26.399999618530273, 26.350000381469727, 25.799999237060547, 25.700000762939453, 25.649999618530273, 25.649999618530273, 25.649999618530273, 25.649999618530273, 25.649999618530273, 25.649999618530273, 25.649999618530273, 25.649999618530273], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '1402 遠東新', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 6024 群益台灣精選高息 ---
+new Chart(document.getElementById('chart_6024'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [52.70000076293945, 52.70000076293945, 52.5, 52.400001525878906, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 54.400001525878906, 55.29999923706055, 56.0, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.79999923706055, 56.79999923706055], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [52.400001525878906, 52.400001525878906, 52.400001525878906, 52.29999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.79999923706055, 53.20000076293945, 53.20000076293945, 54.400001525878906, 55.29999923706055, 56.0, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.400001525878906, 56.29999923706055, 55.79999923706055, 56.099998474121094, 56.400001525878906, 56.79999923706055, 56.79999923706055], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [51.29999923706055, 51.0, 50.599998474121094, 51.20000076293945, 52.79999923706055, 52.29999923706055, 52.70000076293945, 52.5, 52.70000076293945, 53.099998474121094, 52.79999923706055, 52.5, 51.400001525878906, 52.099998474121094, 52.0, 52.79999923706055, 54.29999923706055, 55.099998474121094, 55.400001525878906, 56.0, 55.20000076293945, 55.5, 55.099998474121094, 55.0, 55.400001525878906, 54.900001525878906, 54.599998474121094, 54.900001525878906, 54.70000076293945, 54.79999923706055, 55.20000076293945, 56.0, 56.400001525878906, 55.900001525878906, 56.79999923706055], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [50.70000076293945, 50.70000076293945, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.70000076293945, 51.0, 51.0, 51.0, 51.0, 51.0, 51.0, 51.0, 51.0, 51.0, 51.099998474121094, 51.099998474121094, 51.099998474121094, 53.0, 54.400001525878906, 54.5, 54.400001525878906, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094, 53.599998474121094], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [50.70000076293945, 50.70000076293945, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.29999923706055, 50.70000076293945, 51.0, 51.0, 51.0, 51.0, 51.0, 51.0, 51.0, 51.0, 51.0, 51.099998474121094, 51.099998474121094, 51.099998474121094], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '6024 群益台灣精選高息', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 9951 皇田 ---
+new Chart(document.getElementById('chart_9951'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [59.400001525878906, 59.400001525878906, 59.400001525878906, 59.400001525878906, 59.400001525878906, 59.400001525878906, 59.400001525878906, 59.400001525878906, 58.20000076293945, 57.0, 57.0, 56.70000076293945, 56.599998474121094, 56.599998474121094, 56.29999923706055, 56.0, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.79999923706055, 55.79999923706055, 55.79999923706055, 55.5, 55.29999923706055, 55.20000076293945, 55.20000076293945, 55.20000076293945, 55.20000076293945, 55.20000076293945], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [57.0, 56.70000076293945, 56.599998474121094, 56.599998474121094, 56.29999923706055, 56.0, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.900001525878906, 55.79999923706055, 55.79999923706055, 55.79999923706055, 55.5, 55.29999923706055, 55.0, 55.20000076293945, 55.20000076293945, 55.20000076293945, 55.20000076293945, 55.20000076293945, 55.20000076293945, 55.20000076293945, 55.20000076293945, 55.20000076293945, 55.20000076293945, 55.0, 55.0, 55.0, 54.599998474121094], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [55.0, 55.0, 54.79999923706055, 54.70000076293945, 54.5, 55.599998474121094, 55.599998474121094, 55.70000076293945, 55.70000076293945, 55.099998474121094, 55.099998474121094, 54.900001525878906, 53.400001525878906, 54.0, 54.099998474121094, 52.599998474121094, 53.400001525878906, 53.5, 53.900001525878906, 54.400001525878906, 55.0, 55.0, 54.5, 54.099998474121094, 54.79999923706055, 54.099998474121094, 54.20000076293945, 53.900001525878906, 53.900001525878906, 53.5, 53.29999923706055, 53.29999923706055, 53.5, 53.29999923706055, 53.20000076293945], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [54.5, 54.5, 54.20000076293945, 54.20000076293945, 54.099998474121094, 54.099998474121094, 54.099998474121094, 54.099998474121094, 54.099998474121094, 54.099998474121094, 54.099998474121094, 54.099998474121094, 52.400001525878906, 52.400001525878906, 52.400001525878906, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.599998474121094, 53.0, 53.0, 53.0, 53.20000076293945, 53.0, 53.0, 53.0, 53.0, 53.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [54.5, 54.5, 54.20000076293945, 54.20000076293945, 54.099998474121094, 54.099998474121094, 54.099998474121094, 54.099998474121094, 54.099998474121094, 54.099998474121094, 54.099998474121094, 54.099998474121094, 52.400001525878906, 52.400001525878906, 52.400001525878906, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0, 52.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '9951 皇田', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 4736 泰博 ---
+new Chart(document.getElementById('chart_4736'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07", "2026-04-08"],
+    datasets: [
+      { label: '20日上軌', data: [137.0, 137.0, 137.0, 137.0, 137.0, 137.0, 137.0, 137.0, 137.0, 137.0, 137.0, 137.0, 137.0, 136.5, 136.5, 136.0, 135.0, 134.5, 133.5, 132.0, 132.0, 130.5, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [137.0, 137.0, 137.0, 136.5, 136.5, 136.0, 135.0, 134.5, 133.5, 132.0, 132.0, 130.5, 129.5, 128.0, 129.0, 129.0, 129.0, 129.5, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 127.5, 127.5, 127.5, 127.5, 126.5, 125.0, 125.0, 125.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [130.0, 131.0, 128.0, 127.0, 126.5, 125.5, 123.5, 121.5, 124.0, 124.5, 127.0, 124.5, 123.0, 128.0, 128.5, 124.0, 126.5, 129.0, 126.0, 125.0, 126.0, 127.0, 127.0, 124.0, 124.5, 123.0, 123.5, 124.0, 124.0, 124.5, 122.5, 121.5, 122.5, 122.5, 122.0, 122.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [126.5, 129.5, 127.0, 126.5, 125.0, 124.5, 122.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.5, 122.5, 122.5, 122.5, 122.5, 123.5, 123.5, 123.0, 122.5, 122.5, 122.5, 122.5, 122.5, 122.5, 121.5, 121.5, 121.0, 121.0, 121.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [122.0, 122.0, 123.5, 124.5, 124.5, 124.5, 122.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.0, 121.5, 122.5, 122.5, 122.5, 121.5, 121.5, 121.0, 121.0, 121.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '4736 泰博', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2382 廣達 ---
+new Chart(document.getElementById('chart_2382'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [292.0, 292.0, 292.0, 292.0, 292.0, 292.0, 292.0, 292.0, 299.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 295.0, 295.0, 295.0, 295.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [292.0, 292.0, 292.0, 292.0, 292.0, 288.0, 288.5, 288.5, 299.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 302.0, 293.0, 295.0, 295.0, 295.0, 295.0, 295.0, 295.0, 295.0, 295.0, 295.0, 295.0, 292.0, 291.5, 291.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [278.0, 273.0, 279.5, 284.0, 285.0, 286.0, 283.5, 284.0, 297.5, 291.5, 301.0, 294.5, 281.0, 289.5, 289.0, 282.0, 282.5, 289.0, 288.5, 289.0, 289.0, 289.0, 293.0, 286.5, 283.5, 280.0, 281.5, 285.0, 287.0, 289.0, 281.0, 278.5, 290.5, 284.5, 289.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [271.5, 271.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 281.0, 281.0, 281.0, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0, 275.5, 275.5, 275.5, 275.5, 275.5, 275.5, 275.5, 275.5, 275.5, 275.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [271.5, 271.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 268.5, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0, 272.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2382 廣達', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2887 台新金 ---
+new Chart(document.getElementById('chart_2887'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [23.450000762939453, 23.450000762939453, 23.450000762939453, 24.0, 24.0, 24.200000762939453, 25.450000762939453, 25.5, 25.5, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 25.399999618530273, 25.399999618530273, 25.200000762939453, 25.200000762939453, 25.200000762939453, 25.200000762939453], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [23.450000762939453, 23.450000762939453, 23.450000762939453, 24.0, 24.0, 24.200000762939453, 25.450000762939453, 25.5, 25.5, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 26.0, 25.399999618530273, 25.399999618530273, 25.200000762939453, 25.200000762939453, 25.200000762939453, 25.200000762939453, 25.200000762939453, 25.200000762939453, 25.200000762939453, 25.200000762939453, 25.200000762939453, 25.100000381469727, 25.100000381469727, 24.799999237060547, 24.799999237060547, 24.799999237060547], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [23.049999237060547, 23.100000381469727, 23.350000381469727, 23.799999237060547, 23.950000762939453, 24.0, 25.299999237060547, 25.299999237060547, 24.899999618530273, 25.600000381469727, 24.850000381469727, 25.299999237060547, 24.149999618530273, 24.549999237060547, 24.399999618530273, 23.950000762939453, 24.299999237060547, 24.350000381469727, 24.649999618530273, 24.75, 24.799999237060547, 25.049999237060547, 24.600000381469727, 24.450000762939453, 24.649999618530273, 23.899999618530273, 24.149999618530273, 24.450000762939453, 24.149999618530273, 24.049999237060547, 23.75, 23.149999618530273, 24.049999237060547, 24.350000381469727, 24.350000381469727], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [22.049999237060547, 22.100000381469727, 22.100000381469727, 22.200000762939453, 22.200000762939453, 22.200000762939453, 22.200000762939453, 22.200000762939453, 22.649999618530273, 22.75, 22.799999237060547, 22.799999237060547, 23.399999618530273, 23.700000762939453, 23.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 23.450000762939453, 23.450000762939453, 23.450000762939453, 23.450000762939453, 23.450000762939453, 23.350000381469727, 23.100000381469727, 23.100000381469727, 23.100000381469727, 23.100000381469727], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [20.549999237060547, 20.549999237060547, 20.799999237060547, 20.799999237060547, 21.0, 21.25, 21.649999618530273, 21.649999618530273, 22.049999237060547, 22.049999237060547, 22.049999237060547, 22.100000381469727, 22.100000381469727, 22.200000762939453, 22.200000762939453, 22.200000762939453, 22.200000762939453, 22.200000762939453, 22.649999618530273, 22.75, 22.799999237060547, 22.799999237060547, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273, 22.899999618530273], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2887 台新金', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 7813 瑞芯微 ---
+new Chart(document.getElementById('chart_7813'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [97.9000015258789, 97.9000015258789, 97.9000015258789, 95.5999984741211, 94.5999984741211, 94.30000305175781, 94.0, 93.9000015258789, 96.5, 96.5, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 101.5, 101.5, 101.5, 101.5, 101.5], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [91.80000305175781, 91.4000015258789, 91.4000015258789, 91.0, 91.0, 91.0, 91.0, 93.80000305175781, 96.5, 96.5, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 102.0, 99.0, 99.5, 100.0, 100.0, 101.5, 101.5, 101.5, 101.5, 101.5, 101.5, 101.5, 101.5, 101.5, 101.5, 100.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [88.9000015258789, 89.19999694824219, 88.4000015258789, 88.9000015258789, 89.80000305175781, 89.30000305175781, 89.80000305175781, 93.5999984741211, 95.19999694824219, 93.4000015258789, 99.0, 97.0, 92.69999694824219, 95.19999694824219, 94.5, 91.9000015258789, 92.5, 92.9000015258789, 91.5999984741211, 91.5, 92.80000305175781, 98.69999694824219, 97.9000015258789, 97.9000015258789, 99.19999694824219, 96.5, 97.80000305175781, 97.5999984741211, 96.80000305175781, 96.0999984741211, 92.0, 90.9000015258789, 94.30000305175781, 93.9000015258789, 93.4000015258789], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.30000305175781, 87.30000305175781, 87.30000305175781, 87.30000305175781, 87.30000305175781, 87.5, 88.30000305175781, 88.30000305175781, 89.4000015258789, 89.4000015258789, 89.4000015258789, 88.0, 88.0, 88.0, 88.0, 88.0, 88.0, 88.0, 88.0, 88.0, 88.0, 91.0, 90.0, 86.80000305175781, 86.80000305175781, 86.80000305175781, 86.80000305175781], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.0999984741211, 87.30000305175781, 87.30000305175781, 87.30000305175781, 87.30000305175781, 87.30000305175781, 87.5, 88.0, 88.0, 88.0, 88.0, 88.0, 88.0, 88.0, 86.80000305175781, 86.80000305175781, 86.80000305175781, 86.80000305175781], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '7813 瑞芯微', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 1314 中石化 ---
+new Chart(document.getElementById('chart_1314'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [8.5600004196167, 8.5600004196167, 8.5600004196167, 8.5600004196167, 8.5600004196167, 8.5600004196167, 8.5600004196167, 8.5600004196167, 8.579999923706055, 8.579999923706055, 8.640000343322754, 8.640000343322754, 8.640000343322754, 8.640000343322754, 8.920000076293945, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [8.5600004196167, 8.5600004196167, 8.5600004196167, 8.5600004196167, 8.350000381469727, 8.25, 8.260000228881836, 8.550000190734863, 8.579999923706055, 8.579999923706055, 8.640000343322754, 8.640000343322754, 8.640000343322754, 8.640000343322754, 8.920000076293945, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.8100004196167, 9.550000190734863, 9.550000190734863, 9.550000190734863, 9.550000190734863, 9.0600004196167, 9.029999732971191, 9.029999732971191, 9.029999732971191, 9.029999732971191, 9.029999732971191], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [8.039999961853027, 8.010000228881836, 7.849999904632568, 7.980000019073486, 7.869999885559082, 7.920000076293945, 8.210000038146973, 8.460000038146973, 8.319999694824219, 8.3100004196167, 8.25, 8.40999984741211, 8.140000343322754, 8.109999656677246, 8.920000076293945, 9.8100004196167, 8.960000038146973, 8.489999771118164, 8.819999694824219, 8.739999771118164, 8.6899995803833, 8.510000228881836, 8.529999732971191, 8.649999618530273, 8.489999771118164, 8.399999618530273, 8.319999694824219, 8.1899995803833, 8.300000190734863, 8.109999656677246, 8.210000038146973, 8.130000114440918, 8.239999771118164, 8.149999618530273, 8.289999961853027], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.789999961853027, 7.800000190734863, 7.800000190734863, 7.829999923706055, 7.829999923706055, 7.840000152587891, 7.880000114440918, 8.050000190734863, 8.050000190734863, 8.050000190734863, 8.050000190734863, 8.050000190734863, 8.050000190734863, 8.050000190734863, 8.100000381469727, 8.300000190734863, 8.300000190734863, 8.220000267028809, 8.140000343322754, 8.140000343322754, 8.069999694824219, 8.069999694824219, 8.069999694824219, 8.069999694824219, 8.069999694824219, 8.069999694824219], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.769999980926514, 7.789999961853027, 7.800000190734863, 7.800000190734863, 7.829999923706055, 7.829999923706055, 7.840000152587891, 7.880000114440918, 8.050000190734863, 8.050000190734863, 8.050000190734863, 8.050000190734863, 8.050000190734863, 8.050000190734863, 8.050000190734863, 8.069999694824219, 8.069999694824219], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '1314 中石化', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2233 宇隆 ---
+new Chart(document.getElementById('chart_2233'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 276.0, 254.0, 243.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 276.0, 254.0, 243.0, 243.0, 243.0, 243.0, 243.0, 239.5, 239.5, 239.5, 239.5, 239.5, 243.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0, 253.0, 244.0, 244.0, 237.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [255.0, 233.0, 222.0, 228.5, 223.0, 223.0, 235.5, 234.0, 229.0, 233.5, 235.5, 235.0, 223.0, 229.5, 227.0, 207.0, 211.0, 220.0, 226.0, 226.5, 233.0, 237.0, 239.0, 231.5, 235.0, 226.0, 226.5, 232.5, 232.0, 233.0, 225.5, 217.0, 225.5, 218.5, 215.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [224.0, 228.5, 221.5, 221.5, 221.0, 218.5, 218.5, 218.5, 218.5, 218.5, 218.5, 218.5, 218.5, 218.5, 218.5, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 208.5, 212.5, 218.0, 220.5, 224.5, 223.0, 215.5, 215.5, 215.5, 215.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [204.5, 204.5, 212.0, 221.5, 221.0, 218.5, 218.5, 218.5, 218.5, 218.5, 218.5, 218.5, 218.5, 218.5, 218.5, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2233 宇隆', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 3324 雙鴻 ---
+new Chart(document.getElementById('chart_3324'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [1030.0, 1080.0, 1080.0, 1120.0, 1160.0, 1160.0, 1160.0, 1160.0, 1160.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1180.0, 1180.0, 1115.0, 1115.0, 1115.0, 1115.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [1030.0, 1080.0, 1080.0, 1120.0, 1160.0, 1160.0, 1160.0, 1160.0, 1160.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1200.0, 1180.0, 1180.0, 1100.0, 1100.0, 1115.0, 1115.0, 1115.0, 1115.0, 1115.0, 1115.0, 1115.0, 1115.0, 1115.0, 1115.0, 1090.0, 1075.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [1015.0, 1000.0, 1030.0, 1105.0, 1080.0, 1065.0, 1015.0, 1050.0, 1155.0, 1155.0, 1130.0, 1080.0, 972.0, 978.0, 989.0, 894.0, 938.0, 1030.0, 1050.0, 1055.0, 1035.0, 1050.0, 1030.0, 1070.0, 1065.0, 1005.0, 1005.0, 1035.0, 985.0, 993.0, 956.0, 879.0, 920.0, 910.0, 918.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 948.0, 948.0, 948.0, 948.0, 972.0, 972.0, 971.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 915.0, 948.0, 981.0, 981.0, 932.0, 932.0, 875.0, 875.0, 875.0, 875.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 884.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 891.0, 875.0, 875.0, 875.0, 875.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '3324 雙鴻', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 6239 力成 ---
+new Chart(document.getElementById('chart_6239'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [280.0, 280.0, 280.0, 280.0, 280.0, 280.0, 280.0, 280.0, 280.0, 280.0, 280.0, 280.0, 280.0, 280.0, 275.0, 269.0, 263.0, 263.0, 263.0, 263.0, 263.0, 263.0, 263.0, 263.0, 263.0, 263.0, 263.0, 261.0, 261.0, 255.5, 255.5, 230.0, 230.0, 228.0, 220.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [280.0, 280.0, 280.0, 280.0, 275.0, 269.0, 262.0, 263.0, 263.0, 263.0, 263.0, 263.0, 263.0, 263.0, 263.0, 263.0, 263.0, 261.0, 261.0, 255.5, 255.5, 230.0, 230.0, 228.0, 220.0, 220.0, 220.0, 215.0, 215.0, 215.0, 215.0, 215.0, 213.0, 211.5, 211.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [252.5, 244.0, 239.5, 243.0, 240.0, 243.0, 249.0, 257.5, 258.0, 258.0, 253.0, 231.0, 217.0, 224.5, 225.0, 202.5, 214.5, 215.5, 204.5, 201.0, 204.0, 202.5, 211.0, 205.5, 201.5, 192.0, 192.0, 203.5, 198.5, 195.0, 196.0, 187.0, 195.0, 202.0, 192.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [238.0, 238.0, 232.0, 232.0, 232.0, 232.0, 232.0, 232.0, 232.0, 232.0, 232.0, 228.0, 211.0, 211.0, 211.0, 202.5, 202.5, 202.5, 201.0, 196.5, 196.5, 196.5, 196.5, 196.5, 196.5, 190.0, 188.0, 188.0, 188.0, 188.0, 188.0, 185.5, 185.5, 185.5, 185.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [190.5, 190.5, 206.5, 230.0, 232.0, 232.0, 232.0, 232.0, 232.0, 232.0, 232.0, 228.0, 211.0, 211.0, 211.0, 202.5, 202.5, 202.5, 201.0, 196.5, 196.5, 196.5, 196.5, 196.5, 196.5, 190.0, 188.0, 188.0, 188.0, 188.0, 188.0, 185.5, 185.5, 185.5, 185.5], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '6239 力成', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 6830 — ---
+new Chart(document.getElementById('chart_6830'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [207.0, 227.5, 227.5, 227.5, 231.5, 231.5, 240.0, 240.0, 259.5, 285.0, 313.5, 325.0, 332.0, 361.5, 397.5, 411.0, 411.0, 411.0, 411.0, 411.0, 411.0, 411.0, 411.0, 422.5, 450.0, 470.0, 501.0, 501.0, 501.0, 501.0, 501.0, 501.0, 514.0, 565.0, 620.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [207.0, 227.5, 227.5, 227.5, 231.5, 231.5, 240.0, 240.0, 259.5, 285.0, 313.5, 325.0, 332.0, 361.5, 397.5, 411.0, 411.0, 411.0, 411.0, 411.0, 411.0, 411.0, 411.0, 422.5, 450.0, 470.0, 501.0, 501.0, 501.0, 501.0, 501.0, 501.0, 514.0, 565.0, 620.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [207.0, 227.5, 205.0, 225.5, 222.0, 218.5, 226.5, 236.0, 259.5, 285.0, 313.5, 310.5, 329.0, 361.5, 397.5, 386.5, 377.0, 393.0, 388.0, 349.5, 355.0, 371.5, 384.5, 419.0, 450.0, 456.0, 410.5, 431.0, 474.0, 434.5, 452.0, 467.5, 514.0, 565.0, 602.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 176.5, 185.5, 189.0, 197.0, 197.0, 197.0, 212.5, 212.5, 221.5, 221.5, 249.5, 274.0, 281.0, 288.0, 288.0, 333.0, 333.0, 333.0, 333.0, 333.0, 333.0, 333.0, 333.0, 370.0, 376.5, 387.5, 398.5, 398.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 176.5, 185.5, 189.0, 197.0, 197.0, 197.0, 212.5, 212.5, 221.5, 221.5, 249.5, 274.0, 281.0, 288.0, 288.0, 333.0, 333.0, 333.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '6830 —', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 6285 啟碁 ---
+new Chart(document.getElementById('chart_6285'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 202.5, 197.5, 197.5, 197.5, 197.5, 197.5, 197.5, 195.0, 195.0, 195.0, 195.0, 190.0, 190.0, 190.0, 197.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 207.5, 202.5, 197.5, 197.5, 197.5, 197.5, 197.5, 197.5, 195.0, 195.0, 195.0, 195.0, 181.5, 181.5, 181.5, 183.0, 183.0, 183.0, 183.0, 190.0, 190.0, 190.0, 190.0, 190.0, 190.0, 197.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [207.5, 187.0, 175.0, 173.0, 172.5, 172.0, 180.5, 188.5, 190.0, 187.0, 184.5, 176.5, 159.5, 164.5, 166.0, 152.0, 156.5, 163.5, 167.5, 167.5, 175.0, 176.5, 173.5, 173.0, 173.5, 166.0, 167.0, 180.0, 172.0, 188.5, 179.0, 170.0, 178.0, 179.5, 197.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [138.0, 147.5, 152.0, 152.0, 159.5, 167.5, 167.5, 167.5, 167.5, 167.5, 167.5, 167.5, 159.0, 159.0, 159.0, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 151.0, 158.0, 160.0, 160.0, 164.0, 164.0, 164.0, 164.0, 164.0, 164.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [101.5, 101.5, 104.0, 106.5, 107.0, 107.0, 107.0, 117.0, 124.0, 128.0, 138.0, 147.5, 152.0, 152.0, 159.0, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5, 149.5], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '6285 啟碁', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 3037 欣興 ---
+new Chart(document.getElementById('chart_3037'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [401.0, 401.0, 401.0, 401.0, 401.0, 401.0, 405.5, 446.0, 463.0, 484.5, 504.0, 504.0, 504.0, 504.0, 504.0, 504.0, 504.0, 504.0, 504.0, 509.0, 550.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [401.0, 401.0, 401.0, 401.0, 401.0, 401.0, 405.5, 446.0, 463.0, 484.5, 504.0, 504.0, 504.0, 504.0, 504.0, 504.0, 504.0, 504.0, 504.0, 509.0, 550.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 591.0, 590.0, 577.0, 570.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [388.0, 365.5, 340.0, 347.5, 371.5, 369.0, 405.5, 446.0, 458.5, 481.5, 481.0, 463.0, 417.0, 450.0, 432.0, 389.0, 424.0, 466.0, 480.0, 508.0, 549.0, 543.0, 580.0, 581.0, 554.0, 499.0, 460.0, 506.0, 502.0, 505.0, 493.5, 444.5, 488.5, 519.0, 564.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [318.0, 318.0, 318.0, 329.0, 329.0, 329.0, 329.0, 329.0, 329.0, 329.0, 329.0, 329.0, 332.5, 351.0, 366.5, 387.0, 389.0, 389.0, 389.0, 389.0, 389.0, 389.0, 389.0, 389.0, 389.0, 410.0, 445.0, 449.5, 449.5, 449.5, 449.5, 444.5, 444.5, 444.5, 444.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [219.5, 221.5, 234.5, 242.5, 245.5, 245.5, 247.0, 274.5, 295.5, 310.5, 318.0, 318.0, 318.0, 329.0, 329.0, 329.0, 329.0, 329.0, 329.0, 329.0, 329.0, 329.0, 332.5, 351.0, 366.5, 387.0, 389.0, 389.0, 389.0, 389.0, 389.0, 389.0, 389.0, 389.0, 389.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '3037 欣興', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2376 技嘉 ---
+new Chart(document.getElementById('chart_2376'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [253.0, 250.0, 250.0, 250.0, 250.0, 250.0, 248.0, 247.5, 247.5, 247.5, 247.5, 247.5, 247.5, 247.5, 244.0, 242.5, 239.5, 239.5, 239.5, 239.5, 239.5, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [247.5, 247.5, 247.5, 247.5, 244.0, 242.5, 236.0, 234.0, 238.0, 239.5, 239.5, 239.5, 239.5, 239.5, 239.5, 239.5, 239.5, 239.5, 239.5, 239.5, 239.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 242.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [229.0, 226.0, 227.5, 224.0, 226.5, 229.5, 227.0, 228.0, 235.0, 239.5, 236.5, 229.0, 214.0, 218.0, 219.0, 215.0, 221.0, 232.0, 228.0, 233.0, 236.5, 248.0, 249.5, 247.5, 248.5, 232.5, 235.0, 234.0, 233.5, 235.0, 228.0, 222.5, 232.0, 228.0, 222.5], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [224.5, 224.5, 219.0, 219.0, 219.0, 219.0, 219.0, 219.0, 219.0, 219.0, 219.0, 219.0, 214.0, 214.0, 214.0, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 216.5, 223.0, 226.5, 227.5, 230.0, 228.0, 221.5, 221.5, 221.5, 221.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [224.5, 224.5, 219.0, 219.0, 219.0, 219.0, 219.0, 219.0, 219.0, 219.0, 219.0, 219.0, 214.0, 214.0, 214.0, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5, 206.5], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2376 技嘉', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 3388 崇越電 ---
+new Chart(document.getElementById('chart_3388'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 64.0, 63.5, 63.29999923706055, 63.29999923706055, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.29999923706055, 64.4000015258789, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [64.0, 64.0, 63.5, 63.29999923706055, 63.29999923706055, 62.70000076293945, 62.79999923706055, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.099998474121094, 63.29999923706055, 64.4000015258789, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.69999694824219, 66.5, 66.5, 66.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [61.900001525878906, 62.20000076293945, 61.900001525878906, 62.0, 61.900001525878906, 62.099998474121094, 62.400001525878906, 62.599998474121094, 62.599998474121094, 62.70000076293945, 62.599998474121094, 62.599998474121094, 61.900001525878906, 62.79999923706055, 63.0, 62.20000076293945, 62.099998474121094, 62.29999923706055, 62.70000076293945, 62.5, 63.099998474121094, 64.4000015258789, 66.19999694824219, 65.5999984741211, 65.9000015258789, 65.19999694824219, 65.4000015258789, 65.80000305175781, 65.5, 65.0, 64.19999694824219, 64.30000305175781, 66.0, 65.9000015258789, 65.80000305175781], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [61.70000076293945, 61.70000076293945, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.70000076293945, 61.70000076293945, 61.70000076293945, 62.0, 62.0, 62.099998474121094, 62.29999923706055, 62.599998474121094, 63.20000076293945, 64.0, 64.0, 64.0, 64.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [61.29999923706055, 61.29999923706055, 61.5, 61.5, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.599998474121094, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.5, 61.70000076293945, 61.70000076293945, 61.70000076293945], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '3388 崇越電', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 3017 奇鋐 ---
+new Chart(document.getElementById('chart_3017'), {
+  type: 'line',
+  data: {
+    labels: ["2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07"],
+    datasets: [
+      { label: '20日上軌', data: [1710.0, 1720.0, 1720.0, 1720.0, 1720.0, 1720.0, 1720.0, 1720.0, 1720.0, 1785.0, 1800.0, 1910.0, 1910.0, 1910.0, 1910.0, 1910.0, 1910.0, 1910.0, 1955.0, 1955.0, 1955.0, 1970.0, 1970.0, 2035.0, 2060.0, 2060.0, 2060.0, 2100.0, 2310.0, 2310.0, 2310.0, 2310.0, 2310.0, 2310.0, 2310.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [1710.0, 1720.0, 1720.0, 1720.0, 1720.0, 1720.0, 1720.0, 1720.0, 1720.0, 1785.0, 1800.0, 1910.0, 1910.0, 1910.0, 1910.0, 1910.0, 1910.0, 1910.0, 1955.0, 1955.0, 1955.0, 1970.0, 1970.0, 2035.0, 2060.0, 2060.0, 2060.0, 2100.0, 2310.0, 2310.0, 2310.0, 2310.0, 2310.0, 2310.0, 2310.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [1675.0, 1630.0, 1595.0, 1600.0, 1620.0, 1605.0, 1520.0, 1550.0, 1675.0, 1765.0, 1765.0, 1795.0, 1750.0, 1820.0, 1845.0, 1665.0, 1695.0, 1860.0, 1875.0, 1865.0, 1830.0, 1905.0, 1850.0, 2015.0, 2050.0, 1995.0, 1945.0, 2100.0, 2275.0, 2195.0, 2135.0, 1990.0, 2110.0, 2070.0, 2030.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [1265.0, 1355.0, 1365.0, 1375.0, 1400.0, 1400.0, 1400.0, 1415.0, 1510.0, 1510.0, 1510.0, 1510.0, 1510.0, 1510.0, 1510.0, 1510.0, 1510.0, 1560.0, 1665.0, 1665.0, 1665.0, 1665.0, 1665.0, 1665.0, 1665.0, 1665.0, 1740.0, 1815.0, 1815.0, 1830.0, 1835.0, 1835.0, 1835.0, 1915.0, 1915.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [1265.0, 1265.0, 1265.0, 1265.0, 1265.0, 1265.0, 1265.0, 1265.0, 1265.0, 1265.0, 1265.0, 1355.0, 1365.0, 1375.0, 1400.0, 1400.0, 1400.0, 1415.0, 1510.0, 1510.0, 1510.0, 1510.0, 1510.0, 1510.0, 1510.0, 1510.0, 1510.0, 1560.0, 1665.0, 1665.0, 1665.0, 1665.0, 1665.0, 1665.0, 1665.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '3017 奇鋐', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+</script>
+
+</body>
+</html>
