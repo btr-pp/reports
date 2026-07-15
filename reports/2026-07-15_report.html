@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>PTT Stock 整合分析報告 — 2026-07-15</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: "Microsoft JhengHei", sans-serif; margin: 0; padding: 20px; background: #0d1117; color: #e6edf3; }
+  h1 { color: #58a6ff; margin-bottom: 5px; }
+  h2 { color: #e6edf3; border-bottom: 1px solid #30363d; padding-bottom: 8px; margin-top: 30px; }
+  .subtitle { color: #8b949e; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+  th { background: #161b22; color: #8b949e; font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 2px solid #30363d; }
+  td { padding: 8px 12px; border-bottom: 1px solid #21262d; }
+  tr:hover { background: #161b22; }
+  td.detail { color: #8b949e; font-size: 0.85em; max-width: 300px; }
+  .bullish { color: #3fb950; font-weight: 600; }
+  .bearish { color: #f85149; font-weight: 600; }
+  .neutral { color: #d29922; }
+  .charts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(480px, 1fr)); gap: 16px; margin-top: 15px; }
+  .chart-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; }
+  .chart-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .chart-title { font-weight: 600; font-size: 1.05em; }
+  .tag { font-size: 0.75em; padding: 2px 8px; border-radius: 12px; font-weight: 600; }
+  .tag.bullish { background: #1b4332; color: #3fb950; }
+  .tag.bearish { background: #461220; color: #f85149; }
+  .tag.neutral { background: #2d2000; color: #d29922; }
+  .legend { display: flex; gap: 16px; margin: 10px 0; font-size: 0.85em; color: #8b949e; flex-wrap: wrap; }
+  .legend span::before { content: ''; display: inline-block; width: 20px; height: 3px; margin-right: 4px; vertical-align: middle; }
+  .leg-close::before { background: #00b4d8; }
+  .leg-u20::before { background: rgba(229,69,96,0.8); border-top: 2px dashed rgba(229,69,96,0.8); }
+  .leg-l20::before { background: rgba(82,183,136,0.8); border-top: 2px dashed rgba(82,183,136,0.8); }
+  .leg-10::before { background: rgba(255,209,102,0.5); border-top: 2px dashed rgba(255,209,102,0.5); }
+  .leg-k::before { background: #ff6384; }
+  .leg-d::before { background: #36a2eb; }
+  .leg-rsi5::before { background: #ff9f40; }
+  .leg-rsi14::before { background: #9966ff; }
+  .outlook-section { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; margin: 12px 0 20px 0; }
+  .outlook-summary { font-size: 1.05em; line-height: 1.8; color: #c9d1d9; margin: 0 0 14px 0; }
+  .outlook-tops { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  .outlook-tops > div { background: #0d1117; border: 1px solid #21262d; border-radius: 6px; padding: 10px 14px; }
+  .outlook-tops h3 { font-size: 0.95em; margin: 0 0 8px 0; }
+  .outlook-tops ul { margin: 0; padding-left: 18px; }
+  .outlook-tops li { margin: 4px 0; line-height: 1.55; color: #c9d1d9; }
+  .outlook-bullish h3 { color: #3fb950; }
+  .outlook-bearish h3 { color: #f85149; }
+  .outlook-hint { margin-top: 14px; padding-top: 12px; border-top: 1px solid #30363d; color: #d29922; font-size: 0.95em; line-height: 1.7; }
+  .forecast-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 12px; margin-top: 12px; }
+  .forecast-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px 14px; }
+  .forecast-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .forecast-text { color: #c9d1d9; line-height: 1.65; margin: 8px 0; font-size: 0.95em; }
+  .outlook-label { font-size: 0.78em; padding: 3px 10px; border-radius: 12px; font-weight: 700; }
+  .outlook-label.strong-bull { background: #1b4332; color: #3fb950; }
+  .outlook-label.bull { background: rgba(63,185,80,0.15); color: #7ee787; }
+  .outlook-label.neutral-outlook { background: #2d2000; color: #d29922; }
+  .outlook-label.bear { background: rgba(248,81,73,0.15); color: #ff9b9b; }
+  .outlook-label.strong-bear { background: #461220; color: #f85149; }
+  .drivers, .risks { font-size: 0.85em; color: #8b949e; margin-top: 6px; }
+  .drivers ul, .risks ul { margin: 4px 0; padding-left: 18px; }
+  .drivers li { color: #7ee787; line-height: 1.5; }
+  .risks li { color: #ff9b9b; line-height: 1.5; }
+  .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 12px; margin-top: 12px; }
+  .news-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px 14px; }
+  .news-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .news-list { list-style: none; padding: 0; margin: 0; }
+  .news-item { padding: 8px 0; border-bottom: 1px solid #21262d; }
+  .news-item:last-child { border-bottom: none; }
+  .news-item a { color: #58a6ff; text-decoration: none; line-height: 1.5; font-size: 0.95em; }
+  .news-item a:hover { text-decoration: underline; }
+  .news-meta { display: flex; gap: 8px; align-items: center; margin-top: 4px; font-size: 0.78em; color: #8b949e; }
+  .news-meta .tag { font-size: 0.72em; padding: 1px 7px; }
+  .analyst-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 14px; margin-top: 12px; }
+  .analyst-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 14px 16px; }
+  .analyst-card.fallback { border: 1px dashed #6e7681; opacity: 0.78; }
+  .analyst-card.divergence { border: 2px solid #d29922; box-shadow: 0 0 0 1px rgba(210,153,34,0.15); }
+  .fallback-badge { font-size: 0.72em; padding: 2px 8px; border-radius: 10px; background: #3d2a00; color: #d29922; font-weight: 600; }
+  .divergence-badge { font-size: 0.78em; padding: 3px 10px; border-radius: 12px; background: #3d2a00; color: #ffd166; font-weight: 700; border: 1px solid #d29922; }
+  .ptt-band { background: #0d1117; border-left: 3px solid #58a6ff; padding: 8px 12px; margin: 8px 0 12px 0; border-radius: 4px; }
+  .ptt-band-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 0.78em; color: #8b949e; text-transform: uppercase; letter-spacing: 0.05em; }
+  .ptt-outlook-text { color: #c9d1d9; line-height: 1.6; font-size: 0.92em; margin: 4px 0; }
+  .analyst-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .signal-tag { font-size: 0.85em; padding: 4px 12px; border-radius: 14px; font-weight: 700; }
+  .signal-tag.bullish { background: #1b4332; color: #3fb950; }
+  .signal-tag.bearish { background: #461220; color: #f85149; }
+  .signal-tag.neutral { background: #2d2000; color: #d29922; }
+  .conf-tag { font-size: 0.75em; padding: 2px 8px; border-radius: 10px; font-weight: 600; background: #21262d; color: #8b949e; }
+  .conf-tag.conf-high { color: #58a6ff; }
+  .conf-tag.conf-mid { color: #d29922; }
+  .conf-tag.conf-low { color: #8b949e; }
+  .analyst-block { margin: 10px 0; }
+  .block-title { font-size: 0.78em; color: #8b949e; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .analyst-block p { margin: 4px 0; line-height: 1.6; color: #c9d1d9; font-size: 0.92em; }
+  .key-list { margin: 4px 0 4px 0; padding-left: 18px; font-size: 0.88em; color: #8b949e; }
+  .key-list li { line-height: 1.5; }
+  .analyst-action { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 10px 12px; margin: 12px 0 8px 0; }
+  .analyst-action.bullish { border-left: 3px solid #3fb950; }
+  .analyst-action.bearish { border-left: 3px solid #f85149; }
+  .analyst-action.neutral { border-left: 3px solid #d29922; }
+  .action-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; font-size: 0.9em; }
+  .action-row span { color: #8b949e; }
+  .action-row strong { color: #e6edf3; font-family: "SFMono-Regular", Consolas, monospace; }
+  .action-reason { font-size: 0.85em; color: #c9d1d9; margin: 8px 0 0 0; line-height: 1.55; }
+  .analyst-disclaimer { font-size: 0.7em; color: #6e7681; text-align: center; margin-top: 10px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<h1>PTT Stock 整合分析報告</h1>
+<div class="subtitle">2026-07-15 | 推文語意分析 + 海龜通道（20/10）+ KD/RSI 短線動能</div>
+
+
+<h2>市場風向總結</h2>
+<div class="outlook-section">
+  <p class="outlook-summary">大盤今日大漲近千點，但推文情緒與指數明顯背離：資金集中在記憶體與少數亮燈個股，多數人抱怨「拉一天殺三天」。全場最大變數是明日台積電法說會，多空對「法說 vs 法會」爭論不休，盤後美光與海力士夜盤走弱更讓記憶體多方信心動搖。短線建議降槓桿等法說結果，避免在高檔追記憶體。</p>
+  <div class="outlook-tops">
+    <div class="outlook-bullish">
+      <h3>看多主軸</h3>
+      <ul><li><strong>2408 南亞科</strong>：記憶體族群中修正最少、主力控盤明確，外資持股低不易被殺</li><li><strong>2344 華邦電</strong>：盤中亮燈漲停帶量，SLC NAND 題材延燒</li><li><strong>2313 華通</strong>：久盤後首度漲停，帶量突破沉寂區間</li></ul>
+    </div>
+    <div class="outlook-bearish">
+      <h3>看空警示</h3>
+      <ul><li><strong>8299 群聯</strong>：連日開高走低、投信調節，族群中相對弱勢</li><li><strong>3189 景碩</strong>：處置結束後籌碼不穩，臻鼎同步走弱拖累族群</li></ul>
+    </div>
+  </div>
+  <div class="outlook-hint"><strong>下一交易日提示：</strong>明日 (07/16) 台積電法說會為關鍵，法說前後大盤波動預期放大；同時留意美股記憶體族群夜盤走勢是否拖累台廠開盤。</div>
+</div>
+
+
+<h2>個股觀點整合（claude-sonnet-5・短線 1-5 日）</h2>
+<div class="analyst-grid">
+
+<div class="analyst-card">
+  <div class="analyst-header">
+    <span class="chart-title">2408 南亞科</span>
+    <span class="outlook-label bull">PTT 偏多</span>
+    <span class="signal-tag neutral">AI 觀望</span>
+    <span class="conf-tag conf-mid">信心 中</span>
+    
+    
+  </div>
+
+  <div class="ptt-band">
+    <div class="ptt-band-header">
+      <span>PTT 推文觀點</span>
+      <span class="outlook-label bull">偏多</span>
+    </div>
+    <p class="ptt-outlook-text">族群最強、量能充足，但尾盤守 480 未能鎖漲停，短線若跌破 480 需留意 M 頭成形。</p>
+    <div class="drivers"><strong>關鍵動能：</strong><ul><li>記憶體族群修正最少</li><li>法說行情延續</li><li>外資持股低籌碼安定</li></ul></div>
+    <div class="risks"><strong>風險提示：</strong><ul><li>位階已高離前高不到 4%</li><li>當沖大軍出場壓力</li><li>M 頭疑慮</li></ul></div>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">技術面</div>
+    <p>股價481元，位於海龜通道（20日）80%高位，尚未確認突破505元前高，屬「接近突破」而非「已突破」；KD中性（K67.04/D51.32）未見背離，RSI(5) 76.17已達短線過熱區、RSI(14) 62.97僅中性，顯示短線動能強但追價風險上升，需帶量站穩505元才具技術面買進訊號，否則有拉回整理可能。</p>
+    <ul class="key-list"><li>海龜通道20日位置80%，接近突破未確認</li><li>RSI(5) 76.17 短線偏多但過熱</li><li>RSI(14) 62.97 中性，未過熱</li><li>KD中性，K>D但未見強力交叉</li><li>PTT鄉民尾盤出現M頭疑慮，需留意高檔震盪</li></ul>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">籌碼面</div>
+    <p>近5個交易日外資合計淨賣超約11,512張（7/13單日重賣29,029張為主要拖累），但投信連續5日同步買超，合計淨買超約12,276張，內資對獲利轉強具信心並持續進場，一定程度抵銷外資調節壓力，籌碼面呈現「外資調節、投信護盤」格局，屬中性偏多。</p>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">基本面</div>
+    <p>估值層面：P/E 43.06倍、P/B 7.73倍明顯高於大盤平均（約15-20倍）與多數記憶體同業歷史區間，殖利率僅0.28%缺乏防禦價值，短期估值偏貴。獲利趨勢層面：近四季EPS自2025Q2 -1.32元連續四季轉正並加速成長至2026Q1 8.41元，毛利率同步由-20.6%擴張至67.9%，營益率、淨利率、ROE同步改善，獲利動能明確處於擴張週期（記憶體漲價＋AI需求帶動）。以TTM EPS 11.17元反推，目前本益比約43倍；若比照產業上升週期常見20-30倍區間，合理股價約223-335元，顯示股價已計入相當樂觀的獲利延續預期。惟近期新聞提及公司法說Q2 EPS達14.66元、毛利率79.5%（優於本次資料表列之2026Q1數字），若屬實則TTM EPS將進一步墊高、本益比可望回落至30倍左右，估值壓力有機會緩解，須待下期財報數據確認。</p>
+    <ul class="key-list"><li>TTM EPS 11.17元</li><li>2026Q1毛利率67.9%（單季ROE 13.5%）</li><li>TTM ROE 17.9%</li><li>P/E 43.06倍</li><li>P/B 7.73倍</li><li>殖利率0.28%</li></ul>
+  </div>
+
+  <div class="analyst-action neutral">
+    <div class="action-row"><span>進場區間</span><strong>確認站穩505元且帶量突破可視為進場訊號；保守者可等拉回461-470支撐區承接</strong></div>
+    <div class="action-row"><span>停損價位</span><strong>461元（跌破近期整理區間下緣視為轉弱）</strong></div>
+    <div class="action-row"><span>目標價</span><strong>600-650（參考外資喊出目標價，並對應通道突破後的上檔想像空間）</strong></div>
+    <p class="action-reason">技術面尚未確認海龜通道突破、RSI(5)短線過熱，加上P/E 43倍估值偏貴、PTT出現高檔疑慮，故暫採觀望；但投信連續買超且獲利動能明確加速，若股價帶量突破505元或拉回不破支撐，可轉為積極布局。</p>
+  </div>
+
+  <div class="analyst-disclaimer">本分析僅供參考，非投資建議</div>
+</div>
+<div class="analyst-card">
+  <div class="analyst-header">
+    <span class="chart-title">2337 旺宏</span>
+    <span class="outlook-label neutral-outlook">PTT 中性</span>
+    <span class="signal-tag neutral">AI 觀望</span>
+    <span class="conf-tag conf-mid">信心 中</span>
+    
+    
+  </div>
+
+  <div class="ptt-band">
+    <div class="ptt-band-header">
+      <span>PTT 推文觀點</span>
+      <span class="outlook-label neutral-outlook">中性</span>
+    </div>
+    <p class="ptt-outlook-text">盤中站回 150 帶量反彈，但盤後海外記憶體走弱，短線多空拉鋸；月底自家法說會前可能區間震盪。</p>
+    <div class="drivers"><strong>關鍵動能：</strong><ul><li>帶量紅棒站上 150</li><li>月底法說會接棒</li><li>相對其他 DRAM 股跌幅小</li></ul></div>
+    <div class="risks"><strong>風險提示：</strong><ul><li>美光海力士夜盤走弱</li><li>150 關卡賣壓沉重</li><li>族群連動性高</li></ul></div>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">技術面</div>
+    <p>收盤148.5，海龜通道(20日)僅29%通道位置，屬通道內盤整，未觸及上緣192或下緣130.5，尚無突破訊號；KD(K46.8/D30.97)、RSI5(61.94)、RSI14(49.12)皆為中性，短線動能雖回溫但方向未明朗。</p>
+    <ul class="key-list"><li>海龜通道位置29%，通道內盤整，無突破訊號</li><li>KD中性，K46.8略高於D30.97，僅屬弱勢黃金交叉跡象</li><li>RSI5(61.94)高於RSI14(49.12)，短線動能略優於中期但仍屬中性區間</li></ul>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">籌碼面</div>
+    <p>近5個交易日外資原連續賣超(7/8 -5,180張、7/13 -4,538張、7/14 -4,003張)，於7/15單日大舉翻多買超+11,787張；投信同期持續小額買超並於7/15放大至+2,675張，籌碼面出現明顯反轉訊號，惟單日大量買超是否延續仍待後續交易日確認。</p>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">基本面</div>
+    <p>估值面：P/B 5.81偏高，殖利率0%無股息支撐，TTM EPS為負(-0.41元)故本益比無法計算，以傳統指標衡量屬偏貴。獲利趨勢面：2025Q2~Q4連續虧損(EPS -0.69→-0.47→-0.15元，毛利率15.6%→13.5%→24.2%)已於2026Q1明顯反轉轉盈(EPS 0.9元、毛利率大增至40.8%、營益率轉正18.5%、營收年增70.6%)，獲利動能呈擴張趨勢；若將Q1單季年化概估(0.9×4=3.6元)，對應目前股價148.5之遠期本益比約41倍，雖仍偏高，但隨獲利改善評價已較TTM虧損時收斂，屬記憶體循環復甦初期的高本夢比評價，需留意獲利延續性尚待後續季報驗證。</p>
+    <ul class="key-list"><li>TTM EPS -0.41元</li><li>2026Q1 EPS 0.9元（由虧轉盈）</li><li>2026Q1毛利率40.8%（較前季24.2%大幅回升）</li><li>TTM ROE -1.3%</li><li>P/B 5.81</li><li>殖利率0%</li></ul>
+  </div>
+
+  <div class="analyst-action neutral">
+    <div class="action-row"><span>進場區間</span><strong>146-150（回測季線支撐站穩後進場）</strong></div>
+    <div class="action-row"><span>停損價位</span><strong>140</strong></div>
+    <div class="action-row"><span>目標價</span><strong>165-170</strong></div>
+    <p class="action-reason">技術面通道中段盤整、KD與RSI皆中性，尚未產生明確突破訊號；但7/15外資與投信同步大舉轉買，加上基本面Q1轉盈、毛利率大幅回升，短線具反彈動能，且記憶體族群類股輪動熱絡（華邦電漲停帶動氣氛）。在通道未確立突破前建議先觀望，待站穩150整數關卡或量能延續籌碼買盤再行介入，若進場則以140下方前波支撐為停損，目標看向通道中段165-170附近。</p>
+  </div>
+
+  <div class="analyst-disclaimer">本分析僅供參考，非投資建議</div>
+</div>
+<div class="analyst-card">
+  <div class="analyst-header">
+    <span class="chart-title">2330 台積電</span>
+    <span class="outlook-label neutral-outlook">PTT 中性</span>
+    <span class="signal-tag neutral">AI 觀望</span>
+    <span class="conf-tag conf-mid">信心 中</span>
+    
+    
+  </div>
+
+  <div class="ptt-band">
+    <div class="ptt-band-header">
+      <span>PTT 推文觀點</span>
+      <span class="outlook-label neutral-outlook">中性</span>
+    </div>
+    <p class="ptt-outlook-text">明日法說會前多空對峙，期指仍為正價差；法說結果將主導台股短線方向，事件前不宜重押。</p>
+    <div class="drivers"><strong>關鍵動能：</strong><ul><li>法說會可能上調 Capex 與先進製程漲價</li><li>3 奈米獨家量產</li><li>台指與 GG 期正價差</li></ul></div>
+    <div class="risks"><strong>風險提示：</strong><ul><li>近期法說後常見利多出盡</li><li>外資近一年持續調節</li><li>融資水位偏高</li></ul></div>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">技術面</div>
+    <p>股價2440位於20日海龜通道55%位置，處通道內未突破，KD（K38.05/D42.49）與RSI(5)53.66、RSI(14)54.78皆呈中性，短線動能不足以判斷方向，均線與量價未提供明確多空訊號，法說會前觀望氣氛濃厚，尾盤拉回顯示追價意願不強</p>
+    <ul class="key-list"><li>海龜通道內整理，未觸及2535上軌或2325下軌</li><li>KD中性（K略低於D，動能轉弱但未死叉）</li><li>RSI(5)/(14)皆約54，多空力道均衡</li><li>盤中拉紅尾盤翻軟，法說會前觀望</li></ul>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">籌碼面</div>
+    <p>近5個交易日外資連續賣超（-4,156/-12,749/-2,045/-12,417/-3,428張），累計賣壓沉重且趨勢未見反轉；投信同期則呈現小幅買賣互見（+729/+43/+530/+1,841/-597張），整體以投信小額進場、外資持續調節為主，籌碼面偏中性偏弱，法說會前外資調節動作值得留意</p>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">基本面</div>
+    <p>估值面：P/E 32.8倍、P/B 10.74倍均處於台積電歷史相對高檔區（歷史P/E常態約15-25倍），股價淨值比10.74更是明顯偏貴，殖利率僅0.9%亦偏低，顯示目前股價已反映高成長預期，估值不便宜；獲利趨勢：近4季EPS由15.36→17.44→19.51→22.08元逐季擴張，毛利率58.6%→59.5%→62.3%→66.2%、營益率49.6%→50.6%→54.0%→58.1%、淨利率42.6%→45.6%→48.3%→50.5%、單季ROE穩定於8.7-9.7%，營收年增率亦達20-35%，獲利動能屬明確擴張趨勢（AI/先進製程需求推升）；以TTM EPS 74.39元反推，現價2440對應TTM本益比約32.8倍，若給予歷史高成長期上緣25-28倍合理PE，對應合理價約1860-2083元，顯示現價已高於保守估值區間，需靠法說會後上調獲利預期（外資喊目標價上看3800元、EPS上看198.42元為更樂觀假設）才能支撐當前估值</p>
+    <ul class="key-list"><li>TTM EPS 74.39元</li><li>TTM ROE 32.7%</li><li>2026Q1毛利率66.2%</li><li>2026Q1營益率58.1%</li><li>P/E 32.8倍／P/B 10.74倍</li><li>殖利率0.9%</li></ul>
+  </div>
+
+  <div class="analyst-action neutral">
+    <div class="action-row"><span>進場區間</span><strong>2380-2420</strong></div>
+    <div class="action-row"><span>停損價位</span><strong>停損 2300</strong></div>
+    <div class="action-row"><span>目標價</span><strong>2600-2700</strong></div>
+    <p class="action-reason">技術面通道內整理、KD與RSI皆中性缺乏明確方向；基本面雖獲利動能擴張但估值已達歷史高檔，P/E與P/B偏貴；籌碼面外資連續大幅賣超；法說會前市場觀望氣氛濃厚，建議暫時觀望等待法說會結果明朗化，若股價拉回至通道下緣附近且法說會釋出正面展望（如毛利率、Capex指引優於預期）可分批布局，若跌破2325通道下軌則須留意轉弱風險</p>
+  </div>
+
+  <div class="analyst-disclaimer">本分析僅供參考，非投資建議</div>
+</div>
+<div class="analyst-card">
+  <div class="analyst-header">
+    <span class="chart-title">2344 華邦電</span>
+    <span class="outlook-label bull">PTT 偏多</span>
+    <span class="signal-tag neutral">AI 觀望</span>
+    <span class="conf-tag conf-mid">信心 中</span>
+    
+    
+  </div>
+
+  <div class="ptt-band">
+    <div class="ptt-band-header">
+      <span>PTT 推文觀點</span>
+      <span class="outlook-label bull">偏多</span>
+    </div>
+    <p class="ptt-outlook-text">亮燈漲停確立短線反彈波，但距前高仍需數根漲停，追高風險偏高。</p>
+    <div class="drivers"><strong>關鍵動能：</strong><ul><li>漲停帶量</li><li>SLC NAND 需求題材</li><li>跌深反彈</li></ul></div>
+    <div class="risks"><strong>風險提示：</strong><ul><li>盤後出現空方集結言論</li><li>族群跟隨美股記憶體波動</li><li>反彈幅度已大</li></ul></div>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">技術面</div>
+    <p>收盤180.5元位於海龜通道下緣（20日通道233.5/156.0，位置僅32%），未觸及上軌突破訊號，趨勢仍偏中性偏弱；但KD出現黃金交叉（K29.27上穿D21.4），顯示短線動能有轉強跡象，RSI(5)55.87、RSI(14)51.44均落於中性區，尚未過熱，惟需留意7/15當日漲停、當沖爆量逾10萬張，短線波動風險偏高，追價需謹慎等待量價確認。</p>
+    <ul class="key-list"><li>KD黃金交叉</li><li>RSI中性</li><li>海龜通道內（未突破）</li><li>當沖量能異常放大</li></ul>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">籌碼面</div>
+    <p>近5個交易日籌碼波動劇烈：外資7/9~7/14連3日賣超（-6,800、-13,661、-3,969張），但7/15隨漲停轉為大買+14,945張；投信除7/8賣超-15,780張外，其餘日多為小幅買超，7/15亦轉買+1,441張。整體呈現「先賣後買」型態，7/15當日法人同步轉多與股價漲停同步，短線籌碼轉強，但先前連續賣超顯示中期並非一致性買盤，需觀察轉強是否延續。</p>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">基本面</div>
+    <p>估值面：P/E 53.56倍、P/B 6.96倍均明顯高於大盤平均與多數同業水準，殖利率僅0.28%幾無息收吸引力，就靜態指標而言評價偏貴。惟獲利趨勢面呈現明確擴張：EPS由2025Q2虧損-0.29元，連續四季轉正並加速成長至2026Q1 2.25元，營收年增91.3%，毛利率22.7%→53.4%、營益率-6.2%→32.8%、淨利率-7.8%→26.4%同步大幅走高，屬記憶體景氣上行的強勁反轉動能股。若以最新單季EPS 2.25元年化（約9元）估算，本益比可望壓縮至約20倍附近，遠低於TTM EPS 3.37元所計算之53.56倍，顯示市場已提前反映未來獲利成長，短線評價偏貴但中長線若動能延續則合理性提升，屬「貴但有故事」的典型循環股評價型態。</p>
+    <ul class="key-list"><li>TTM EPS 3.37元</li><li>TTM ROE 12.2%</li><li>2026Q1毛利率53.4%</li><li>2026Q1營益率32.8%</li><li>2026Q1營收YoY +91.3%</li><li>P/E 53.56倍</li></ul>
+  </div>
+
+  <div class="analyst-action neutral">
+    <div class="action-row"><span>進場區間</span><strong>回測170-175支撐區間分批試單</strong></div>
+    <div class="action-row"><span>停損價位</span><strong>跌破160（近期低點/通道下緣支撐）停損</strong></div>
+    <div class="action-row"><span>目標價</span><strong>200-210（前波高點附近）</strong></div>
+    <p class="action-reason">漲停後估值已偏貴且當沖量能異常，追高風險大於報酬；建議等待量縮回測支撐或站穩前高再行進場，短線動能與獲利成長趨勢仍具吸引力但需嚴設停損控管波動風險</p>
+  </div>
+
+  <div class="analyst-disclaimer">本分析僅供參考，非投資建議</div>
+</div>
+<div class="analyst-card">
+  <div class="analyst-header">
+    <span class="chart-title">2313 華通</span>
+    <span class="outlook-label bull">PTT 偏多</span>
+    <span class="signal-tag bullish">AI 買進</span>
+    <span class="conf-tag conf-mid">信心 中</span>
+    
+    
+  </div>
+
+  <div class="ptt-band">
+    <div class="ptt-band-header">
+      <span>PTT 推文觀點</span>
+      <span class="outlook-label bull">偏多</span>
+    </div>
+    <p class="ptt-outlook-text">沉寂多時後首度漲停，量價轉強；惟題材偏模糊，需觀察次日是否延續。</p>
+    <div class="drivers"><strong>關鍵動能：</strong><ul><li>漲停突破盤整</li><li>PCB 族群輪動</li></ul></div>
+    <div class="risks"><strong>風險提示：</strong><ul><li>題材不明確</li><li>一日行情疑慮</li></ul></div>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">技術面</div>
+    <p>股價248元，海龜通道（20日）位置65%，訊號為接近突破上軌266.5，中期偏多但尚未確認站上壓力區。KD呈K61.04>D44.82，多頭排列初步成形但尚未過熱；RSI(5)69.45、RSI(14)53.86皆為中性，短線動能轉強但無明顯超買，仍有上攻空間。今日股價觸及漲停248元、單日大漲逾7%，屬帶量突破格局，需留意追高後拉回修正風險。</p>
+    <ul class="key-list"><li>海龜通道位置65%，接近20日上軌266.5，尚未正式突破</li><li>KD黃金交叉初現（K61.04 > D44.82），動能轉強</li><li>RSI(5)69.45偏強但未達超買，RSI(14)53.86中性</li><li>當日觸及漲停248元，量能同步放大</li></ul>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">籌碼面</div>
+    <p>近5個交易日籌碼轉強，投信連續4日買超（+554、+3,350、+6,650、+2,390張），顯示中期偏多布局；外資雖有進出反覆（07/09賣超3,020張、07/14賣超11,474張），但今日（07/15）單日大幅買超達18,822張，為近期最大單日買超量，與股價漲停同步，顯示外資資金明顯回補，籌碼面轉為偏多訊號。自營商無明顯部位。</p>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">基本面</div>
+    <p>估值水位偏昂貴：本益比43.74倍、股價淨值比6.31倍皆處相對高檔，殖利率僅1.13%明顯偏低，反映市場已將AI高速光模組／低軌衛星題材成長溢價計入股價，非傳統PCB股的保守估值水準。獲利趨勢呈溫和擴張：TTM EPS 5.67元、TTM ROE 14.4%，2026Q1營收YoY+16.8%成長重新加速，惟毛利率（18.0%）、營益率（9.9%）、淨利率（7.7%）皆較2025Q4/Q3小幅下滑，獲利含金量略有壓縮但單季EPS 1.26元仍屬健康。以TTM EPS 5.67元反推，若給予成長股合理本益比25-35倍，合理價約142-198元，目前248元已超出此區間，顯示股價領先基本面反映題材預期，具評價過熱風險。</p>
+    <ul class="key-list"><li>TTM EPS：5.67元</li><li>TTM ROE：14.4%</li><li>本益比：43.74倍（P/B 6.31倍）</li><li>2026Q1毛利率：18.0%／營益率：9.9%</li><li>2026Q1營收YoY：+16.8%</li><li>殖利率：1.13%</li></ul>
+  </div>
+
+  <div class="analyst-action bullish">
+    <div class="action-row"><span>進場區間</span><strong>240-248</strong></div>
+    <div class="action-row"><span>停損價位</span><strong>228</strong></div>
+    <div class="action-row"><span>目標價</span><strong>266-275</strong></div>
+    <p class="action-reason">技術面海龜通道接近突破、KD轉強且RSI未過熱，加上今日外資與投信同步大舉買超，籌碼與價量齊揚，短線動能偏多；惟本益比43.7倍、股價淨值比6.31倍已處偏貴水位，屬題材面驅動的評價溢價，追高風險提高，建議小額參與並嚴設停損，待站穩248元或突破266.5元上軌再加碼，跌破228元則出場觀望。</p>
+  </div>
+
+  <div class="analyst-disclaimer">本分析僅供參考，非投資建議</div>
+</div>
+<div class="analyst-card">
+  <div class="analyst-header">
+    <span class="chart-title">8299 群聯</span>
+    <span class="outlook-label bear">PTT 偏空</span>
+    <span class="signal-tag neutral">AI 觀望</span>
+    <span class="conf-tag conf-mid">信心 中</span>
+    
+    
+  </div>
+
+  <div class="ptt-band">
+    <div class="ptt-band-header">
+      <span>PTT 推文觀點</span>
+      <span class="outlook-label bear">偏空</span>
+    </div>
+    <p class="ptt-outlook-text">族群普漲時仍收弱，開高走低型態連續數日，反彈需先看量能止穩。</p>
+    <div class="drivers"><strong>關鍵動能：</strong><ul><li>跌深後有技術性反彈空間</li></ul></div>
+    <div class="risks"><strong>風險提示：</strong><ul><li>投信連續調節</li><li>散戶籌碼混亂</li><li>發債後股價未見起色</li></ul></div>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">技術面</div>
+    <p>收盤2105元，位於海龜通道（20日）僅21%低檔區，非突破訊號，屬箱型偏弱格局。KD剛由低檔（K28.18/D27.03）黃金交叉，短線有止跌跡象，但RSI(5)35.77與RSI(14)41.23皆處中性，動能尚未明確轉強，建議待站穩短均線與量能配合再確認反彈有效性。</p>
+    <ul class="key-list"><li>海龜通道位置21%（偏下緣，未突破）</li><li>KD黃金交叉但K值仍低於30，屬低檔初步止跌</li><li>RSI(5)/RSI(14)皆中性，尚無強力動能訊號</li></ul>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">籌碼面</div>
+    <p>近5個交易日籌碼分歧：外資7/14、7/15連兩日轉買（+261、+270張），但投信同期連3日賣超且賣壓遞增（-28→-170→-270張），自營商亦於7/14單日大賣617張，整體法人籌碼並未一致轉多，投信與自營調節壓力仍是短線變數，需觀察投信是否止賣以確認籌碼面轉強。</p>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">基本面</div>
+    <p>注意：基本面欄位之收盤參考價20.14元與技術面實際股價2105元明顯不一致，P/E 1.1、殖利率115.16%等估值數字內部矛盾（與TTM EPS及股利數字換算不符），判斷該筆估值資料可能有誤，不予採信直接引用。改以TTM EPS 105.23元對照實際股價2105元反推，實際本益比約20倍，對照近四季獲利加速成長（EPS由3.6→10.75→22.08→68.8元，營收年增率由30.1%擴大至196.0%，毛利率29.2%→61.8%、淨利率4.2%→37.0%、單季ROE1.5%→20.5%），屬獲利動能明確擴張階段，20倍本益比對高成長儲存控制晶片廠並不算貴，若獲利動能延續，合理本益比區間可看20-25倍。</p>
+    <ul class="key-list"><li>TTM EPS：105.23元</li><li>TTM ROE：30.7%</li><li>最新季（2026Q1）毛利率：61.8%、營益率36.2%、淨利率37.0%</li><li>2026Q1營收年增率：+196.0%</li><li>反推實際P/E（現價2105元）：約20倍</li><li>基本面欄位P/E 1.1、殖利率115.16%：資料疑似異常，不採用</li></ul>
+  </div>
+
+  <div class="analyst-action neutral">
+    <div class="action-row"><span>進場區間</span><strong>2050-2150（拉回不破前波、站回月線再分批介入）</strong></div>
+    <div class="action-row"><span>停損價位</span><strong>1930（跌破海龜通道下軌1955視為轉弱）</strong></div>
+    <div class="action-row"><span>目標價</span><strong>2400-2670（挑戰海龜通道上緣）</strong></div>
+    <p class="action-reason">技術面僅通道內低檔止跌、尚未突破，KD黃金交叉但動能未明確；籌碼面投信、自營近日仍偏空、僅外資轉買；基本面獲利動能強勁、實際估值不貴但市場疑慮（可能與可轉債稀釋、PTT極度負面情緒有關）壓抑股價表現，建議先觀望待籌碼與均線同步轉強後再介入，而非追價。</p>
+  </div>
+
+  <div class="analyst-disclaimer">本分析僅供參考，非投資建議</div>
+</div>
+<div class="analyst-card">
+  <div class="analyst-header">
+    <span class="chart-title">3189 景碩</span>
+    <span class="outlook-label bear">PTT 偏空</span>
+    <span class="signal-tag neutral">AI 觀望</span>
+    <span class="conf-tag conf-mid">信心 中</span>
+    
+    
+  </div>
+
+  <div class="ptt-band">
+    <div class="ptt-band-header">
+      <span>PTT 推文觀點</span>
+      <span class="outlook-label bear">偏空</span>
+    </div>
+    <p class="ptt-outlook-text">明日處置結束恢復正常交易，籌碼未穩，短線波動加大但方向偏弱。</p>
+    <div class="drivers"><strong>關鍵動能：</strong><ul><li>處置結束流動性恢復</li></ul></div>
+    <div class="risks"><strong>風險提示：</strong><ul><li>籌碼凌亂</li><li>臻鼎等 ABF 同業走弱</li><li>主力控盤痕跡明顯</li></ul></div>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">技術面</div>
+    <p>股價845元位於海龜通道（640~939）中段偏上，通道位置69%，尚未觸及上軌突破訊號，屬「通道內」整理格局。KD（K65.05 > D51.78）與RSI(5)65.53、RSI(14)59.34 均落在中性偏多區間，動能尚可但未達強勢超買，缺乏量價資料佐證是否為健康換手。整體技術面偏多但未見明確突破訊號，加上該股近日曾因處置股試撮出現跌停至738元後快速反彈至845元的異常波動，短線技術指標的參考效度需打折。</p>
+    <ul class="key-list"><li>海龜通道20日：上軌939／下軌640，通道位置69%，訊號為「通道內」未突破</li><li>KD中性：K=65.05、D=51.78，K在D之上略偏多但未達80超買</li><li>RSI(5)=65.53、RSI(14)=59.34，均為中性，短線動能尚可</li><li>7/14盤中曾殺至跌停738元、7/15收845元，波動劇烈，反映處置股試撮的人為干擾</li></ul>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">籌碼面</div>
+    <p>近5個交易日外資與投信同步連續買超（外資5日皆為淨買、7/8單日+2,259張；投信7/13單日+426張最為顯著），自營商幾乎未參與，籌碼面表面上偏多。惟需留意該股近期處於處置股試撮階段（成交量受限、單日曾殺至跌停），此期間籌碼進出易受人為調控影響，較難視為單純法人趨勢性佈局，PTT板上鄉民亦質疑「主力在搞」，籌碼解讀應保守看待。</p>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">基本面</div>
+    <p>估值水位：本益比238.03倍、股價淨值比10.32倍，遠高於一般載板/PCB同業平均（通常個位數至20倍區間），殖利率僅0.18%幾乎無配息吸引力，以絕對估值而言明顯昂貴，目前股價已反映市場對ABF載板未來產能滿載、外資喊上看1500元目標價的高度樂觀預期，並非以現階段獲利支撐。獲利趨勢：近4季EPS由0.74→0.75→1.41→1.17元逐季墊高，2026Q1營收YoY+28.8%、毛利率21.2%、營益率8.0%、淨利率7.9%，較去年同期成長趨勢明確，屬獲利擴張階段；但單季ROE僅2.0%（TTM 6.9%）仍偏低，資產報酬效率尚未跟上股價漲幅。以TTM EPS 4.07元反推，若給予同業成長股合理15~30倍本益比，合理股價區間約61~122元，與目前845元有巨大落差，顯示股價已大幅超前基本面，需仰賴未來1500元題材（產能擴張、AI伺服器ABF需求）持續兌現才能支撐現有估值，否則回檔風險高。</p>
+    <ul class="key-list"><li>TTM EPS：4.07元</li><li>本益比 P/E：238.03倍（明顯偏貴）</li><li>股價淨值比 P/B：10.32倍</li><li>TTM ROE：6.9%（單季2026Q1僅2.0%）</li><li>2026Q1毛利率：21.2%／營益率8.0%／淨利率7.9%</li><li>殖利率：0.18%（配息吸引力低）</li></ul>
+  </div>
+
+  <div class="analyst-action neutral">
+    <div class="action-row"><span>進場區間</span><strong>800-830（處置股試撮結束、股價拉回不破月線區間再分批試單，不建議追高）</strong></div>
+    <div class="action-row"><span>停損價位</span><strong>738（近期跌停低點，若再度跌破視為籌碼失控應立即出場）</strong></div>
+    <div class="action-row"><span>目標價</span><strong>930-950（挑戰海龜通道上軌939附近，觸及且未站穩則獲利了結）</strong></div>
+    <p class="action-reason">技術面通道內整理、KD與RSI中性偏多但無突破訊號；籌碼面外資投信連續買超看似正向，但受處置股試撮干擾，可信度需保留；基本面獲利確實逐季成長，惟本益比238倍、股價淨值比10.32倍已大幅超前合理估值（TTM EPS反推合理區間約61~122元），且明日處置結束後PTT鄉民預期波動將加大，風險報酬比不佳，故建議觀望，待處置解除後價量穩定、拉回不破關鍵均線再考慮分批進場。</p>
+  </div>
+
+  <div class="analyst-disclaimer">本分析僅供參考，非投資建議</div>
+</div>
+<div class="analyst-card">
+  <div class="analyst-header">
+    <span class="chart-title">0050 元大台灣50</span>
+    
+    <span class="signal-tag neutral">AI 觀望</span>
+    <span class="conf-tag conf-mid">信心 中</span>
+    
+    
+  </div>
+
+
+  <div class="analyst-block">
+    <div class="block-title">技術面</div>
+    <p>股價106.3位於20日海龜通道中段（通道位置40%，上軌112.3、下軌102.2），尚未觸及任一邊界，屬「通道內」整理格局，未出現突破訊號。KD雖出現黃金交叉（K=38.8, D=38.66）但兩者仍低於50，動能剛從弱勢區翻揚、尚待站穩才能確認轉強；RSI(5)=52.15、RSI(14)=53.29 均落在中性區，短中線動能均無明顯方向。整體技術面偏中性整理，缺乏立即進場理由。</p>
+    <ul class="key-list"><li>海龜通道20日：上軌112.3／下軌102.2，通道位置40%，訊號＝通道內（未突破）</li><li>KD黃金交叉但K/D均低於50，屬弱勢翻揚初期，未確認強勢</li><li>RSI(5)=52.15、RSI(14)=53.29，短中線動能皆中性</li><li>股價106.3居通道中段，距下軌約3.9%、距上軌約5.6%，風險報酬不對稱不明顯</li></ul>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">籌碼面</div>
+    <p>近5個交易日外資合計賣超約114,773張（7/8~7/14連續四日賣超，其中7/14單日重殺92,603張），籌碼面承壓明顯；惟7/15轉為買超34,254張，賣壓略有收斂。投信則連續5日全數買超（合計約21,862張），呈現逢低承接態勢，加上新聞提及「第四法人」（定期定額）逆勢加碼，顯示中長線資金持續進場，但外資仍是主導籌碼方向的一方，短期尚未明確止穩。</p>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">基本面</div>
+    <p>本次未提供基本面資料（0050為ETF，無EPS／毛利率／營益率等公司財報項目，亦無P/E、P/B、殖利率可與同業比較），故無法判斷估值水位與獲利趨勢，此為ETF常態而非資料異常。</p>
+    
+  </div>
+
+  <div class="analyst-action neutral">
+    <div class="action-row"><span>進場區間</span><strong>103-106</strong></div>
+    <div class="action-row"><span>停損價位</span><strong>跌破101.8（20日通道下軌下方）</strong></div>
+    <div class="action-row"><span>目標價</span><strong>111-112.3</strong></div>
+    <p class="action-reason">技術面通道內整理、KD初步翻揚但未站穩，籌碼面外資賣壓仍重、投信與定期定額資金逢低承接形成支撐，兩方力道拉鋸下短線方向不明；建議觀望等待站上通道中軸並帶量，或拉回近下軌113附近搭配KD/RSI轉強再行分批布局，而非現價追價。</p>
+  </div>
+
+  <div class="analyst-disclaimer">本分析僅供參考，非投資建議</div>
+</div>
+<div class="analyst-card">
+  <div class="analyst-header">
+    <span class="chart-title">6488 環球晶</span>
+    
+    <span class="signal-tag neutral">AI 觀望</span>
+    <span class="conf-tag conf-mid">信心 中</span>
+    
+    
+  </div>
+
+
+  <div class="analyst-block">
+    <div class="block-title">技術面</div>
+    <p>收盤價1480元位於海龜通道（20日，866~1600）上緣，通道位置84%，屬強勢突破格局；但KD出現高檔死亡交叉（K83.82/D84.6），短線動能有轉弱跡象，RSI(5)74.02偏多且偏熱、RSI(14)69.96僅中性偏多，顯示指標背離、追高風險升高，宜留意短線拉回整理。</p>
+    <ul class="key-list"><li>海龜通道(20日)通道位置84%，逼近上軌1600，屬強勢區但風險同步升高</li><li>KD高檔死亡交叉(K83.82/D84.6)，短線動能轉弱訊號</li><li>RSI(5)74.02偏多過熱、RSI(14)69.96中性，指標略呈背離</li></ul>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">籌碼面</div>
+    <p>最近5個交易日三大法人籌碼呈現外資調節、投信力挺格局：外資除07/14單日大幅買超+2,879張外，其餘4日皆賣超（07/08 -690、07/09 -1,295、07/13 -176、07/15 -904張），累計仍偏賣超；投信則多數交易日買超（07/08 +774、07/09 +169、07/14 +1,275、07/15 +142張），僅07/13小幅賣超-619張，顯示投信對後市看法相對積極；自營商進出金額小、無明顯方向性。整體籌碼短線略分歧，需留意外資動向是否延續調節。</p>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">基本面</div>
+    <p>估值水位：提供的估值資料（收盤參考價91.3元、P/E 0.52、P/B 7.58、殖利率8.43%）與技術面收盤價1480元明顯不一致，反推市值/淨值比也與TTM ROE 8.3%、TTM EPS 16.22元不相符，研判基本面估值欄位資料異常，僅供參考不予採信；若以現價1480元與TTM EPS 16.22元概算，本益比約91倍，明顯高於半導體矽晶圓同業一般本益比區間，估值面偏昂貴。獲利趨勢：近4季EPS由2025Q2 3.52元、2025Q3 4.12元、2025Q4 4.61元回落至2026Q1 3.97元，營收年增率連續4季負成長（-8.7%~-11.3%），毛利率、營益率、淨利率亦於2026Q1同步回落（毛利率20.8%、營益率10.5%、淨利率13.6%），單季ROE僅2.0%，整體獲利動能呈現高檔停滯、略見降溫，尚未看到明確擴張跡象，須觀察美光10年長約與12吋滿載等利多能否於後續季度反映在營收獲利上。</p>
+    <ul class="key-list"><li>TTM EPS 16.22元</li><li>2026Q1毛利率20.8%／營益率10.5%／淨利率13.6%</li><li>TTM ROE 8.3%</li><li>2026Q1營收年增率-10.3%（近4季皆負成長）</li><li>殖利率8.43%（每股股利7.7元，114年度）</li><li>估值欄位(P/E 0.52／P/B 7.58／參考價91.3)與現價1480元不一致，疑似資料異常，未採用於估值判讀</li></ul>
+  </div>
+
+  <div class="analyst-action neutral">
+    <div class="action-row"><span>進場區間</span><strong>拉回至1350-1400區間分批進場</strong></div>
+    <div class="action-row"><span>停損價位</span><strong>1300</strong></div>
+    <div class="action-row"><span>目標價</span><strong>1600-1650</strong></div>
+    <p class="action-reason">技術面雖處海龜通道上緣強勢區，但KD高檔死亡交叉與RSI過熱訊號提示短線拉回風險，且基本面估值資料異常無法可靠佐證現價合理性，加上外資近期籌碼偏賣超，故不建議現價追高；若回檔至海龜通道中段獲支撐且籌碼轉穩，可分批布局，目標區間看向通道上軌附近，跌破近期支撐則停損出場。</p>
+  </div>
+
+  <div class="analyst-disclaimer">本分析僅供參考，非投資建議</div>
+</div>
+<div class="analyst-card">
+  <div class="analyst-header">
+    <span class="chart-title">2327 國巨</span>
+    
+    <span class="signal-tag neutral">AI 觀望</span>
+    <span class="conf-tag conf-mid">信心 中</span>
+    
+    
+  </div>
+
+
+  <div class="analyst-block">
+    <div class="block-title">技術面</div>
+    <p>股價位於海龜通道下緣（20日區間僅13%位置），KD已達超賣區（K=13.07、D=15.47），短線有技術性反彈條件；但RSI(14)=40.96僅偏中性，未見強力扭轉動能，且RSI(5)=22.65仍偏空，顯示空方力道尚未完全出盡，均線排列資料未提供無法佐證。</p>
+    <ul class="key-list"><li>海龜通道下緣（20日通道位置13%）</li><li>KD超賣（K=13.07/D=15.47）</li><li>RSI(5)=22.65 偏空</li><li>RSI(14)=40.96 中性，缺乏強反轉訊號</li></ul>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">籌碼面</div>
+    <p>最近5個交易日外資買賣超互見（7/8+3,476、7/9-4,491、7/13+2,813、7/14+4,604、7/15-7,987張），累計小幅淨賣超約1,585張；投信則轉為持續且擴大的賣超（7/13-4,366、7/14-5,711張），累計淨賣超約9,610張，籌碼面呈現法人調節賣壓，尤其投信賣壓明顯，對股價支撐力道偏弱。</p>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">基本面</div>
+    <p>估值水位：P/E 62.83、P/B 9.83 皆處高檔，遠高於一般電子零組件股合理區間，殖利率僅0.75%偏低，顯示目前股價隱含相當高的獲利成長預期，估值明顯偏貴。獲利趨勢：近四季營收年增率持續正成長（2026Q1 +22.7%、2025Q4 +19.9%、2025Q3 +4.2%），毛利率（35.6%→36.2%→37.3%→38.1%）、營益率（21.5%→22.9%→24.3%→25.2%）、淨利率（15.3%→19.3%→18.9%→21.1%）皆逐季擴張，獲利動能屬擴張階段。惟以TTM EPS 20.03元反推，若套用電子零組件股常見20-30倍本益比，合理股價區間約為400-600元，顯著低於現價798元，顯示近期股價重挫（新聞面提及跌停、大戶提款）可能正是市場對過高估值的修正，短期仍有評價下修風險。</p>
+    <ul class="key-list"><li>TTM EPS 20.03元</li><li>TTM ROE 15.7%</li><li>2026Q1毛利率38.1%</li><li>2026Q1營益率25.2%</li><li>P/E 62.83</li><li>P/B 9.83</li></ul>
+  </div>
+
+  <div class="analyst-action neutral">
+    <div class="action-row"><span>進場區間</span><strong>無明確進場訊號，建議觀望，若拉回至737支撐區且量縮止穩可分批試單</strong></div>
+    <div class="action-row"><span>停損價位</span><strong>737</strong></div>
+    <div class="action-row"><span>目標價</span><strong>反彈目標參考900-950（前波密集區），中期須待估值修正到位</strong></div>
+    <p class="action-reason">技術面雖處超賣區具短線反彈條件，但基本面估值（P/E 62.83、P/B 9.83）明顯偏貴，籌碼面投信持續賣超，加上近期新聞出現違約交割爭議與重挫跌停等負面消息，風險尚未完全釋放，建議觀望等待止跌訊號與籌碼轉佳後再評估進場。</p>
+  </div>
+
+  <div class="analyst-disclaimer">本分析僅供參考，非投資建議</div>
+</div>
+<div class="analyst-card">
+  <div class="analyst-header">
+    <span class="chart-title">3042 晶技</span>
+    
+    <span class="signal-tag neutral">AI 觀望</span>
+    <span class="conf-tag conf-mid">信心 中</span>
+    
+    
+  </div>
+
+
+  <div class="analyst-block">
+    <div class="block-title">技術面</div>
+    <p>股價189.5元位於海龜通道（20日）下緣，通道位置僅15%，顯示近期偏弱走勢逼近下軌179元支撐；KD與RSI（5日、14日）均處中性區間，尚未出現明確超賣或反轉訊號，短線動能不足，觀察179元支撐是否有效守住。</p>
+    <ul class="key-list"><li>海龜通道20日：上軌250.0／下軌179.0，通道位置15%（訊號：通道下緣）</li><li>KD：K=18.12 < D=27.71，低檔鈍化但訊號判定為中性</li><li>RSI(5)=35.33、RSI(14)=45.17，皆為中性，無明顯超賣背離</li></ul>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">籌碼面</div>
+    <p>近5個交易日三大法人買賣超呈現外資態度搖擺：7/8外資大賣5,095張後，7/9~7/14轉為小幅回補（+79、+1,313、+3,298張），但7/15又轉賣超1,293張，累計5日外資淨賣超約1,698張，尚未形成穩定買盤；投信同期小幅淨買超約683張，自營商全期無動作，籌碼面缺乏明確一致訊號，中性偏保守。</p>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">基本面</div>
+    <p>估值水位偏貴：本益比36.16倍、股價淨值比4.26倍，明顯高於被動元件族群常見15-25倍本益比區間，殖利率僅2.53%亦非高息防禦標的，顯示現價已反映較高成長預期。獲利趨勢面：近4季EPS由2025Q2 1.08元升至2025Q3 1.49元後，2025Q4回落1.33元、2026Q1再降至1.32元，營收年增率2026Q1僅+5.5%（2025Q3甚至YoY-4.8%），毛利率31-34%、營益率14-16%、單季ROE僅2.5-3.4%波動，整體獲利動能屬持平甚至略見衰退，尚未看到擴張跡象。以TTM EPS 5.22元反推，若比照同業合理本益比20-25倍，隱含合理股價約104-130元，現價189.5元明顯高於此區間，估值偏昂貴，需留意獲利成長是否能跟上股價。</p>
+    <ul class="key-list"><li>TTM EPS：5.22元</li><li>TTM ROE：11.8%</li><li>最新季（2026Q1）毛利率：32.3%</li><li>本益比 P/E：36.16倍</li><li>股價淨值比 P/B：4.26倍</li><li>殖利率：2.53%（股利年度114）</li></ul>
+  </div>
+
+  <div class="analyst-action neutral">
+    <div class="action-row"><span>進場區間</span><strong>179-185（等待通道下緣支撐確立）</strong></div>
+    <div class="action-row"><span>停損價位</span><strong>跌破179元停損</strong></div>
+    <div class="action-row"><span>目標價</span><strong>205-210（短線反彈參考前波壓力區）</strong></div>
+    <p class="action-reason">技術面股價貼近海龜通道下軌且KD、RSI皆中性，尚無明確買超或跌破訊號；基本面本益比與股價淨值比皆高於同業合理區間，反推TTM EPS對應合理價約104-130元，現價偏貴；籌碼面外資買賣超搖擺不定，缺乏方向共識。綜合三面向建議觀望，待179元支撐確認或籌碼轉趨一致再行決策。</p>
+  </div>
+
+  <div class="analyst-disclaimer">本分析僅供參考，非投資建議</div>
+</div>
+<div class="analyst-card">
+  <div class="analyst-header">
+    <span class="chart-title">2317 鴻海</span>
+    
+    <span class="signal-tag neutral">AI 觀望</span>
+    <span class="conf-tag conf-mid">信心 中</span>
+    
+    
+  </div>
+
+
+  <div class="analyst-block">
+    <div class="block-title">技術面</div>
+    <p>股價239元位於海龜通道(20日)下緣，通道位置僅20%，短線偏弱但尚未跌破230下軌支撐；KD(K=30.2, D=20.49)與RSI(5日46.94、14日40.25)均落於中性區間，動能方向不明朗，量價缺乏明確突破訊號，建議等待站穩230上緣或站上通道中軸再判斷方向。</p>
+    <ul class="key-list"><li>海龜通道20日下軌230.0、上軌275.5，通道位置20%，屬通道下緣</li><li>KD中性：K=30.2, D=20.49，尚未出現黃金/死亡交叉</li><li>RSI(5)=46.94、RSI(14)=40.25，均為中性，無超買超賣訊號</li></ul>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">籌碼面</div>
+    <p>近5個交易日三大法人買賣超方向反覆：外資由賣轉買再轉賣後於最新交易日(07/15)大買6,880張，投信則多為小額買超但最新一日轉賣890張，自營商全程無動作，整體籌碼呈現外資波段進出、投信態度轉趨保守，尚未形成一致性的多方或空方共識，需觀察後續外資是否延續買超。</p>
+  </div>
+
+  <div class="analyst-block">
+    <div class="block-title">基本面</div>
+    <p>估值水位：本益比16.97倍、股價淨值比1.88倍、殖利率3.0%，以TTM EPS 14.13元反推，若給予EMS/AI伺服器供應鏈合理本益比區間14-18倍，合理股價約198-254元，現價239元落在區間中段，估值尚合理，非明顯便宜也非昂貴。獲利趨勢：近4季EPS在3.19-4.15元間震盪(2026Q1 3.56、2025Q4 3.23、2025Q3 4.15、2025Q2 3.19)，營收年增率強勁擴張(+28.9%、+22.3%、+11.0%)反映AI伺服器/雲端需求帶動出貨量成長，但毛利率(5.9%-6.4%)、營益率(3.2%-3.6%)、淨利率(2.1%-3.2%)僅小幅波動未見明顯提升，屬於「營收擴張、毛利率停滯」格局，獲利成長主要由量增驅動而非利潤率改善，TTM ROE 12.7%屬中等水準。</p>
+    <ul class="key-list"><li>TTM EPS：14.13元</li><li>TTM ROE：12.7%</li><li>本益比P/E：16.97倍（反推合理股價區間約198-254元）</li><li>股價淨值比P/B：1.88倍</li><li>殖利率：3.0%</li><li>最新季(2026Q1)毛利率：6.2%，營收YoY +28.9%</li></ul>
+  </div>
+
+  <div class="analyst-action neutral">
+    <div class="action-row"><span>進場區間</span><strong>230-235</strong></div>
+    <div class="action-row"><span>停損價位</span><strong>225</strong></div>
+    <div class="action-row"><span>目標價</span><strong>260-265</strong></div>
+    <p class="action-reason">現價239元位於海龜通道下緣且技術指標中性，缺乏明確方向；建議暫時觀望，待回落至230-235通道支撐區間且籌碼轉為外資連續買超再考慮進場，若跌破225則視為支撐失守應停損；若站穩通道中軸則上看260-265（接近通道上緣275.5前的區域）。</p>
+  </div>
+
+  <div class="analyst-disclaimer">本分析僅供參考，非投資建議</div>
+</div>
+</div>
+
+
+<h2>推薦股票總覽</h2>
+<table>
+<tr>
+  <th>代碼</th><th>名稱</th><th>推文情緒</th>
+  <th>收盤價</th><th>20日高</th><th>20日低</th><th>通道位置</th><th>技術訊號</th>
+  <th>說明</th>
+</tr>
+<tr>
+  <td>2408</td>
+  <td>南亞科</td>
+  <td class="bullish">看多</td>
+  <td>481.0</td>
+  <td>505.0</td>
+  <td>386.5</td>
+  <td>80%</td>
+  <td class="bullish">接近突破</td>
+  <td class="detail">全日最熱議個股，鄉民稱「記憶體就牙科修正最少」「其他都在等死」，盤中一度衝上 486 挑戰漲停、喊出目標價 600 至 1000；但尾盤壓回守 480，開始出現「這邊畫一個 M 就完了」的高檔疑慮。</td>
+</tr>
+<tr>
+  <td>2337</td>
+  <td>旺宏</td>
+  <td class="neutral">中性</td>
+  <td>148.5</td>
+  <td>192.0</td>
+  <td>130.5</td>
+  <td>29%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">盤中帶量紅棒站回 150，「記憶卡蛙」歡呼復活、喊挑戰季線；盤後美光與海力士夜盤走弱，情緒瞬間翻轉成「爽一天又被拖出去宰」，多空拉鋸極為劇烈。</td>
+</tr>
+<tr>
+  <td>2330</td>
+  <td>台積電</td>
+  <td class="neutral">中性</td>
+  <td>2440.0</td>
+  <td>2535.0</td>
+  <td>2325.0</td>
+  <td>55%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">明日法說會成全場焦點，多方喊「一G救全村」「26H2 先進製程漲價 + Capex 上調」，空方則反諷「法說開成法會」「利多出盡地獄之門」；盤中拉紅但尾盤翻軟，觀望氣氛濃厚。</td>
+</tr>
+<tr>
+  <td>2344</td>
+  <td>華邦電</td>
+  <td class="bullish">看多</td>
+  <td>180.5</td>
+  <td>233.5</td>
+  <td>156.0</td>
+  <td>32%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">盤中亮燈漲停，「華崩」翻身喊年底看 300、需三根才回 230；不過盤後有人後悔沒出掉，並出現「明天開盤空華崩」的看空聲音。</td>
+</tr>
+<tr>
+  <td>2313</td>
+  <td>華通</td>
+  <td class="bullish">看多</td>
+  <td>248.0</td>
+  <td>266.5</td>
+  <td>214.0</td>
+  <td>65%</td>
+  <td class="bullish">接近突破</td>
+  <td class="detail">沉寂多時後突然亮燈漲停，鄉民刷「華通睡這麼久終於醒了」「太空夢再起？」，但也有人質疑漲停缺乏明確題材。</td>
+</tr>
+<tr>
+  <td>8299</td>
+  <td>群聯</td>
+  <td class="bearish">看空</td>
+  <td>2105.0</td>
+  <td>2670.0</td>
+  <td>1955.0</td>
+  <td>21%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">記憶體族群中最弱，被酸「每天開高走低，空的人都賺爛」「發債以來股價一蹶不振」，散戶籌碼混亂、投信持續調節，全日幾乎清一色負面。</td>
+</tr>
+<tr>
+  <td>3189</td>
+  <td>景碩</td>
+  <td class="bearish">看空</td>
+  <td>845.0</td>
+  <td>939.0</td>
+  <td>640.0</td>
+  <td>69%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail">處置股試撮期間被玩弄跌停與漲停，鄉民多為看戲與抱怨「主力在搞」，明日處置結束後波動預期加大。</td>
+</tr>
+<tr>
+  <td>0050</td>
+  <td>元大台灣50</td>
+  <td class="neutral">觀察清單</td>
+  <td>106.3</td>
+  <td>112.3</td>
+  <td>102.2</td>
+  <td>40%</td>
+  <td class="neutral">通道內</td>
+  <td class="detail"></td>
+</tr>
+<tr>
+  <td>6488</td>
+  <td>環球晶</td>
+  <td class="neutral">觀察清單</td>
+  <td>1480.0</td>
+  <td>1600.0</td>
+  <td>866.0</td>
+  <td>84%</td>
+  <td class="bullish">通道上緣</td>
+  <td class="detail"></td>
+</tr>
+<tr>
+  <td>2327</td>
+  <td>國巨</td>
+  <td class="neutral">觀察清單</td>
+  <td>798.0</td>
+  <td>1220.0</td>
+  <td>737.0</td>
+  <td>13%</td>
+  <td class="bearish">通道下緣</td>
+  <td class="detail"></td>
+</tr>
+
+</table>
+
+<h2>海龜通道圖表</h2>
+<div class="legend">
+  <span class="leg-close">收盤價</span>
+  <span class="leg-u20">20日上軌</span>
+  <span class="leg-l20">20日下軌</span>
+  <span class="leg-10">10日上/下軌</span>
+</div>
+<div class="charts-grid">
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2408 南亞科</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag bullish">接近突破</span>
+  </div>
+  <canvas id="chart_2408" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2337 旺宏</span>
+    <span class="tag neutral">中性</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_2337" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2330 台積電</span>
+    <span class="tag neutral">中性</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_2330" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2344 華邦電</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_2344" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2313 華通</span>
+    <span class="tag bullish">看多</span>
+    <span class="tag bullish">接近突破</span>
+  </div>
+  <canvas id="chart_2313" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">8299 群聯</span>
+    <span class="tag bearish">看空</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_8299" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">3189 景碩</span>
+    <span class="tag bearish">看空</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_3189" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">0050 元大台灣50</span>
+    <span class="tag neutral">觀察清單</span>
+    <span class="tag neutral">通道內</span>
+  </div>
+  <canvas id="chart_0050" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">6488 環球晶</span>
+    <span class="tag neutral">觀察清單</span>
+    <span class="tag bullish">通道上緣</span>
+  </div>
+  <canvas id="chart_6488" height="200"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2327 國巨</span>
+    <span class="tag neutral">觀察清單</span>
+    <span class="tag bearish">通道下緣</span>
+  </div>
+  <canvas id="chart_2327" height="200"></canvas>
+</div>
+
+</div>
+
+
+<h2>KD / RSI 短線動能分析</h2>
+<table>
+<tr>
+  <th>代碼</th><th>名稱</th><th>收盤價</th>
+  <th>K</th><th>D</th><th>KD訊號</th>
+  <th>RSI(5)</th><th>RSI(14)</th><th>RSI訊號</th>
+  <th>綜合評估</th>
+</tr>
+<tr>
+  <td>2408</td>
+  <td>南亞科</td>
+  <td>481.0</td>
+  <td>67.04</td>
+  <td>51.32</td>
+  <td class="neutral">KD中性</td>
+  <td>76.17</td>
+  <td>62.97</td>
+  <td class="bearish">RSI偏多</td>
+  <td class="bearish">短線偏強 / RSI 偏高留意</td>
+</tr>
+<tr>
+  <td>2337</td>
+  <td>旺宏</td>
+  <td>148.5</td>
+  <td>46.8</td>
+  <td>30.97</td>
+  <td class="neutral">KD中性</td>
+  <td>61.94</td>
+  <td>49.12</td>
+  <td class="neutral">RSI中性</td>
+  <td class="neutral">盤整 / 觀望</td>
+</tr>
+<tr>
+  <td>2330</td>
+  <td>台積電</td>
+  <td>2440.0</td>
+  <td>38.05</td>
+  <td>42.49</td>
+  <td class="neutral">KD中性</td>
+  <td>53.66</td>
+  <td>54.78</td>
+  <td class="neutral">RSI中性</td>
+  <td class="neutral">盤整 / 觀望</td>
+</tr>
+<tr>
+  <td>2344</td>
+  <td>華邦電</td>
+  <td>180.5</td>
+  <td>29.27</td>
+  <td>21.4</td>
+  <td class="bullish">KD黃金交叉</td>
+  <td>55.87</td>
+  <td>51.44</td>
+  <td class="neutral">RSI中性</td>
+  <td class="bullish">短線轉多 / 買進訊號</td>
+</tr>
+<tr>
+  <td>2313</td>
+  <td>華通</td>
+  <td>248.0</td>
+  <td>61.04</td>
+  <td>44.82</td>
+  <td class="neutral">KD中性</td>
+  <td>69.45</td>
+  <td>53.86</td>
+  <td class="neutral">RSI中性</td>
+  <td class="neutral">盤整 / 觀望</td>
+</tr>
+<tr>
+  <td>8299</td>
+  <td>群聯</td>
+  <td>2105.0</td>
+  <td>28.18</td>
+  <td>27.03</td>
+  <td class="bullish">KD黃金交叉</td>
+  <td>35.77</td>
+  <td>41.23</td>
+  <td class="neutral">RSI中性</td>
+  <td class="bullish">短線轉多 / 買進訊號</td>
+</tr>
+<tr>
+  <td>3189</td>
+  <td>景碩</td>
+  <td>845.0</td>
+  <td>65.05</td>
+  <td>51.78</td>
+  <td class="neutral">KD中性</td>
+  <td>65.53</td>
+  <td>59.34</td>
+  <td class="neutral">RSI中性</td>
+  <td class="neutral">盤整 / 觀望</td>
+</tr>
+<tr>
+  <td>2317</td>
+  <td>鴻海</td>
+  <td>239.0</td>
+  <td>30.2</td>
+  <td>20.49</td>
+  <td class="neutral">KD中性</td>
+  <td>46.94</td>
+  <td>40.25</td>
+  <td class="neutral">RSI中性</td>
+  <td class="neutral">盤整 / 觀望</td>
+</tr>
+<tr>
+  <td>3042</td>
+  <td>晶技</td>
+  <td>189.5</td>
+  <td>18.12</td>
+  <td>27.71</td>
+  <td class="neutral">KD中性</td>
+  <td>35.33</td>
+  <td>45.17</td>
+  <td class="neutral">RSI中性</td>
+  <td class="neutral">盤整 / 觀望</td>
+</tr>
+
+</table>
+
+<h2>KD / RSI 圖表</h2>
+<div class="legend">
+  <span class="leg-k">K線</span>
+  <span class="leg-d">D線</span>
+  <span class="leg-rsi5">RSI(5)</span>
+  <span class="leg-rsi14">RSI(14)</span>
+</div>
+<div class="charts-grid">
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2408 南亞科</span>
+    <span class="tag neutral">KD中性</span>
+    <span class="tag bearish">RSI偏多</span>
+  </div>
+  <canvas id="kd_2408" height="150"></canvas>
+  <canvas id="rsi_2408" height="150" style="margin-top: 8px;"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2337 旺宏</span>
+    <span class="tag neutral">KD中性</span>
+    <span class="tag neutral">RSI中性</span>
+  </div>
+  <canvas id="kd_2337" height="150"></canvas>
+  <canvas id="rsi_2337" height="150" style="margin-top: 8px;"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2330 台積電</span>
+    <span class="tag neutral">KD中性</span>
+    <span class="tag neutral">RSI中性</span>
+  </div>
+  <canvas id="kd_2330" height="150"></canvas>
+  <canvas id="rsi_2330" height="150" style="margin-top: 8px;"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2344 華邦電</span>
+    <span class="tag bullish">KD黃金交叉</span>
+    <span class="tag neutral">RSI中性</span>
+  </div>
+  <canvas id="kd_2344" height="150"></canvas>
+  <canvas id="rsi_2344" height="150" style="margin-top: 8px;"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2313 華通</span>
+    <span class="tag neutral">KD中性</span>
+    <span class="tag neutral">RSI中性</span>
+  </div>
+  <canvas id="kd_2313" height="150"></canvas>
+  <canvas id="rsi_2313" height="150" style="margin-top: 8px;"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">8299 群聯</span>
+    <span class="tag bullish">KD黃金交叉</span>
+    <span class="tag neutral">RSI中性</span>
+  </div>
+  <canvas id="kd_8299" height="150"></canvas>
+  <canvas id="rsi_8299" height="150" style="margin-top: 8px;"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">3189 景碩</span>
+    <span class="tag neutral">KD中性</span>
+    <span class="tag neutral">RSI中性</span>
+  </div>
+  <canvas id="kd_3189" height="150"></canvas>
+  <canvas id="rsi_3189" height="150" style="margin-top: 8px;"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">2317 鴻海</span>
+    <span class="tag neutral">KD中性</span>
+    <span class="tag neutral">RSI中性</span>
+  </div>
+  <canvas id="kd_2317" height="150"></canvas>
+  <canvas id="rsi_2317" height="150" style="margin-top: 8px;"></canvas>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">3042 晶技</span>
+    <span class="tag neutral">KD中性</span>
+    <span class="tag neutral">RSI中性</span>
+  </div>
+  <canvas id="kd_3042" height="150"></canvas>
+  <canvas id="rsi_3042" height="150" style="margin-top: 8px;"></canvas>
+</div>
+
+</div>
+
+
+<script>
+
+// --- 2408 南亞科 ---
+new Chart(document.getElementById('chart_2408'), {
+  type: 'line',
+  data: {
+    labels: ["2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: '20日上軌', data: [248.0, 248.0, 248.0, 255.0, 275.0, 275.0, 275.0, 276.0, 282.5, 295.0, 295.0, 299.5, 313.0, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 314.5, 314.5, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 298.0, 291.5, 291.0, 288.5, 288.5, 288.5, 288.5, 288.5, 288.5, 288.5, 288.5, 288.5, 288.5, 288.5, 288.5, 272.5, 264.5, 249.0, 249.0, 249.0, 249.0, 240.0, 242.5, 242.5, 242.5, 242.5, 259.0, 282.0, 296.0, 296.0, 301.0, 325.0, 325.0, 353.0, 353.0, 353.0, 353.0, 353.0, 353.0, 353.0, 353.0, 353.0, 353.0, 353.0, 353.0, 381.5, 419.5, 430.5, 430.5, 430.5, 430.5, 430.5, 430.5, 430.5, 430.5, 430.5, 432.5, 437.0, 459.5, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [248.0, 248.0, 248.0, 255.0, 275.0, 275.0, 275.0, 276.0, 282.5, 295.0, 295.0, 299.5, 313.0, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 326.5, 314.5, 314.5, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 303.0, 298.0, 291.5, 291.0, 288.0, 284.5, 288.5, 288.5, 288.5, 288.5, 288.5, 288.5, 288.5, 288.5, 288.5, 288.5, 272.5, 264.5, 249.0, 249.0, 249.0, 249.0, 227.5, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 242.5, 242.5, 242.5, 242.5, 259.0, 282.0, 296.0, 296.0, 301.0, 325.0, 325.0, 353.0, 353.0, 353.0, 353.0, 353.0, 353.0, 353.0, 353.0, 353.0, 353.0, 339.0, 351.5, 381.5, 419.5, 430.5, 430.5, 430.5, 430.5, 430.5, 430.5, 430.5, 430.5, 430.5, 432.5, 437.0, 459.5, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 505.0, 500.0, 498.0, 498.0, 498.0, 465.5, 466.5, 466.5, 489.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [230.0, 236.5, 237.5, 250.0, 275.0, 272.0, 251.0, 266.5, 271.5, 286.0, 277.0, 297.0, 297.0, 326.5, 294.0, 277.5, 295.0, 275.0, 264.0, 274.5, 271.0, 278.0, 289.0, 298.0, 288.0, 285.5, 285.0, 256.5, 234.5, 257.5, 233.0, 210.0, 231.0, 254.0, 239.5, 238.0, 261.5, 271.5, 276.0, 260.0, 234.0, 223.0, 216.5, 226.5, 225.5, 219.5, 220.5, 198.5, 211.0, 200.5, 206.0, 223.0, 205.0, 215.0, 225.5, 220.0, 211.5, 213.5, 210.0, 207.0, 220.0, 219.0, 208.0, 206.0, 226.5, 237.5, 235.0, 215.5, 237.0, 256.5, 282.0, 287.0, 274.0, 301.0, 321.0, 321.0, 341.0, 311.5, 305.0, 274.5, 275.0, 293.0, 310.5, 296.0, 303.5, 312.0, 324.0, 347.0, 381.5, 419.5, 401.5, 395.0, 360.0, 339.5, 363.0, 333.0, 340.0, 374.0, 395.5, 425.0, 437.0, 459.5, 505.0, 454.5, 443.5, 477.0, 449.0, 453.0, 452.5, 421.0, 407.0, 409.5, 420.5, 403.0, 396.0, 435.5, 435.5, 423.0, 448.0, 481.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [189.0, 189.5, 191.0, 206.5, 213.0, 217.5, 217.5, 217.5, 222.0, 224.5, 225.0, 235.5, 244.5, 245.0, 245.0, 245.0, 256.0, 256.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 251.0, 231.0, 231.0, 231.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 215.0, 204.0, 204.0, 204.0, 204.0, 204.0, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 200.0, 200.0, 202.0, 202.0, 202.0, 202.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 214.5, 214.5, 214.5, 214.5, 217.0, 242.5, 260.0, 260.0, 260.0, 265.5, 265.5, 265.5, 265.5, 265.5, 265.5, 265.5, 265.5, 280.0, 288.0, 288.0, 295.5, 306.0, 306.0, 324.0, 324.0, 324.0, 324.0, 324.0, 324.0, 324.0, 325.0, 325.0, 325.0, 365.0, 382.0, 396.0, 412.0, 386.5, 386.5, 386.5, 386.5, 386.5, 386.5, 386.5, 386.5, 386.5, 386.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [154.5, 154.5, 158.5, 164.5, 170.0, 175.0, 175.0, 175.0, 184.5, 184.5, 189.0, 189.5, 191.0, 206.5, 213.0, 217.5, 217.5, 217.5, 222.0, 224.5, 225.0, 235.5, 244.5, 245.0, 245.0, 245.0, 251.0, 251.0, 231.0, 231.0, 231.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 204.0, 204.0, 204.0, 204.0, 204.0, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 198.5, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 199.0, 214.5, 214.5, 214.5, 214.5, 217.0, 242.5, 260.0, 260.0, 260.0, 265.5, 265.5, 265.5, 265.5, 265.5, 265.5, 265.5, 265.5, 280.0, 288.0, 288.0, 295.5, 306.0, 306.0, 324.0, 324.0, 324.0, 324.0, 324.0, 324.0, 324.0, 325.0, 325.0, 325.0, 365.0, 382.0, 386.5, 386.5], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2408 南亞科', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2337 旺宏 ---
+new Chart(document.getElementById('chart_2337'), {
+  type: 'line',
+  data: {
+    labels: ["2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: '20日上軌', data: [64.0, 64.0, 64.0, 67.80000305175781, 73.69999694824219, 76.80000305175781, 78.80000305175781, 78.80000305175781, 78.80000305175781, 78.80000305175781, 80.9000015258789, 83.80000305175781, 92.0999984741211, 95.5, 95.5, 95.5, 95.5, 95.5, 95.5, 95.5, 95.5, 98.5, 108.0, 113.5, 117.5, 117.5, 120.5, 120.5, 120.5, 120.5, 120.5, 120.5, 120.5, 120.5, 120.5, 120.5, 120.5, 130.5, 143.5, 157.5, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 162.0, 162.0, 162.0, 162.0, 162.0, 162.0, 171.5, 176.0, 176.0, 176.0, 176.5, 176.5, 176.5, 176.5, 176.5, 176.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 185.5, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [64.0, 64.0, 64.0, 67.80000305175781, 73.69999694824219, 76.80000305175781, 78.80000305175781, 78.80000305175781, 78.80000305175781, 78.80000305175781, 80.9000015258789, 83.80000305175781, 92.0999984741211, 95.5, 95.5, 95.5, 95.5, 95.5, 95.5, 95.5, 95.5, 98.5, 108.0, 113.5, 117.5, 117.5, 120.5, 120.5, 120.5, 120.5, 120.5, 120.5, 120.5, 120.5, 120.5, 120.5, 119.0, 130.5, 143.5, 157.5, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 170.0, 155.0, 150.0, 154.0, 156.0, 156.0, 162.0, 162.0, 162.0, 162.0, 162.0, 162.0, 162.0, 162.0, 162.0, 162.0, 162.0, 171.5, 176.0, 176.0, 176.0, 176.5, 176.5, 176.5, 176.5, 176.5, 176.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 178.5, 175.0, 175.0, 175.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 177.5, 168.5, 171.5, 185.5, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 192.0, 179.5, 179.5, 174.5, 167.5, 162.5, 156.5, 152.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [60.900001525878906, 60.099998474121094, 61.900001525878906, 67.0, 73.69999694824219, 76.80000305175781, 73.30000305175781, 73.4000015258789, 69.30000305175781, 76.19999694824219, 76.19999694824219, 83.80000305175781, 92.0999984741211, 92.80000305175781, 84.80000305175781, 84.5, 89.69999694824219, 87.9000015258789, 80.80000305175781, 88.80000305175781, 89.5999984741211, 98.5, 103.5, 113.5, 108.0, 110.0, 116.0, 104.5, 98.0, 107.5, 102.5, 92.30000305175781, 90.69999694824219, 99.69999694824219, 99.0, 108.5, 119.0, 130.5, 143.5, 157.0, 160.0, 148.5, 136.5, 142.0, 128.0, 125.0, 128.0, 115.5, 127.0, 129.0, 136.5, 150.0, 142.0, 146.0, 147.5, 155.5, 142.0, 139.0, 131.0, 120.5, 132.5, 134.5, 126.0, 132.0, 145.0, 159.5, 167.0, 154.0, 154.5, 160.5, 172.0, 164.5, 153.0, 159.5, 153.0, 168.0, 169.0, 162.5, 160.0, 144.0, 141.0, 141.0, 149.5, 152.5, 160.5, 155.5, 160.0, 166.5, 167.5, 175.5, 162.0, 156.5, 150.0, 143.5, 145.5, 135.0, 140.0, 146.5, 159.0, 166.5, 161.5, 169.0, 185.5, 172.0, 172.0, 161.5, 162.5, 158.5, 155.5, 143.5, 145.5, 142.5, 144.5, 139.0, 138.5, 143.5, 143.5, 138.0, 139.5, 148.5], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [38.25, 39.150001525878906, 40.04999923706055, 47.650001525878906, 47.70000076293945, 53.0, 57.0, 57.0, 58.599998474121094, 58.599998474121094, 59.20000076293945, 59.79999923706055, 63.0, 66.4000015258789, 66.4000015258789, 67.4000015258789, 67.4000015258789, 67.4000015258789, 69.80000305175781, 73.0, 79.5, 79.5, 79.5, 79.5, 79.5, 79.5, 79.5, 79.5, 87.30000305175781, 88.80000305175781, 88.80000305175781, 92.30000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 93.30000305175781, 98.5, 104.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 125.0, 127.0, 118.0, 118.0, 118.0, 118.0, 118.0, 118.0, 118.0, 118.0, 118.0, 118.0, 123.5, 124.0, 124.0, 124.0, 138.0, 149.0, 147.0, 147.0, 147.0, 147.0, 144.0, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 140.5, 140.5, 140.5, 135.0, 135.0, 135.0, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 144.0, 150.0, 153.5, 142.5, 135.0, 135.0, 135.0, 135.0, 134.0, 134.0, 134.0, 134.0, 130.5, 130.5], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [35.849998474121094, 36.0, 36.5, 37.04999923706055, 37.04999923706055, 38.0, 38.0, 38.0, 38.0, 38.0, 38.25, 39.150001525878906, 40.04999923706055, 47.650001525878906, 47.70000076293945, 53.0, 57.0, 57.0, 58.599998474121094, 58.599998474121094, 59.20000076293945, 59.79999923706055, 63.0, 66.4000015258789, 66.4000015258789, 67.4000015258789, 67.4000015258789, 67.4000015258789, 69.80000305175781, 73.0, 79.5, 79.5, 79.5, 79.5, 79.5, 79.5, 79.5, 79.5, 87.30000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 93.30000305175781, 98.5, 104.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 115.5, 118.0, 118.0, 118.0, 118.0, 118.0, 118.0, 118.0, 118.0, 118.0, 118.0, 118.0, 118.0, 123.5, 124.0, 124.0, 124.0, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 135.0, 135.0, 135.0, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 134.0, 134.0, 130.5, 130.5], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2337 旺宏', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2330 台積電 ---
+new Chart(document.getElementById('chart_2330'), {
+  type: 'line',
+  data: {
+    labels: ["2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: '20日上軌', data: [1720.0, 1720.0, 1720.0, 1750.0, 1780.0, 1780.0, 1780.0, 1780.0, 1780.0, 1785.0, 1785.0, 1820.0, 1835.0, 1835.0, 1835.0, 1835.0, 1835.0, 1835.0, 1835.0, 1835.0, 1880.0, 1925.0, 1935.0, 1975.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2010.0, 1995.0, 1980.0, 1960.0, 1960.0, 1950.0, 1950.0, 1950.0, 1955.0, 2000.0, 2000.0, 2055.0, 2100.0, 2100.0, 2100.0, 2100.0, 2100.0, 2100.0, 2135.0, 2190.0, 2330.0, 2330.0, 2330.0, 2330.0, 2330.0, 2330.0, 2330.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2360.0, 2375.0, 2415.0, 2415.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2510.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [1720.0, 1720.0, 1720.0, 1750.0, 1780.0, 1780.0, 1780.0, 1780.0, 1780.0, 1785.0, 1785.0, 1820.0, 1835.0, 1835.0, 1835.0, 1835.0, 1835.0, 1835.0, 1835.0, 1835.0, 1880.0, 1925.0, 1935.0, 1975.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2025.0, 2010.0, 1995.0, 1980.0, 1960.0, 1960.0, 1950.0, 1950.0, 1950.0, 1950.0, 1915.0, 1910.0, 1910.0, 1910.0, 1910.0, 1880.0, 1875.0, 1875.0, 1950.0, 1955.0, 2000.0, 2000.0, 2055.0, 2100.0, 2100.0, 2100.0, 2100.0, 2100.0, 2100.0, 2135.0, 2190.0, 2330.0, 2330.0, 2330.0, 2330.0, 2330.0, 2330.0, 2330.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2345.0, 2325.0, 2325.0, 2325.0, 2325.0, 2330.0, 2360.0, 2375.0, 2415.0, 2415.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2440.0, 2415.0, 2415.0, 2510.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2535.0, 2505.0, 2505.0, 2505.0, 2505.0, 2505.0, 2505.0, 2500.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [1710.0, 1710.0, 1690.0, 1740.0, 1760.0, 1775.0, 1740.0, 1760.0, 1770.0, 1755.0, 1780.0, 1820.0, 1805.0, 1775.0, 1765.0, 1800.0, 1785.0, 1765.0, 1780.0, 1815.0, 1880.0, 1915.0, 1900.0, 1965.0, 2015.0, 1995.0, 1975.0, 1935.0, 1865.0, 1900.0, 1890.0, 1810.0, 1850.0, 1940.0, 1885.0, 1865.0, 1845.0, 1870.0, 1905.0, 1850.0, 1840.0, 1810.0, 1810.0, 1845.0, 1840.0, 1820.0, 1780.0, 1760.0, 1855.0, 1810.0, 1860.0, 1950.0, 1955.0, 2000.0, 1990.0, 2055.0, 2080.0, 2085.0, 2030.0, 2025.0, 2050.0, 2050.0, 2080.0, 2185.0, 2265.0, 2215.0, 2180.0, 2135.0, 2275.0, 2250.0, 2250.0, 2310.0, 2290.0, 2235.0, 2255.0, 2220.0, 2270.0, 2265.0, 2240.0, 2205.0, 2185.0, 2230.0, 2255.0, 2310.0, 2270.0, 2300.0, 2295.0, 2355.0, 2355.0, 2380.0, 2425.0, 2385.0, 2365.0, 2295.0, 2305.0, 2255.0, 2250.0, 2310.0, 2375.0, 2400.0, 2385.0, 2410.0, 2510.0, 2490.0, 2390.0, 2390.0, 2340.0, 2370.0, 2410.0, 2505.0, 2465.0, 2445.0, 2460.0, 2440.0, 2465.0, 2415.0, 2415.0, 2440.0, 2420.0, 2440.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [1510.0, 1515.0, 1545.0, 1625.0, 1645.0, 1655.0, 1655.0, 1655.0, 1680.0, 1680.0, 1680.0, 1680.0, 1710.0, 1725.0, 1740.0, 1740.0, 1745.0, 1745.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1815.0, 1840.0, 1865.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1785.0, 1785.0, 1785.0, 1785.0, 1785.0, 1780.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1805.0, 1805.0, 1835.0, 1925.0, 1930.0, 1970.0, 1975.0, 2010.0, 2025.0, 2025.0, 2025.0, 2025.0, 2040.0, 2040.0, 2055.0, 2105.0, 2135.0, 2135.0, 2135.0, 2135.0, 2195.0, 2205.0, 2205.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2225.0, 2225.0, 2270.0, 2230.0, 2230.0, 2230.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2290.0, 2325.0, 2325.0, 2325.0, 2325.0, 2325.0, 2325.0, 2325.0, 2325.0, 2325.0, 2330.0, 2410.0, 2390.0, 2390.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [1415.0, 1415.0, 1415.0, 1415.0, 1430.0, 1455.0, 1470.0, 1485.0, 1495.0, 1510.0, 1510.0, 1515.0, 1545.0, 1625.0, 1645.0, 1655.0, 1655.0, 1655.0, 1680.0, 1680.0, 1680.0, 1680.0, 1710.0, 1725.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1740.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1770.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1760.0, 1805.0, 1805.0, 1835.0, 1925.0, 1930.0, 1970.0, 1975.0, 2010.0, 2025.0, 2025.0, 2025.0, 2025.0, 2040.0, 2040.0, 2055.0, 2105.0, 2135.0, 2135.0, 2135.0, 2135.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2185.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2210.0, 2290.0, 2325.0, 2325.0, 2325.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2330 台積電', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2344 華邦電 ---
+new Chart(document.getElementById('chart_2344'), {
+  type: 'line',
+  data: {
+    labels: ["2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: '20日上軌', data: [110.5, 110.5, 110.5, 110.5, 117.0, 117.0, 117.0, 117.0, 117.0, 117.0, 120.5, 127.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 127.0, 127.0, 127.0, 127.0, 127.0, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 125.5, 124.5, 109.5, 109.5, 104.5, 104.5, 98.0, 98.0, 98.0, 98.0, 98.4000015258789, 100.5, 108.5, 117.0, 117.0, 117.5, 123.5, 123.5, 134.0, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 141.0, 155.0, 156.5, 158.0, 173.5, 184.5, 193.0, 193.0, 193.0, 193.0, 193.0, 193.0, 193.0, 193.0, 193.0, 201.0, 201.0, 218.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [110.5, 110.5, 110.5, 110.5, 117.0, 117.0, 117.0, 117.0, 117.0, 117.0, 120.5, 127.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 136.0, 123.5, 124.0, 124.0, 127.0, 127.0, 127.0, 127.0, 127.0, 127.0, 127.0, 127.0, 127.0, 127.0, 125.0, 126.0, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 129.5, 125.5, 124.5, 109.5, 109.5, 104.5, 104.5, 97.5999984741211, 98.0, 98.0, 98.0, 98.0, 98.0, 98.0, 98.0, 98.0, 98.0, 98.0, 96.9000015258789, 96.9000015258789, 96.9000015258789, 98.4000015258789, 100.5, 108.5, 117.0, 117.0, 117.5, 123.5, 123.5, 134.0, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 136.5, 141.0, 155.0, 156.5, 158.0, 173.5, 184.5, 193.0, 193.0, 193.0, 193.0, 193.0, 193.0, 193.0, 193.0, 193.0, 201.0, 201.0, 218.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 225.0, 225.0, 225.0, 225.0, 212.5, 210.5, 207.5, 200.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [99.80000305175781, 99.80000305175781, 99.19999694824219, 106.5, 116.5, 113.0, 105.5, 104.5, 103.0, 113.0, 115.5, 127.0, 130.0, 128.5, 116.0, 105.5, 108.5, 102.5, 97.80000305175781, 107.5, 103.5, 105.5, 115.0, 122.0, 118.0, 122.5, 124.5, 112.5, 104.0, 112.0, 106.5, 101.0, 105.5, 114.0, 109.0, 109.0, 117.0, 123.5, 128.0, 122.0, 110.0, 107.5, 99.5, 98.19999694824219, 96.0, 92.4000015258789, 93.0, 90.19999694824219, 93.0999984741211, 91.80000305175781, 89.4000015258789, 95.5999984741211, 91.0, 93.5, 94.4000015258789, 93.5, 90.19999694824219, 89.5999984741211, 87.80000305175781, 85.69999694824219, 91.0999984741211, 90.5999984741211, 87.80000305175781, 88.19999694824219, 93.9000015258789, 95.5, 92.69999694824219, 89.80000305175781, 95.4000015258789, 98.80000305175781, 108.5, 114.0, 107.0, 117.5, 121.5, 122.0, 134.0, 129.5, 130.5, 117.5, 115.5, 114.0, 125.0, 128.5, 141.0, 155.0, 144.0, 158.0, 168.0, 184.5, 177.5, 179.5, 162.0, 154.0, 156.5, 149.0, 156.5, 172.0, 189.0, 197.0, 199.0, 218.5, 222.0, 211.5, 205.0, 219.5, 206.5, 203.0, 207.5, 190.0, 183.5, 184.5, 183.0, 174.0, 168.5, 176.5, 176.5, 167.0, 164.5, 180.5], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [77.19999694824219, 82.0999984741211, 82.0999984741211, 91.5999984741211, 95.0, 96.5, 96.5, 96.5, 96.5, 98.5, 99.0, 99.0999984741211, 99.4000015258789, 99.4000015258789, 99.4000015258789, 99.4000015258789, 99.4000015258789, 99.4000015258789, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 101.0, 101.5, 101.5, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 101.5, 97.0, 97.0, 96.0, 87.19999694824219, 87.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 88.30000305175781, 86.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 84.0, 84.0, 84.0, 84.0, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 91.0999984741211, 96.5999984741211, 103.5, 103.5, 103.5, 112.0, 112.0, 112.0, 112.0, 112.0, 112.0, 112.0, 112.0, 113.5, 115.5, 119.0, 133.0, 142.0, 142.0, 146.0, 146.0, 146.0, 146.0, 146.0, 146.0, 146.0, 148.0, 148.0, 149.0, 166.0, 175.0, 186.5, 186.5, 176.0, 176.0, 176.0, 172.0, 165.0, 165.0, 165.0, 165.0, 156.0, 156.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [68.80000305175781, 68.80000305175781, 70.19999694824219, 71.19999694824219, 71.19999694824219, 72.4000015258789, 72.4000015258789, 72.5, 75.5999984741211, 75.5999984741211, 77.19999694824219, 82.0999984741211, 82.0999984741211, 91.5999984741211, 95.0, 96.5, 96.5, 96.5, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.0, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 95.9000015258789, 87.19999694824219, 87.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 85.19999694824219, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 83.80000305175781, 84.0, 84.0, 84.0, 84.0, 88.80000305175781, 88.80000305175781, 88.80000305175781, 88.80000305175781, 91.0999984741211, 96.5999984741211, 103.5, 103.5, 103.5, 112.0, 112.0, 112.0, 112.0, 112.0, 112.0, 112.0, 112.0, 113.5, 115.5, 119.0, 133.0, 142.0, 142.0, 146.0, 146.0, 146.0, 146.0, 146.0, 146.0, 146.0, 148.0, 148.0, 149.0, 165.0, 165.0, 156.0, 156.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2344 華邦電', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2313 華通 ---
+new Chart(document.getElementById('chart_2313'), {
+  type: 'line',
+  data: {
+    labels: ["2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: '20日上軌', data: [138.0, 138.0, 144.5, 144.5, 149.5, 149.5, 151.5, 158.5, 171.0, 182.0, 182.0, 182.0, 192.0, 192.0, 192.0, 192.0, 194.0, 194.0, 194.0, 194.0, 194.0, 194.0, 205.0, 225.5, 231.0, 231.0, 231.0, 246.0, 246.0, 246.0, 246.0, 246.0, 246.0, 246.0, 246.0, 246.0, 246.0, 246.0, 249.0, 249.0, 249.0, 249.0, 249.0, 249.0, 253.0, 270.0, 272.5, 272.5, 272.5, 285.0, 285.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 290.5, 287.0, 285.0, 285.0, 285.0, 285.0, 285.0, 285.0, 285.0, 285.0, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 299.0, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 270.4336853027344, 266.4566955566406, 266.4566955566406], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [138.0, 138.0, 144.5, 144.5, 149.5, 149.5, 151.5, 158.5, 171.0, 182.0, 182.0, 182.0, 192.0, 192.0, 192.0, 192.0, 194.0, 194.0, 194.0, 194.0, 194.0, 194.0, 205.0, 225.5, 231.0, 231.0, 231.0, 246.0, 246.0, 246.0, 246.0, 246.0, 246.0, 246.0, 246.0, 246.0, 246.0, 242.0, 249.0, 249.0, 249.0, 249.0, 249.0, 249.0, 253.0, 270.0, 272.5, 272.5, 272.5, 285.0, 285.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 294.0, 290.5, 287.0, 268.0, 268.0, 268.0, 268.5, 285.0, 285.0, 285.0, 285.0, 285.0, 285.0, 285.0, 285.0, 285.0, 285.0, 279.0, 279.0, 279.0, 281.0, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 305.5, 299.0, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 291.5, 270.4336853027344, 266.4566955566406, 266.4566955566406, 265.9595947265625, 263.5, 260.5, 249.0, 244.0, 241.5, 241.5, 245.0, 245.0, 248.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [135.0, 132.5, 141.0, 142.0, 143.5, 148.0, 144.5, 155.5, 171.0, 177.0, 169.0, 176.0, 178.0, 169.0, 172.0, 181.5, 192.0, 176.0, 172.0, 172.5, 183.0, 186.5, 205.0, 225.5, 209.5, 204.5, 224.5, 224.5, 211.0, 205.0, 203.0, 183.0, 191.0, 204.0, 200.0, 211.5, 221.0, 236.5, 230.0, 223.5, 222.0, 216.0, 209.5, 230.0, 245.5, 270.0, 263.0, 248.0, 266.0, 260.0, 275.0, 274.0, 281.5, 286.0, 279.0, 257.5, 263.0, 260.0, 261.5, 250.5, 254.5, 247.0, 222.5, 214.5, 235.5, 239.5, 230.0, 244.5, 268.5, 274.5, 250.0, 249.5, 253.5, 242.0, 260.0, 237.0, 245.5, 235.5, 259.0, 256.0, 255.0, 258.0, 278.0, 298.5, 284.5, 282.0, 259.0, 284.5, 282.0, 270.5, 266.5, 265.5, 259.0, 252.0, 276.0, 259.0, 275.0, 263.0, 256.0171813964844, 247.5661163330078, 262.479736328125, 258.0056457519531, 259.5, 243.0, 240.0, 233.0, 222.5, 221.0, 232.5, 220.0, 228.5, 229.5, 235.0, 218.0, 224.0, 223.0, 223.0, 235.0, 225.5, 248.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [91.5, 91.5, 91.5, 93.0999984741211, 96.19999694824219, 99.5, 104.0, 106.5, 117.0, 129.0, 130.0, 133.0, 138.5, 138.5, 138.5, 143.0, 153.0, 156.0, 165.0, 165.0, 165.0, 165.0, 165.0, 167.0, 167.0, 167.0, 167.0, 167.0, 171.0, 171.0, 178.5, 183.0, 183.0, 183.0, 183.0, 183.0, 183.0, 183.0, 183.0, 183.0, 183.0, 185.5, 193.0, 193.0, 193.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 219.0, 232.5, 239.5, 242.0, 242.0, 255.5, 255.5, 250.5, 240.0, 240.0, 222.5, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 208.5, 227.5, 227.5, 227.5, 234.0, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 250.0, 250.0, 256.0, 257.5, 251.0, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 242.5, 239.0, 233.0, 221.5, 218.0, 218.0, 218.0, 214.0, 214.0, 214.0, 214.0, 214.0, 214.0, 214.0, 214.0, 214.0, 214.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [83.80000305175781, 85.5, 87.0999984741211, 87.0999984741211, 87.0999984741211, 89.5, 91.5, 91.5, 91.5, 91.5, 91.5, 91.5, 91.5, 93.0999984741211, 96.19999694824219, 99.5, 104.0, 106.5, 117.0, 129.0, 130.0, 133.0, 138.5, 138.5, 138.5, 143.0, 153.0, 156.0, 165.0, 165.0, 165.0, 165.0, 165.0, 167.0, 167.0, 167.0, 167.0, 167.0, 171.0, 171.0, 178.5, 183.0, 183.0, 183.0, 183.0, 183.0, 183.0, 183.0, 183.0, 183.0, 183.0, 185.5, 193.0, 193.0, 193.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 219.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 205.0, 208.5, 227.5, 227.5, 227.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.5, 233.0, 221.5, 218.0, 218.0, 218.0, 214.0, 214.0, 214.0, 214.0, 214.0, 214.0, 214.0, 214.0, 214.0, 214.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2313 華通', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 8299 群聯 ---
+new Chart(document.getElementById('chart_8299'), {
+  type: 'line',
+  data: {
+    labels: ["2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: '20日上軌', data: [1805.0, 1805.0, 1810.0, 1915.0, 2025.0, 2025.0, 2145.0, 2145.0, 2145.0, 2145.0, 2170.0, 2285.0, 2370.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2275.0, 2275.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2015.0, 1995.0, 1870.0, 1840.0, 1880.0, 1880.0, 1880.0, 1990.0, 2075.0, 2175.0, 2175.0, 2175.0, 2325.0, 2500.0, 2500.0, 2670.0, 2860.0, 2860.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2850.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2715.0, 2670.0, 2670.0, 2670.0, 2670.0, 2670.0, 2670.0, 2670.0, 2670.0, 2670.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [1805.0, 1805.0, 1810.0, 1915.0, 2025.0, 2025.0, 2145.0, 2145.0, 2145.0, 2145.0, 2170.0, 2285.0, 2370.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2465.0, 2275.0, 2275.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2085.0, 2015.0, 1945.0, 1945.0, 1980.0, 2070.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2080.0, 2015.0, 1995.0, 1870.0, 1835.0, 1780.0, 1760.0, 1795.0, 1840.0, 1840.0, 1840.0, 1840.0, 1840.0, 1840.0, 1840.0, 1880.0, 1880.0, 1880.0, 1990.0, 2075.0, 2175.0, 2175.0, 2175.0, 2325.0, 2500.0, 2500.0, 2670.0, 2860.0, 2860.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2880.0, 2850.0, 2755.0, 2825.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2835.0, 2715.0, 2630.0, 2670.0, 2670.0, 2670.0, 2670.0, 2670.0, 2670.0, 2670.0, 2670.0, 2670.0, 2670.0, 2640.0, 2640.0, 2640.0, 2540.0, 2420.0, 2420.0, 2420.0, 2420.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [1770.0, 1775.0, 1795.0, 1890.0, 1980.0, 2005.0, 1905.0, 2055.0, 2000.0, 2075.0, 2120.0, 2285.0, 2305.0, 2380.0, 2145.0, 1990.0, 2055.0, 2020.0, 1895.0, 1925.0, 1825.0, 1855.0, 1925.0, 2070.0, 1925.0, 1890.0, 1920.0, 1755.0, 1705.0, 1800.0, 1770.0, 1605.0, 1745.0, 1890.0, 1810.0, 1800.0, 1980.0, 1945.0, 1975.0, 1960.0, 1915.0, 1800.0, 1685.0, 1725.0, 1650.0, 1565.0, 1605.0, 1500.0, 1650.0, 1555.0, 1570.0, 1725.0, 1615.0, 1660.0, 1720.0, 1760.0, 1630.0, 1585.0, 1570.0, 1635.0, 1765.0, 1775.0, 1705.0, 1680.0, 1835.0, 1970.0, 2070.0, 1900.0, 2010.0, 2115.0, 2325.0, 2390.0, 2430.0, 2670.0, 2725.0, 2620.0, 2880.0, 2650.0, 2735.0, 2465.0, 2265.0, 2335.0, 2430.0, 2480.0, 2505.0, 2480.0, 2450.0, 2575.0, 2770.0, 2820.0, 2685.0, 2580.0, 2450.0, 2250.0, 2360.0, 2155.0, 2200.0, 2310.0, 2320.0, 2375.0, 2330.0, 2530.0, 2580.0, 2430.0, 2500.0, 2475.0, 2310.0, 2340.0, 2385.0, 2270.0, 2240.0, 2295.0, 2290.0, 2145.0, 2140.0, 2220.0, 2220.0, 2170.0, 2050.0, 2105.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [1330.0, 1400.0, 1425.0, 1450.0, 1465.0, 1530.0, 1530.0, 1530.0, 1660.0, 1690.0, 1740.0, 1765.0, 1855.0, 1860.0, 1860.0, 1880.0, 1935.0, 1935.0, 1820.0, 1820.0, 1795.0, 1795.0, 1795.0, 1795.0, 1795.0, 1795.0, 1795.0, 1755.0, 1610.0, 1610.0, 1610.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1695.0, 1620.0, 1620.0, 1620.0, 1485.0, 1485.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1545.0, 1545.0, 1550.0, 1555.0, 1555.0, 1555.0, 1555.0, 1555.0, 1555.0, 1555.0, 1555.0, 1555.0, 1640.0, 1640.0, 1640.0, 1640.0, 1750.0, 1865.0, 1900.0, 1900.0, 1920.0, 2000.0, 2230.0, 2230.0, 2230.0, 2250.0, 2250.0, 2250.0, 2250.0, 2250.0, 2250.0, 2250.0, 2250.0, 2305.0, 2320.0, 2320.0, 2205.0, 2205.0, 2135.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2285.0, 2285.0, 2285.0, 2255.0, 2135.0, 2135.0, 2135.0, 2135.0, 2080.0, 2080.0, 2080.0, 2080.0, 1955.0, 1955.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [1020.0, 1020.0, 1050.0, 1070.0, 1090.0, 1145.0, 1170.0, 1180.0, 1285.0, 1290.0, 1330.0, 1400.0, 1425.0, 1450.0, 1465.0, 1530.0, 1530.0, 1530.0, 1660.0, 1690.0, 1740.0, 1765.0, 1795.0, 1795.0, 1795.0, 1795.0, 1795.0, 1755.0, 1610.0, 1610.0, 1610.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1595.0, 1485.0, 1485.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1475.0, 1545.0, 1545.0, 1550.0, 1555.0, 1555.0, 1555.0, 1555.0, 1555.0, 1555.0, 1555.0, 1555.0, 1555.0, 1640.0, 1640.0, 1640.0, 1640.0, 1750.0, 1865.0, 1900.0, 1900.0, 1920.0, 2000.0, 2230.0, 2230.0, 2230.0, 2250.0, 2205.0, 2205.0, 2135.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2060.0, 2080.0, 2080.0, 1955.0, 1955.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '8299 群聯', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 3189 景碩 ---
+new Chart(document.getElementById('chart_3189'), {
+  type: 'line',
+  data: {
+    labels: ["2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: '20日上軌', data: [186.0, 186.0, 186.0, 192.5, 204.4720916748047, 213.17303466796875, 213.17303466796875, 213.17303466796875, 213.17303466796875, 214.0, 228.5, 249.5, 249.5, 252.0, 252.0, 259.0, 270.5, 274.5, 274.5, 274.5, 274.5, 274.5, 292.0, 321.0, 332.5, 332.5, 332.5, 332.5, 332.5, 332.5, 332.5, 332.5, 332.5, 332.5, 332.5, 332.5, 348.5, 368.0, 373.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 408.0, 408.0, 408.0, 408.0, 408.0, 408.0, 408.0, 430.5, 473.5, 509.0, 509.0, 526.0, 555.0, 555.0, 555.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 609.0, 669.0, 719.0, 764.0, 764.0, 764.0, 775.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 796.0, 796.0, 796.0, 812.0, 893.0, 893.0, 893.0, 939.0, 939.0, 939.0, 939.0, 939.0, 939.0, 939.0, 939.0, 939.0, 939.0, 939.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [186.0, 186.0, 186.0, 192.5, 204.4720916748047, 213.17303466796875, 213.17303466796875, 213.17303466796875, 213.17303466796875, 214.0, 228.5, 249.5, 249.5, 252.0, 252.0, 259.0, 270.5, 274.5, 274.5, 274.5, 274.5, 274.5, 292.0, 321.0, 332.5, 332.5, 332.5, 332.5, 332.5, 332.5, 332.5, 332.5, 332.5, 332.5, 330.0, 330.0, 348.5, 368.0, 373.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 398.0, 388.5, 370.0, 394.0, 408.0, 408.0, 408.0, 408.0, 408.0, 408.0, 408.0, 430.5, 473.5, 509.0, 509.0, 526.0, 555.0, 555.0, 555.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 556.0, 544.0, 541.0, 540.0, 540.0, 554.0, 609.0, 669.0, 719.0, 764.0, 764.0, 764.0, 775.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 778.0, 749.0, 732.0, 738.0, 796.0, 796.0, 796.0, 812.0, 893.0, 893.0, 893.0, 939.0, 939.0, 939.0, 939.0, 939.0, 939.0, 939.0, 939.0, 939.0, 939.0, 859.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [176.5, 172.0, 175.0, 192.5, 204.4720916748047, 199.63824462890625, 193.35421752929688, 198.6714630126953, 206.88902282714844, 208.0, 228.5, 243.5, 229.5, 252.0, 239.5, 246.0, 270.5, 263.5, 242.5, 255.0, 253.5, 265.5, 292.0, 321.0, 325.5, 314.5, 304.5, 309.0, 284.5, 297.5, 291.5, 264.5, 274.0, 290.5, 289.0, 317.5, 337.0, 341.5, 365.5, 383.5, 380.0, 346.0, 320.5, 351.5, 351.5, 352.0, 346.5, 313.0, 332.0, 336.0, 358.5, 394.0, 387.0, 381.0, 366.5, 371.0, 383.5, 393.5, 391.5, 430.5, 473.5, 491.5, 479.0, 526.0, 515.0, 508.0, 508.0, 528.0, 531.0, 527.0, 482.5, 492.5, 458.0, 503.0, 494.0, 497.5, 522.0, 486.0, 505.0, 513.0, 504.0, 554.0, 609.0, 669.0, 696.0, 702.0, 681.0, 729.0, 774.0, 743.0, 739.0, 692.0, 712.0, 698.0, 714.0, 660.0, 619.0, 610.0, 660.0, 642.0, 706.0, 724.0, 796.0, 727.0, 739.0, 812.0, 797.0, 810.0, 891.0, 888.0, 830.0, 833.0, 763.0, 687.0, 755.0, 795.0, 795.0, 819.0, 805.0, 845.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [146.0, 149.0, 151.5, 151.5, 164.0, 164.0, 164.0, 164.5, 170.0, 170.0, 170.0, 170.0, 174.5, 188.52037048339844, 193.35421752929688, 193.35421752929688, 197.2213134765625, 197.2213134765625, 205.5, 210.0, 219.5, 219.5, 230.5, 230.5, 236.0, 237.5, 237.5, 237.5, 240.5, 251.0, 252.5, 262.5, 262.5, 262.5, 262.5, 262.5, 262.5, 262.5, 262.5, 262.5, 262.5, 267.5, 280.0, 280.0, 280.0, 311.5, 311.5, 311.5, 311.5, 311.5, 311.5, 311.5, 312.0, 312.0, 312.0, 312.0, 312.0, 321.0, 323.5, 350.0, 360.5, 360.5, 360.5, 360.5, 363.5, 363.5, 377.5, 391.0, 396.0, 446.0, 453.0, 453.0, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 460.0, 460.0, 460.0, 460.0, 460.0, 460.0, 481.0, 481.0, 531.0, 588.0, 623.0, 623.0, 623.0, 623.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 599.0, 621.0, 637.0, 640.0, 702.0, 710.0, 710.0, 687.0, 687.0, 687.0, 687.0, 687.0, 687.0, 687.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [131.0, 131.0, 131.0, 131.0, 133.5, 136.0, 142.0, 142.5, 144.5, 146.0, 146.0, 149.0, 151.5, 151.5, 164.0, 164.0, 164.0, 164.5, 170.0, 170.0, 170.0, 170.0, 174.5, 188.52037048339844, 193.35421752929688, 193.35421752929688, 197.2213134765625, 197.2213134765625, 205.5, 210.0, 219.5, 219.5, 230.5, 230.5, 236.0, 237.5, 237.5, 237.5, 240.5, 251.0, 252.5, 262.5, 262.5, 262.5, 262.5, 262.5, 262.5, 262.5, 262.5, 262.5, 262.5, 267.5, 280.0, 280.0, 280.0, 311.5, 311.5, 311.5, 311.5, 311.5, 311.5, 311.5, 312.0, 312.0, 312.0, 312.0, 312.0, 321.0, 323.5, 350.0, 360.5, 360.5, 360.5, 360.5, 363.5, 363.5, 377.5, 391.0, 396.0, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 445.5, 460.0, 460.0, 460.0, 460.0, 460.0, 460.0, 481.0, 481.0, 531.0, 588.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 594.0, 599.0, 621.0, 637.0, 640.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '3189 景碩', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 0050 元大台灣50 ---
+new Chart(document.getElementById('chart_0050'), {
+  type: 'line',
+  data: {
+    labels: ["2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: '20日上軌', data: [71.19999694824219, 71.19999694824219, 71.19999694824219, 72.0999984741211, 72.80000305175781, 72.80000305175781, 72.80000305175781, 72.80000305175781, 72.80000305175781, 72.80000305175781, 73.1500015258789, 74.19999694824219, 74.5, 74.5, 74.5, 74.5, 74.5, 74.5, 74.5, 74.5, 75.5, 77.44999694824219, 78.44999694824219, 79.6500015258789, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.5, 80.80000305175781, 80.4000015258789, 78.8499984741211, 78.8499984741211, 78.5, 78.5, 79.25, 79.4000015258789, 80.80000305175781, 81.0, 83.19999694824219, 85.0999984741211, 85.0999984741211, 85.0999984741211, 85.0999984741211, 86.0999984741211, 86.5999984741211, 88.80000305175781, 89.94999694824219, 94.25, 94.25, 94.25, 94.25, 94.6500015258789, 94.75, 96.9000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 101.0, 101.80000305175781, 103.9000015258789, 104.25, 105.4000015258789, 106.69999694824219, 106.69999694824219, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 111.19999694824219, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [71.19999694824219, 71.19999694824219, 71.19999694824219, 72.0999984741211, 72.80000305175781, 72.80000305175781, 72.80000305175781, 72.80000305175781, 72.80000305175781, 72.80000305175781, 73.1500015258789, 74.19999694824219, 74.5, 74.5, 74.5, 74.5, 74.5, 74.5, 74.5, 74.5, 75.5, 77.44999694824219, 78.44999694824219, 79.6500015258789, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.80000305175781, 81.5, 80.80000305175781, 80.4000015258789, 78.8499984741211, 78.8499984741211, 78.5, 78.5, 78.5, 78.5, 78.05000305175781, 78.05000305175781, 78.05000305175781, 78.05000305175781, 78.05000305175781, 76.8499984741211, 76.8499984741211, 76.8499984741211, 79.25, 79.4000015258789, 80.80000305175781, 81.0, 83.19999694824219, 85.0999984741211, 85.0999984741211, 85.0999984741211, 85.0999984741211, 86.0999984741211, 86.5999984741211, 88.80000305175781, 89.94999694824219, 94.25, 94.25, 94.25, 94.25, 94.6500015258789, 94.75, 96.9000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.4000015258789, 98.25, 98.25, 101.0, 101.80000305175781, 103.9000015258789, 104.25, 105.4000015258789, 106.69999694824219, 106.69999694824219, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.8499984741211, 107.0, 107.44999694824219, 111.19999694824219, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 112.30000305175781, 109.94999694824219, 109.94999694824219, 109.94999694824219, 109.94999694824219, 109.94999694824219, 109.94999694824219, 109.5999984741211], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [70.69999694824219, 70.75, 70.6500015258789, 72.0, 72.5999984741211, 72.5999984741211, 71.8499984741211, 71.80000305175781, 72.25, 72.25, 73.05000305175781, 74.19999694824219, 73.75, 72.5999984741211, 71.5, 72.94999694824219, 72.9000015258789, 72.0, 71.9000015258789, 73.94999694824219, 75.5, 77.19999694824219, 77.4000015258789, 79.4000015258789, 81.0999984741211, 81.1500015258789, 80.3499984741211, 78.75, 75.5999984741211, 77.4000015258789, 76.8499984741211, 73.5999984741211, 75.19999694824219, 78.19999694824219, 76.5999984741211, 75.94999694824219, 75.5999984741211, 76.6500015258789, 77.80000305175781, 76.0, 75.9000015258789, 74.25, 74.4000015258789, 76.19999694824219, 75.80000305175781, 75.0, 73.9000015258789, 72.3499984741211, 75.44999694824219, 73.94999694824219, 75.30000305175781, 79.19999694824219, 79.1500015258789, 80.75, 80.5999984741211, 83.0999984741211, 84.1500015258789, 85.0, 84.1500015258789, 84.55000305175781, 86.0, 86.3499984741211, 86.3499984741211, 89.94999694824219, 93.0, 92.0, 90.75, 90.5, 94.5999984741211, 94.5999984741211, 95.75, 97.69999694824219, 97.0, 96.9000015258789, 96.8499984741211, 95.5, 96.05000305175781, 95.4000015258789, 94.9000015258789, 93.0999984741211, 92.5, 95.8499984741211, 97.30000305175781, 100.80000305175781, 100.0999984741211, 102.55000305175781, 100.5, 105.4000015258789, 105.5, 105.69999694824219, 107.5999984741211, 106.0999984741211, 104.1500015258789, 100.94999694824219, 103.5, 100.25, 99.8499984741211, 101.94999694824219, 105.25, 105.9000015258789, 106.0, 107.30000305175781, 111.1500015258789, 110.0999984741211, 107.1500015258789, 107.19999694824219, 103.0999984741211, 104.44999694824219, 107.80000305175781, 109.3499984741211, 108.80000305175781, 108.3499984741211, 108.25, 106.19999694824219, 106.05000305175781, 105.80000305175781, 105.80000305175781, 106.0, 104.4000015258789, 106.30000305175781], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [64.75, 64.9000015258789, 65.80000305175781, 68.05000305175781, 68.9000015258789, 68.9000015258789, 68.9000015258789, 68.9000015258789, 70.05000305175781, 70.1500015258789, 70.1500015258789, 70.1500015258789, 71.19999694824219, 71.44999694824219, 70.9000015258789, 70.9000015258789, 70.9000015258789, 70.9000015258789, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 73.75, 74.5999984741211, 75.5, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 73.30000305175781, 73.30000305175781, 73.30000305175781, 73.30000305175781, 73.30000305175781, 72.80000305175781, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 73.80000305175781, 73.80000305175781, 74.6500015258789, 78.0999984741211, 78.80000305175781, 79.94999694824219, 80.4000015258789, 81.75, 83.80000305175781, 84.0, 84.0, 84.44999694824219, 85.0, 85.1500015258789, 85.1500015258789, 87.55000305175781, 90.0, 90.0, 90.0, 90.30000305175781, 92.4000015258789, 93.30000305175781, 93.0999984741211, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 94.69999694824219, 96.0, 99.55000305175781, 98.05000305175781, 98.05000305175781, 98.05000305175781, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 101.55000305175781, 102.80000305175781, 102.80000305175781, 102.80000305175781, 102.80000305175781, 102.80000305175781, 102.80000305175781, 102.80000305175781, 102.80000305175781, 102.80000305175781, 103.30000305175781, 105.05000305175781, 102.25, 102.25], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [61.54999923706055, 61.54999923706055, 61.54999923706055, 61.54999923706055, 62.349998474121094, 63.04999923706055, 63.5, 63.75, 64.0999984741211, 64.5999984741211, 64.75, 64.9000015258789, 65.80000305175781, 68.05000305175781, 68.9000015258789, 68.9000015258789, 68.9000015258789, 68.9000015258789, 70.05000305175781, 70.1500015258789, 70.1500015258789, 70.1500015258789, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 70.80000305175781, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 71.6500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 72.1500015258789, 73.80000305175781, 73.80000305175781, 74.6500015258789, 78.0999984741211, 78.80000305175781, 79.94999694824219, 80.4000015258789, 81.75, 83.80000305175781, 84.0, 84.0, 84.44999694824219, 85.0, 85.1500015258789, 85.1500015258789, 87.55000305175781, 90.0, 90.0, 90.0, 90.30000305175781, 92.4000015258789, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 92.44999694824219, 94.69999694824219, 96.0, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 97.5999984741211, 101.55000305175781, 102.80000305175781, 102.25, 102.25], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '0050 元大台灣50', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 6488 環球晶 ---
+new Chart(document.getElementById('chart_6488'), {
+  type: 'line',
+  data: {
+    labels: ["2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: '20日上軌', data: [488.0, 523.0, 523.0, 523.0, 523.0, 523.0, 523.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 535.0, 529.0, 528.0, 526.0, 521.0, 507.0, 499.5, 499.5, 497.5, 497.5, 497.5, 497.5, 497.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 526.0, 526.0, 533.0, 543.0, 543.0, 555.0, 602.0, 617.0, 619.0, 619.0, 633.0, 633.0, 633.0, 633.0, 633.0, 666.0, 732.0, 793.0, 842.0, 849.0, 849.0, 849.0, 849.0, 849.0, 849.0, 849.0, 849.0, 849.0, 849.0, 849.0, 866.0, 949.0, 1020.0, 1020.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 1045.0, 1145.0, 1145.0, 1170.0, 1170.0, 1170.0, 1170.0, 1170.0, 1170.0, 1170.0, 1170.0, 1205.0, 1255.0, 1380.0, 1380.0, 1380.0, 1380.0, 1380.0, 1485.0, 1575.0, 1600.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [488.0, 523.0, 523.0, 523.0, 523.0, 523.0, 523.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 537.0, 535.0, 529.0, 528.0, 526.0, 521.0, 507.0, 499.5, 499.5, 497.5, 497.5, 497.5, 497.5, 497.5, 490.0, 490.0, 490.0, 490.0, 490.0, 490.0, 490.0, 490.0, 490.0, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 494.5, 479.5, 474.5, 474.5, 474.5, 492.0, 526.0, 526.0, 533.0, 543.0, 543.0, 555.0, 602.0, 617.0, 619.0, 619.0, 633.0, 633.0, 633.0, 633.0, 633.0, 666.0, 732.0, 793.0, 842.0, 849.0, 849.0, 849.0, 849.0, 849.0, 849.0, 849.0, 849.0, 849.0, 849.0, 833.0, 866.0, 949.0, 1020.0, 1020.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 1040.0, 967.0, 1045.0, 1145.0, 1145.0, 1170.0, 1170.0, 1170.0, 1170.0, 1170.0, 1170.0, 1170.0, 1170.0, 1205.0, 1255.0, 1380.0, 1380.0, 1380.0, 1380.0, 1380.0, 1485.0, 1575.0, 1600.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [476.0, 516.0, 489.0, 479.0, 499.0, 502.0, 494.5, 508.0, 528.0, 525.0, 511.0, 509.0, 502.0, 497.0, 473.0, 475.0, 479.5, 464.0, 466.0, 478.0, 491.5, 445.5, 425.0, 445.0, 452.5, 455.0, 440.0, 433.5, 448.5, 470.5, 467.0, 428.5, 443.0, 472.0, 429.0, 432.5, 440.5, 450.5, 481.0, 472.0, 469.0, 441.5, 431.5, 450.0, 454.5, 447.5, 437.0, 420.5, 413.5, 409.5, 412.0, 436.0, 447.5, 490.5, 499.5, 501.0, 516.0, 540.0, 505.0, 551.0, 597.0, 600.0, 572.0, 582.0, 620.0, 580.0, 536.0, 580.0, 606.0, 666.0, 721.0, 793.0, 802.0, 835.0, 785.0, 750.0, 788.0, 710.0, 698.0, 665.0, 638.0, 701.0, 717.0, 788.0, 866.0, 930.0, 927.0, 1015.0, 950.0, 940.0, 950.0, 870.0, 811.0, 768.0, 803.0, 775.0, 786.0, 864.0, 950.0, 1045.0, 1100.0, 1110.0, 1115.0, 1010.0, 965.0, 1040.0, 936.0, 915.0, 1005.0, 1105.0, 1205.0, 1255.0, 1335.0, 1205.0, 1230.0, 1350.0, 1350.0, 1485.0, 1515.0, 1480.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [400.0, 403.0, 403.0, 408.5, 422.5, 425.0, 425.0, 425.0, 439.5, 459.5, 470.5, 470.5, 470.5, 484.0, 467.0, 467.0, 460.5, 460.5, 447.0, 447.0, 447.0, 443.5, 423.0, 423.0, 423.0, 423.0, 423.0, 423.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 420.0, 420.0, 420.0, 420.0, 420.0, 420.0, 420.0, 428.5, 430.0, 419.0, 408.5, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 410.5, 420.0, 435.5, 457.5, 482.0, 497.5, 503.0, 503.0, 505.0, 508.0, 534.0, 534.0, 534.0, 534.0, 534.0, 534.0, 534.0, 558.0, 597.0, 615.0, 629.0, 630.0, 630.0, 630.0, 630.0, 630.0, 630.0, 630.0, 630.0, 630.0, 630.0, 701.0, 711.0, 773.0, 730.0, 730.0, 730.0, 730.0, 730.0, 730.0, 730.0, 730.0, 730.0, 730.0, 745.0, 745.0, 745.0, 850.0, 866.0, 866.0, 866.0, 866.0, 866.0, 866.0, 866.0, 866.0, 866.0, 866.0, 961.0, 1085.0, 1085.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [360.0, 360.0, 371.0, 371.0, 375.0, 376.0, 380.0, 380.0, 383.5, 394.0, 400.0, 403.0, 403.0, 408.5, 422.5, 425.0, 425.0, 425.0, 439.5, 447.0, 447.0, 443.5, 423.0, 423.0, 423.0, 423.0, 423.0, 423.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 417.0, 408.5, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 407.0, 410.5, 420.0, 435.5, 457.5, 482.0, 497.5, 503.0, 503.0, 505.0, 508.0, 534.0, 534.0, 534.0, 534.0, 534.0, 534.0, 534.0, 558.0, 597.0, 615.0, 629.0, 630.0, 630.0, 630.0, 630.0, 630.0, 630.0, 630.0, 630.0, 630.0, 630.0, 701.0, 711.0, 730.0, 730.0, 730.0, 730.0, 730.0, 730.0, 730.0, 730.0, 730.0, 730.0, 730.0, 745.0, 745.0, 745.0, 850.0, 866.0, 866.0, 866.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '6488 環球晶', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- 2327 國巨 ---
+new Chart(document.getElementById('chart_2327'), {
+  type: 'line',
+  data: {
+    labels: ["2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: '20日上軌', data: [260.5, 285.0, 285.0, 285.0, 300.0, 300.0, 300.0, 300.0, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 300.0, 299.0, 299.0, 296.0, 296.0, 296.0, 296.0, 296.0, 296.0, 296.0, 311.0, 314.0, 332.0, 332.0, 336.5, 336.5, 336.5, 336.5, 336.5, 336.5, 336.5, 336.5, 336.5, 336.5, 345.0, 357.5, 361.5, 371.5, 400.0, 400.0, 430.0, 430.0, 462.0, 492.5, 501.0, 516.0, 545.0, 572.0, 629.0, 691.0, 691.0, 727.0, 769.0, 784.0, 811.0, 847.0, 847.0, 847.0, 847.0, 847.0, 847.0, 908.0, 908.0, 919.0, 940.0, 1000.0, 1000.0, 1080.0, 1120.0, 1120.0, 1120.0, 1155.0, 1155.0, 1155.0, 1155.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0], borderColor: 'rgba(229,69,96,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: false },
+      { label: '10日上軌', data: [260.5, 285.0, 285.0, 285.0, 300.0, 300.0, 300.0, 300.0, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 304.5, 297.0, 297.0, 297.0, 286.0, 282.0, 304.0, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 306.5, 300.0, 299.0, 299.0, 286.0, 296.0, 296.0, 296.0, 296.0, 296.0, 296.0, 296.0, 296.0, 296.0, 296.0, 287.0, 287.0, 268.0, 273.5, 282.0, 292.0, 311.0, 314.0, 332.0, 332.0, 336.5, 336.5, 336.5, 336.5, 336.5, 336.5, 336.5, 336.5, 336.5, 336.5, 345.0, 357.5, 361.5, 371.5, 400.0, 400.0, 430.0, 430.0, 462.0, 492.5, 501.0, 516.0, 545.0, 572.0, 629.0, 691.0, 691.0, 727.0, 769.0, 784.0, 811.0, 847.0, 847.0, 847.0, 847.0, 847.0, 847.0, 908.0, 908.0, 919.0, 940.0, 1000.0, 1000.0, 1080.0, 1120.0, 1120.0, 1120.0, 1155.0, 1155.0, 1155.0, 1155.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0, 1220.0, 1125.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '收盤價', data: [260.5, 278.5, 273.5, 283.0, 295.5, 289.5, 277.5, 296.0, 291.5, 287.0, 295.0, 285.5, 277.0, 277.5, 258.0, 266.5, 267.0, 258.0, 248.5, 250.0, 254.0, 256.0, 281.5, 301.0, 300.0, 298.0, 292.0, 280.5, 259.0, 267.5, 265.0, 248.5, 258.5, 264.5, 251.5, 258.0, 260.0, 286.0, 280.5, 275.0, 271.0, 253.0, 250.5, 260.0, 262.0, 260.0, 258.0, 243.5, 251.5, 246.0, 256.0, 271.5, 281.5, 285.0, 303.5, 312.0, 322.0, 325.0, 316.5, 319.5, 323.0, 315.5, 295.0, 297.0, 305.0, 326.5, 322.0, 317.0, 342.5, 348.5, 338.0, 371.5, 389.0, 391.5, 419.5, 420.0, 462.0, 455.5, 501.0, 497.0, 520.0, 572.0, 629.0, 691.0, 661.0, 701.0, 742.0, 738.0, 790.0, 846.0, 820.0, 743.0, 769.0, 751.0, 826.0, 819.0, 842.0, 855.0, 940.0, 950.0, 984.0, 1080.0, 1065.0, 1020.0, 1050.0, 1125.0, 1015.0, 1040.0, 1140.0, 1140.0, 1055.0, 1045.0, 1005.0, 905.0, 891.0, 900.0, 900.0, 816.0, 778.0, 798.0], borderColor: '#00b4d8', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, fill: false },
+      { label: '10日下軌', data: [220.5, 222.5, 230.0, 234.5, 234.5, 234.5, 234.5, 234.5, 242.5, 248.0, 265.5, 268.0, 268.0, 274.0, 255.5, 255.5, 255.5, 255.5, 243.5, 243.5, 243.5, 243.5, 243.5, 243.5, 243.5, 243.5, 243.5, 243.5, 250.0, 250.5, 252.5, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 246.0, 246.0, 246.0, 246.0, 246.0, 246.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 245.0, 245.0, 249.5, 264.0, 273.0, 283.0, 289.5, 289.5, 289.5, 289.5, 289.5, 289.5, 289.5, 289.5, 289.5, 290.0, 292.5, 307.0, 314.0, 314.0, 314.0, 331.0, 331.0, 337.5, 369.5, 370.0, 390.5, 404.0, 447.5, 447.5, 467.5, 485.5, 503.0, 560.0, 600.0, 631.0, 631.0, 670.0, 670.0, 670.0, 670.0, 670.0, 670.0, 670.0, 670.0, 693.0, 761.0, 761.0, 761.0, 852.0, 921.0, 930.0, 930.0, 974.0, 979.0, 979.0, 905.0, 856.0, 856.0, 856.0, 810.0, 737.0, 737.0], borderColor: 'rgba(255,209,102,0.4)', borderWidth: 1, borderDash: [3,3], pointRadius: 0, fill: false },
+      { label: '20日下軌', data: [218.0, 218.0, 218.0, 218.0, 220.0, 220.5, 220.5, 220.5, 220.5, 220.5, 220.5, 222.5, 230.0, 234.5, 234.5, 234.5, 234.5, 234.5, 242.5, 243.5, 243.5, 243.5, 243.5, 243.5, 243.5, 243.5, 243.5, 243.5, 243.5, 243.5, 243.5, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 240.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 243.0, 245.0, 245.0, 249.5, 264.0, 273.0, 283.0, 289.5, 289.5, 289.5, 289.5, 289.5, 289.5, 289.5, 289.5, 289.5, 290.0, 292.5, 307.0, 314.0, 314.0, 314.0, 331.0, 331.0, 337.5, 369.5, 370.0, 390.5, 404.0, 447.5, 447.5, 467.5, 485.5, 503.0, 560.0, 600.0, 631.0, 631.0, 670.0, 670.0, 670.0, 670.0, 670.0, 670.0, 670.0, 670.0, 693.0, 761.0, 761.0, 761.0, 852.0, 810.0, 737.0, 737.0], borderColor: 'rgba(82,183,136,0.6)', borderWidth: 1.5, borderDash: [6,3], pointRadius: 0, fill: '-4', backgroundColor: 'rgba(100,100,180,0.08)' },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2327 國巨', color: '#eee', font: { size: 14 } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+
+// --- KD 2408 南亞科 ---
+new Chart(document.getElementById('kd_2408'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'K', data: [33.85, 37.48, 30.25, 25.86, 46.81, 60.71, 68.06, 58.02, 67.8, 77.14, 84.76, 86.75, 82.17, 88.11, 90.87, 92.71, 92.2, 82.28, 70.98, 52.52, 40.39, 37.4, 42.08, 39.67, 40.92, 49.75, 59.69, 71.39, 80.92, 87.28, 84.74, 81.52, 70.27, 55.82, 52.47, 37.8, 30.21, 35.79, 46.24, 61.85, 74.57, 83.05, 88.7, 83.11, 77.35, 78.24, 70.31, 64.31, 57.39, 41.48, 33.42, 29.04, 29.52, 24.61, 19.25, 33.51, 43.01, 43.88, 54.88, 67.04], borderColor: '#ff6384', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'D', data: [34.65, 35.59, 33.81, 31.16, 36.38, 44.49, 52.34, 54.23, 58.75, 64.88, 71.51, 76.59, 78.45, 81.67, 84.74, 87.39, 88.99, 86.75, 81.5, 71.84, 61.35, 53.37, 49.61, 46.29, 44.5, 46.25, 50.73, 57.62, 65.39, 72.68, 76.7, 78.31, 75.63, 69.03, 63.51, 54.94, 46.69, 43.06, 44.12, 50.03, 58.21, 66.49, 73.89, 76.97, 77.09, 77.47, 75.09, 71.49, 66.79, 58.36, 50.05, 43.04, 38.54, 33.9, 29.01, 30.51, 34.68, 37.75, 43.46, 51.32], borderColor: '#36a2eb', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(80)', data: Array(60).fill(80), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(20)', data: Array(60).fill(20), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2408 南亞科 KD (9,3,3)', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+// --- RSI 2408 南亞科 ---
+new Chart(document.getElementById('rsi_2408'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'RSI(5)', data: [58.92, 57.11, 40.13, 37.59, 65.54, 73.5, 68.97, 43.1, 62.49, 72.94, 81.41, 82.74, 67.18, 77.95, 83.08, 83.08, 87.6, 58.71, 53.82, 36.16, 36.59, 51.24, 61.93, 50.47, 55.76, 61.58, 68.82, 78.51, 86.43, 90.99, 75.88, 70.58, 48.03, 38.93, 51.97, 38.76, 42.99, 59.83, 67.43, 75.41, 78.14, 82.64, 88.59, 60.05, 55.21, 65.73, 52.78, 54.38, 54.09, 38.2, 32.84, 34.88, 44.2, 34.41, 30.98, 59.48, 59.48, 49.39, 64.46, 76.17], borderColor: '#ff9f40', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'RSI(14)', data: [48.57, 48.2, 44.21, 43.51, 51.96, 55.78, 54.71, 47.15, 54.6, 60.1, 65.91, 66.92, 61.76, 67.39, 70.81, 70.81, 73.98, 63.1, 60.97, 52.09, 52.22, 56.54, 60.3, 55.98, 57.67, 59.56, 62.14, 66.53, 71.82, 76.27, 70.59, 68.6, 58.97, 54.17, 58.35, 51.85, 53.16, 59.0, 62.21, 66.13, 67.6, 70.22, 74.67, 63.35, 61.18, 65.11, 59.67, 60.18, 60.08, 53.85, 51.31, 51.75, 53.72, 50.2, 48.82, 56.14, 56.14, 53.34, 57.87, 62.97], borderColor: '#9966ff', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(70)', data: Array(60).fill(70), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(30)', data: Array(60).fill(30), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2408 南亞科 RSI', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- KD 2337 旺宏 ---
+new Chart(document.getElementById('kd_2337'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'K', data: [28.93, 31.79, 27.25, 28.77, 39.64, 59.76, 70.37, 67.6, 64.75, 66.56, 74.85, 75.62, 63.4, 54.99, 41.51, 51.4, 57.55, 54.77, 50.27, 33.51, 25.91, 20.85, 24.22, 28.84, 38.28, 41.97, 48.32, 58.19, 65.63, 73.29, 67.0, 58.17, 46.47, 37.28, 32.63, 21.75, 19.77, 23.0, 34.96, 56.64, 64.61, 74.27, 82.85, 77.36, 73.7, 61.29, 50.78, 34.34, 24.63, 17.09, 17.53, 16.08, 17.83, 14.89, 13.63, 18.54, 23.47, 21.57, 28.33, 46.8], borderColor: '#ff6384', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'D', data: [39.72, 37.08, 33.8, 32.13, 34.63, 43.01, 52.13, 57.28, 59.77, 62.04, 66.31, 69.41, 67.41, 63.27, 56.02, 54.48, 55.5, 55.26, 53.59, 46.9, 39.9, 33.55, 30.44, 29.91, 32.7, 35.79, 39.97, 46.04, 52.57, 59.48, 61.99, 60.72, 55.97, 49.74, 44.04, 36.61, 30.99, 28.33, 30.54, 39.24, 47.7, 56.56, 65.32, 69.33, 70.79, 67.62, 62.01, 52.79, 43.4, 34.63, 28.93, 24.65, 22.38, 19.88, 17.79, 18.04, 19.85, 20.42, 23.06, 30.97], borderColor: '#36a2eb', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(80)', data: Array(60).fill(80), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(20)', data: Array(60).fill(20), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2337 旺宏 KD (9,3,3)', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+// --- RSI 2337 旺宏 ---
+new Chart(document.getElementById('rsi_2337'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'RSI(5)', data: [46.11, 49.03, 38.07, 48.27, 64.22, 74.98, 79.05, 58.44, 58.96, 65.38, 74.83, 61.21, 45.39, 53.82, 45.11, 62.58, 63.55, 52.52, 48.48, 30.0, 27.54, 27.54, 46.84, 52.43, 64.78, 53.86, 61.21, 69.88, 71.12, 79.55, 49.24, 41.24, 33.25, 26.77, 31.88, 21.87, 34.17, 47.58, 64.81, 71.77, 61.62, 69.66, 80.76, 58.77, 58.77, 44.16, 45.77, 40.02, 35.8, 23.45, 28.58, 25.39, 31.74, 24.55, 23.94, 42.1, 42.1, 29.85, 36.18, 61.94], borderColor: '#ff9f40', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'RSI(14)', data: [51.17, 52.09, 47.94, 50.91, 56.69, 62.06, 64.51, 57.57, 57.76, 60.05, 64.07, 59.84, 53.96, 56.56, 53.32, 59.14, 59.5, 56.02, 54.7, 47.03, 45.74, 45.74, 50.24, 51.76, 55.65, 52.78, 55.03, 58.12, 58.6, 62.26, 53.63, 50.56, 47.12, 43.9, 45.14, 40.12, 43.35, 47.33, 54.01, 57.5, 54.53, 58.03, 64.5, 56.79, 56.79, 51.26, 51.74, 49.62, 48.04, 42.23, 43.45, 42.01, 43.36, 40.57, 40.31, 44.09, 44.09, 40.8, 42.07, 49.12], borderColor: '#9966ff', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(70)', data: Array(60).fill(70), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(30)', data: Array(60).fill(30), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2337 旺宏 RSI', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- KD 2330 台積電 ---
+new Chart(document.getElementById('kd_2330'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'K', data: [74.91, 70.46, 68.85, 78.3, 78.43, 73.05, 65.64, 55.78, 64.2, 66.94, 68.26, 73.98, 73.92, 65.16, 62.48, 55.15, 53.43, 49.91, 41.6, 27.74, 18.49, 23.04, 32.03, 51.11, 54.31, 62.65, 62.72, 71.64, 72.39, 75.46, 81.31, 76.76, 69.8, 56.85, 49.8, 37.17, 30.58, 34.88, 47.17, 62.34, 71.47, 80.17, 86.78, 86.57, 76.18, 64.39, 45.31, 37.35, 38.39, 54.17, 58.33, 57.94, 63.62, 63.71, 68.4, 61.79, 42.95, 37.89, 34.35, 38.05], borderColor: '#ff6384', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'D', data: [81.16, 77.59, 74.68, 75.89, 76.73, 75.51, 72.22, 66.74, 65.89, 66.24, 66.92, 69.27, 70.82, 68.93, 66.78, 62.9, 59.75, 56.47, 51.51, 43.59, 35.22, 31.16, 31.45, 38.0, 43.44, 49.84, 54.13, 59.97, 64.11, 67.89, 72.37, 73.83, 72.49, 67.27, 61.45, 53.36, 45.76, 42.14, 43.81, 49.99, 57.15, 64.82, 72.14, 76.95, 76.69, 72.59, 63.5, 54.78, 49.32, 50.93, 53.4, 54.91, 57.82, 59.78, 62.65, 62.37, 55.89, 49.89, 44.71, 42.49], borderColor: '#36a2eb', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(80)', data: Array(60).fill(80), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(20)', data: Array(60).fill(20), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2330 台積電 KD (9,3,3)', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+// --- RSI 2330 台積電 ---
+new Chart(document.getElementById('rsi_2330'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'RSI(5)', data: [65.04, 65.04, 73.54, 87.18, 91.4, 72.7, 61.66, 49.57, 71.39, 65.1, 65.1, 73.77, 66.85, 50.56, 55.49, 45.55, 58.74, 57.02, 48.17, 37.88, 32.86, 51.08, 58.83, 71.33, 55.9, 63.34, 61.19, 74.28, 74.28, 78.91, 84.99, 64.37, 55.89, 35.46, 39.42, 28.5, 27.55, 51.76, 66.79, 71.11, 64.78, 70.29, 83.33, 75.09, 46.41, 46.41, 35.75, 45.19, 55.98, 72.21, 60.48, 54.9, 58.49, 51.64, 59.12, 42.63, 42.63, 52.9, 44.87, 53.66], borderColor: '#ff9f40', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'RSI(14)', data: [63.02, 63.02, 65.57, 72.68, 76.63, 69.83, 65.45, 60.21, 68.62, 65.94, 65.94, 69.28, 66.92, 60.8, 62.16, 58.36, 61.94, 61.37, 58.48, 54.6, 52.46, 56.59, 58.73, 63.05, 58.27, 60.68, 60.06, 64.73, 64.73, 66.61, 69.75, 63.99, 61.27, 52.81, 53.79, 48.37, 47.85, 54.2, 59.9, 61.87, 59.97, 62.06, 69.03, 66.4, 55.11, 55.11, 50.16, 52.89, 56.33, 63.2, 58.99, 56.95, 58.12, 55.94, 58.06, 52.6, 52.6, 55.05, 52.71, 54.78], borderColor: '#9966ff', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(70)', data: Array(60).fill(70), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(30)', data: Array(60).fill(30), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2330 台積電 RSI', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- KD 2344 華邦電 ---
+new Chart(document.getElementById('kd_2344'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'K', data: [31.08, 36.68, 33.84, 32.89, 48.23, 61.92, 63.93, 57.89, 64.98, 73.22, 82.15, 85.07, 78.22, 85.48, 88.4, 90.83, 93.88, 90.07, 87.32, 72.36, 60.36, 42.96, 46.33, 53.33, 68.89, 79.26, 76.81, 84.54, 86.71, 91.14, 87.43, 85.54, 73.14, 56.6, 47.21, 33.6, 29.85, 38.34, 56.06, 68.28, 77.64, 85.09, 85.58, 81.81, 76.63, 77.51, 69.62, 58.12, 53.64, 37.22, 29.16, 25.22, 21.58, 15.64, 12.37, 16.32, 19.3, 14.44, 16.06, 29.27], borderColor: '#ff6384', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'D', data: [30.52, 32.58, 33.0, 32.96, 38.05, 46.01, 51.98, 53.95, 57.63, 62.82, 69.26, 74.53, 75.76, 79.0, 82.14, 85.03, 87.98, 88.68, 88.23, 82.94, 75.41, 64.59, 58.51, 56.78, 60.82, 66.96, 70.25, 75.01, 78.91, 82.99, 84.47, 84.82, 80.93, 72.82, 64.28, 54.06, 45.99, 43.44, 47.64, 54.52, 62.23, 69.85, 75.09, 77.33, 77.1, 77.23, 74.7, 69.17, 63.99, 55.07, 46.43, 39.36, 33.44, 27.5, 22.46, 20.41, 20.04, 18.18, 17.47, 21.4], borderColor: '#36a2eb', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(80)', data: Array(60).fill(80), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(20)', data: Array(60).fill(20), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2344 華邦電 KD (9,3,3)', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+// --- RSI 2344 華邦電 ---
+new Chart(document.getElementById('rsi_2344'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'RSI(5)', data: [52.31, 50.09, 38.62, 41.03, 65.31, 69.69, 54.61, 42.66, 62.48, 70.28, 82.93, 86.89, 63.48, 75.74, 79.08, 79.52, 87.45, 74.01, 75.08, 45.08, 41.87, 39.24, 61.42, 66.31, 78.48, 85.71, 64.45, 74.51, 79.65, 85.63, 74.09, 75.28, 50.1, 42.07, 45.48, 37.25, 48.83, 65.35, 75.98, 79.65, 80.58, 87.52, 88.45, 69.19, 59.22, 70.91, 53.67, 49.61, 55.07, 36.06, 31.08, 32.87, 31.35, 23.27, 19.45, 37.98, 37.98, 26.62, 24.23, 55.87], borderColor: '#ff9f40', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'RSI(14)', data: [44.06, 43.58, 40.89, 41.45, 48.82, 50.7, 47.42, 44.23, 51.08, 54.71, 63.13, 66.89, 58.69, 65.52, 67.71, 67.98, 73.73, 68.74, 69.24, 56.61, 54.95, 53.68, 60.84, 62.81, 68.84, 73.93, 64.95, 69.95, 72.93, 76.97, 72.05, 72.59, 61.42, 57.09, 58.09, 54.05, 57.25, 62.99, 68.06, 70.13, 70.65, 75.13, 75.84, 69.41, 65.7, 69.6, 62.71, 60.96, 62.41, 53.99, 51.23, 51.64, 50.95, 46.89, 44.55, 48.56, 48.56, 44.16, 43.05, 51.44], borderColor: '#9966ff', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(70)', data: Array(60).fill(70), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(30)', data: Array(60).fill(30), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2344 華邦電 RSI', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- KD 2313 華通 ---
+new Chart(document.getElementById('kd_2313'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'K', data: [21.81, 18.86, 12.57, 12.24, 24.3, 34.45, 36.2, 46.08, 64.05, 71.66, 66.52, 62.89, 61.53, 49.43, 51.79, 40.04, 32.59, 22.71, 35.87, 40.4, 42.68, 46.4, 62.16, 71.54, 71.3, 69.99, 58.46, 59.7, 59.02, 49.11, 38.99, 31.55, 26.59, 28.36, 43.33, 43.54, 52.88, 52.21, 47.75, 39.91, 43.26, 42.93, 38.21, 25.81, 17.84, 11.9, 8.61, 7.8, 15.18, 11.51, 17.44, 22.74, 35.16, 27.88, 30.71, 31.38, 31.83, 43.8, 41.57, 61.04], borderColor: '#ff6384', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'D', data: [32.04, 27.65, 22.62, 19.16, 20.87, 25.4, 29.0, 34.69, 44.48, 53.54, 57.87, 59.54, 60.21, 56.61, 55.01, 50.02, 44.21, 37.04, 36.65, 37.9, 39.49, 41.8, 48.59, 56.24, 61.26, 64.17, 62.27, 61.41, 60.61, 56.78, 50.85, 44.42, 38.47, 35.1, 37.84, 39.74, 44.12, 46.82, 47.13, 44.72, 44.24, 43.8, 41.94, 36.56, 30.32, 24.18, 18.99, 15.26, 15.23, 13.99, 15.14, 17.67, 23.5, 24.96, 26.88, 28.38, 29.53, 34.29, 36.71, 44.82], borderColor: '#36a2eb', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(80)', data: Array(60).fill(80), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(20)', data: Array(60).fill(20), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2313 華通 KD (9,3,3)', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+// --- RSI 2313 華通 ---
+new Chart(document.getElementById('rsi_2313'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'RSI(5)', data: [40.01, 31.68, 17.13, 14.42, 43.63, 47.87, 39.13, 54.85, 70.57, 73.46, 48.94, 48.53, 52.54, 41.05, 58.71, 39.71, 47.55, 39.92, 59.17, 56.29, 55.18, 58.28, 73.56, 82.0, 64.44, 61.5, 40.33, 59.6, 57.33, 47.04, 43.63, 42.66, 36.16, 30.0, 59.53, 43.34, 57.08, 46.51, 40.99, 34.75, 51.15, 46.74, 48.59, 32.85, 30.6, 25.5, 19.43, 18.63, 41.5, 30.03, 43.34, 44.88, 53.57, 33.3, 42.84, 41.6, 41.6, 62.14, 46.1, 69.45], borderColor: '#ff9f40', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'RSI(14)', data: [53.33, 50.05, 41.15, 38.73, 47.47, 48.96, 45.64, 51.09, 58.51, 60.13, 51.29, 51.12, 52.44, 48.4, 54.34, 46.91, 49.65, 46.6, 53.78, 52.8, 52.46, 53.44, 59.41, 64.44, 59.05, 58.12, 50.25, 57.17, 56.35, 52.57, 51.29, 50.95, 48.72, 46.36, 54.49, 48.84, 53.7, 49.88, 47.74, 45.22, 50.22, 48.78, 49.3, 43.98, 43.07, 40.93, 37.91, 37.48, 42.8, 38.92, 42.72, 43.17, 45.68, 39.82, 42.62, 42.26, 42.26, 48.23, 44.33, 53.86], borderColor: '#9966ff', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(70)', data: Array(60).fill(70), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(30)', data: Array(60).fill(30), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2313 華通 RSI', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- KD 8299 群聯 ---
+new Chart(document.getElementById('kd_8299'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'K', data: [43.81, 54.94, 52.01, 47.49, 60.38, 72.05, 81.05, 72.58, 71.44, 77.22, 84.81, 85.61, 87.3, 91.53, 89.67, 84.78, 89.85, 84.52, 82.25, 66.88, 46.38, 35.42, 33.14, 34.26, 36.33, 37.0, 37.87, 47.81, 62.02, 73.74, 72.78, 65.35, 48.38, 34.64, 31.29, 21.81, 20.56, 24.46, 27.49, 34.36, 38.69, 58.78, 67.6, 65.29, 67.57, 61.5, 43.16, 33.54, 31.02, 21.88, 21.13, 24.65, 26.66, 18.44, 16.64, 24.82, 30.27, 29.0, 26.15, 28.18], borderColor: '#ff6384', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'D', data: [39.96, 44.95, 47.3, 47.37, 51.7, 58.49, 66.01, 68.2, 69.28, 71.93, 76.22, 79.35, 82.0, 85.18, 86.67, 86.04, 87.31, 86.38, 85.0, 78.96, 68.1, 57.21, 49.18, 44.21, 41.58, 40.06, 39.33, 42.16, 48.78, 57.1, 62.33, 63.33, 58.35, 50.45, 44.06, 36.64, 31.28, 29.01, 28.5, 30.46, 33.2, 41.73, 50.35, 55.33, 59.41, 60.1, 54.46, 47.48, 41.99, 35.29, 30.57, 28.6, 27.95, 24.78, 22.07, 22.98, 25.41, 26.61, 26.45, 27.03], borderColor: '#36a2eb', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(80)', data: Array(60).fill(80), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(20)', data: Array(60).fill(20), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '8299 群聯 KD (9,3,3)', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+// --- RSI 8299 群聯 ---
+new Chart(document.getElementById('rsi_8299'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'RSI(5)', data: [66.66, 67.71, 53.14, 48.48, 69.32, 78.7, 83.4, 56.78, 65.65, 72.4, 81.5, 83.59, 84.91, 90.57, 91.48, 74.28, 83.74, 59.53, 64.3, 43.8, 33.82, 39.82, 47.84, 52.05, 54.35, 51.27, 47.26, 62.53, 76.05, 78.53, 58.18, 46.47, 35.43, 24.32, 37.74, 26.71, 32.15, 44.7, 45.84, 52.55, 46.64, 67.16, 70.69, 50.41, 57.52, 54.06, 36.13, 40.6, 47.5, 34.65, 31.84, 42.52, 41.78, 25.56, 25.14, 43.68, 43.68, 35.17, 22.2, 35.77], borderColor: '#ff9f40', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'RSI(14)', data: [53.16, 53.62, 49.97, 48.69, 56.16, 61.43, 64.81, 55.86, 59.73, 63.06, 68.65, 70.16, 71.08, 75.88, 76.83, 71.08, 75.89, 65.5, 67.28, 57.18, 51.06, 52.96, 55.48, 56.79, 57.47, 56.52, 55.33, 59.17, 64.32, 65.52, 59.68, 55.53, 50.83, 44.57, 48.33, 42.53, 44.12, 47.9, 48.25, 50.19, 48.58, 55.42, 56.96, 51.24, 53.58, 52.61, 46.6, 47.77, 49.55, 45.3, 44.23, 46.71, 46.5, 40.96, 40.78, 44.96, 44.96, 42.77, 37.99, 41.23], borderColor: '#9966ff', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(70)', data: Array(60).fill(70), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(30)', data: Array(60).fill(30), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '8299 群聯 RSI', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- KD 3189 景碩 ---
+new Chart(document.getElementById('kd_3189'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'K', data: [87.58, 87.79, 85.13, 90.08, 86.43, 82.12, 78.53, 79.85, 78.99, 76.61, 60.62, 47.62, 35.51, 41.02, 41.98, 43.67, 55.0, 50.8, 54.86, 60.38, 60.89, 73.93, 82.62, 88.41, 89.31, 86.08, 81.62, 83.62, 88.97, 87.92, 85.11, 66.95, 63.77, 58.65, 58.67, 47.07, 35.91, 26.84, 32.08, 32.98, 49.04, 62.79, 75.19, 72.08, 71.98, 81.32, 75.78, 73.05, 81.77, 80.67, 71.25, 65.4, 51.32, 34.21, 31.8, 35.49, 37.94, 42.76, 51.64, 65.05], borderColor: '#ff6384', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'D', data: [77.9, 81.19, 82.5, 85.03, 85.5, 84.37, 82.42, 81.57, 80.71, 79.34, 73.1, 64.61, 54.91, 50.28, 47.51, 46.23, 49.16, 49.71, 51.42, 54.41, 56.57, 62.35, 69.11, 75.54, 80.13, 82.11, 81.95, 82.51, 84.66, 85.75, 85.53, 79.34, 74.15, 68.98, 65.54, 59.39, 51.56, 43.32, 39.57, 37.38, 41.27, 48.44, 57.36, 62.26, 65.5, 70.77, 72.44, 72.64, 75.69, 77.35, 75.31, 72.01, 65.11, 54.81, 47.14, 43.26, 41.49, 41.91, 45.15, 51.78], borderColor: '#36a2eb', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(80)', data: Array(60).fill(80), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(20)', data: Array(60).fill(20), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '3189 景碩 KD (9,3,3)', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+// --- RSI 3189 景碩 ---
+new Chart(document.getElementById('rsi_3189'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'RSI(5)', data: [90.01, 91.75, 79.71, 87.45, 78.67, 72.85, 72.85, 79.59, 80.5, 74.94, 38.24, 45.71, 30.04, 55.12, 50.59, 52.49, 64.45, 44.07, 53.72, 57.58, 51.54, 71.96, 82.24, 88.16, 90.03, 90.45, 76.4, 83.66, 87.98, 71.65, 69.56, 48.75, 55.78, 49.8, 56.47, 36.19, 26.99, 25.23, 48.53, 42.56, 62.87, 66.97, 78.73, 55.19, 57.93, 71.26, 65.9, 68.47, 80.13, 78.79, 56.0, 56.8, 36.99, 25.11, 44.91, 53.87, 53.87, 59.98, 54.7, 65.53], borderColor: '#ff9f40', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'RSI(14)', data: [74.95, 76.84, 72.74, 77.58, 74.26, 72.14, 72.14, 74.55, 74.9, 73.45, 59.61, 61.38, 52.82, 60.55, 58.48, 59.07, 62.99, 54.69, 57.85, 59.14, 57.02, 64.6, 70.71, 75.66, 77.49, 77.89, 73.01, 76.62, 79.4, 72.96, 72.15, 63.23, 65.2, 62.67, 64.37, 55.21, 49.46, 48.27, 54.77, 52.23, 59.45, 61.22, 67.37, 57.89, 58.98, 64.88, 62.88, 63.92, 69.63, 69.19, 61.2, 61.45, 52.94, 45.57, 52.01, 55.36, 55.36, 57.42, 55.8, 59.34], borderColor: '#9966ff', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(70)', data: Array(60).fill(70), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(30)', data: Array(60).fill(30), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '3189 景碩 RSI', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- KD 2317 鴻海 ---
+new Chart(document.getElementById('kd_2317'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'K', data: [79.93, 83.28, 81.13, 74.42, 77.3, 75.58, 73.88, 66.2, 68.63, 78.48, 84.7, 86.05, 83.77, 83.99, 82.4, 82.21, 75.09, 71.78, 61.01, 47.69, 32.61, 34.75, 40.24, 56.69, 64.87, 70.93, 73.4, 82.27, 82.54, 86.7, 88.72, 80.62, 69.83, 53.63, 47.55, 34.95, 27.03, 22.82, 23.75, 25.98, 33.98, 44.45, 51.43, 45.4, 36.51, 28.41, 19.54, 13.59, 14.71, 12.07, 8.93, 10.3, 14.42, 10.87, 12.67, 13.87, 14.68, 13.66, 19.58, 30.2], borderColor: '#ff6384', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'D', data: [76.5, 78.76, 79.55, 77.84, 77.66, 76.97, 75.94, 72.69, 71.34, 73.72, 77.38, 80.27, 81.44, 82.29, 82.32, 82.28, 79.89, 77.18, 71.79, 63.76, 53.38, 47.17, 44.86, 48.8, 54.16, 59.75, 64.3, 70.29, 74.37, 78.48, 81.9, 81.47, 77.59, 69.6, 62.25, 53.15, 44.44, 37.24, 32.74, 30.49, 31.65, 35.92, 41.09, 42.52, 40.52, 36.48, 30.84, 25.09, 21.63, 18.44, 15.27, 13.62, 13.88, 12.88, 12.81, 13.16, 13.67, 13.67, 15.64, 20.49], borderColor: '#36a2eb', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(80)', data: Array(60).fill(80), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(20)', data: Array(60).fill(20), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2317 鴻海 KD (9,3,3)', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+// --- RSI 2317 鴻海 ---
+new Chart(document.getElementById('rsi_2317'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'RSI(5)', data: [77.95, 89.19, 91.39, 74.77, 82.26, 71.99, 69.81, 49.29, 66.95, 80.01, 86.8, 87.44, 76.61, 78.51, 71.27, 72.83, 50.48, 59.94, 59.94, 47.53, 34.7, 56.64, 61.97, 77.3, 70.81, 76.88, 73.08, 89.67, 90.88, 92.77, 94.18, 61.92, 50.45, 35.81, 46.21, 33.8, 30.61, 34.07, 45.87, 48.34, 53.64, 46.66, 46.66, 30.64, 26.25, 31.5, 20.54, 18.73, 34.88, 29.92, 19.52, 24.96, 30.8, 23.26, 25.53, 25.53, 25.53, 22.88, 20.25, 46.94], borderColor: '#ff9f40', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'RSI(14)', data: [56.07, 64.44, 67.13, 62.66, 67.05, 63.93, 63.3, 56.65, 62.78, 69.69, 74.92, 75.47, 71.55, 72.43, 70.09, 70.6, 63.06, 65.5, 65.5, 61.38, 55.97, 61.46, 63.11, 69.34, 67.12, 69.73, 68.56, 78.61, 79.82, 81.78, 83.41, 69.2, 63.05, 53.94, 57.47, 50.0, 47.91, 48.93, 52.44, 53.18, 54.7, 52.55, 52.55, 47.05, 45.07, 46.12, 41.07, 40.02, 43.52, 41.77, 36.98, 38.25, 39.56, 36.75, 37.23, 37.23, 37.23, 36.54, 35.82, 40.25], borderColor: '#9966ff', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(70)', data: Array(60).fill(70), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(30)', data: Array(60).fill(30), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '2317 鴻海 RSI', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+// --- KD 3042 晶技 ---
+new Chart(document.getElementById('kd_3042'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'K', data: [94.36, 94.22, 83.85, 69.73, 57.12, 53.12, 56.36, 54.66, 64.65, 70.88, 61.48, 65.38, 60.66, 55.36, 45.86, 36.55, 33.32, 25.7, 25.46, 28.09, 29.84, 49.82, 66.55, 77.7, 81.08, 78.0, 83.74, 84.26, 79.26, 78.33, 79.13, 70.44, 67.37, 61.16, 71.64, 61.96, 68.46, 65.58, 74.97, 72.6, 68.04, 60.24, 41.78, 28.15, 21.96, 15.98, 15.18, 11.42, 11.98, 25.51, 50.34, 66.89, 65.7, 57.95, 50.86, 43.26, 38.19, 25.46, 19.79, 18.12], borderColor: '#ff6384', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'D', data: [90.94, 92.04, 89.31, 82.78, 74.23, 67.19, 63.58, 60.61, 61.96, 64.93, 63.78, 64.31, 63.09, 60.52, 55.63, 49.27, 43.95, 37.87, 33.73, 31.85, 31.18, 37.39, 47.11, 57.31, 65.23, 69.49, 74.24, 77.58, 78.14, 78.2, 78.51, 75.82, 73.0, 69.06, 69.92, 67.26, 67.66, 66.97, 69.64, 70.63, 69.76, 66.59, 58.32, 48.26, 39.5, 31.66, 26.17, 21.25, 18.16, 20.61, 30.52, 42.65, 50.33, 52.87, 52.2, 49.22, 45.54, 38.85, 32.5, 27.71], borderColor: '#36a2eb', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(80)', data: Array(60).fill(80), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(20)', data: Array(60).fill(20), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '3042 晶技 KD (9,3,3)', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+// --- RSI 3042 晶技 ---
+new Chart(document.getElementById('rsi_3042'), {
+  type: 'line',
+  data: {
+    labels: ["2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15"],
+    datasets: [
+      { label: 'RSI(5)', data: [95.59, 95.67, 59.24, 45.96, 40.02, 55.27, 64.71, 56.35, 70.24, 69.18, 44.2, 59.45, 47.72, 49.78, 41.57, 37.69, 44.2, 35.66, 43.15, 45.78, 45.78, 70.97, 83.64, 89.75, 91.83, 81.04, 87.94, 84.02, 61.67, 67.84, 73.23, 57.88, 62.06, 59.3, 75.59, 53.88, 69.66, 57.39, 69.53, 54.67, 50.06, 42.83, 30.46, 26.48, 26.48, 24.18, 36.09, 28.98, 33.36, 61.1, 75.32, 83.57, 57.45, 46.66, 43.82, 39.33, 39.33, 33.52, 27.0, 35.33], borderColor: '#ff9f40', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: 'RSI(14)', data: [90.88, 90.96, 73.19, 64.9, 60.96, 65.69, 69.09, 65.18, 70.39, 69.96, 58.34, 63.74, 57.92, 58.6, 54.79, 52.94, 54.59, 51.05, 52.85, 53.46, 53.46, 60.59, 67.7, 73.36, 75.84, 72.04, 76.9, 75.45, 66.67, 68.91, 71.02, 65.01, 66.31, 65.33, 70.86, 62.25, 68.27, 62.87, 67.83, 61.12, 58.96, 55.56, 48.77, 46.23, 46.23, 44.97, 47.61, 44.72, 45.67, 53.6, 60.49, 66.39, 56.5, 51.6, 50.3, 48.34, 48.34, 46.09, 43.24, 45.17], borderColor: '#9966ff', borderWidth: 2, pointRadius: 0, fill: false },
+      { label: '超買(70)', data: Array(60).fill(70), borderColor: 'rgba(248,81,73,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: '超賣(30)', data: Array(60).fill(30), borderColor: 'rgba(63,185,80,0.4)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: '3042 晶技 RSI', color: '#eee', font: { size: 12 } },
+      legend: { display: true, labels: { color: '#ccc', boxWidth: 12, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) : '-') } }
+    },
+    scales: {
+      x: { ticks: { color: '#888', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { min: 0, max: 100, ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    }
+  }
+});
+
+</script>
+
+</body>
+</html>
