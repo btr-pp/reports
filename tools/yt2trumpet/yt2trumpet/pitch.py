@@ -139,27 +139,43 @@ def detect_onsets(y: np.ndarray, sr: int, hop: int = 256) -> np.ndarray:
     return librosa.frames_to_time(frames, sr=sr, hop_length=hop)
 
 
-def split_at_onsets(notes: list[NoteEvent], onsets: np.ndarray, y: np.ndarray, sr: int,
-                    min_duration: float = 0.07, guard: float = 0.15, dip_ratio: float = 0.5,
-                    hop: int = 256) -> list[NoteEvent]:
-    """同一個音高的長段內若有起音、且起音前能量明顯下沉，就在那裡切成兩個音（同音反覆）。
-
-    抖音、顫音只會讓能量小幅起伏，不會滿足 dip_ratio，所以不會被切碎。
-    """
+def band_energy(y: np.ndarray, sr: int, hop: int = 256, fmin_midi: int = 36, n_bins: int = 72):
+    """CQT 每個半音一個頻帶的能量（用來看「這個音自己的頻帶」有沒有重新起音）。"""
     import librosa
 
-    rms = librosa.feature.rms(y=y, frame_length=1024, hop_length=hop)[0]
-    t_rms = librosa.frames_to_time(np.arange(len(rms)), sr=sr, hop_length=hop)
+    C = np.abs(librosa.cqt(y, sr=sr, hop_length=hop, fmin=librosa.midi_to_hz(fmin_midi),
+                           n_bins=n_bins, bins_per_octave=12))
+    t = librosa.frames_to_time(np.arange(C.shape[1]), sr=sr, hop_length=hop)
+    return C, t, fmin_midi
+
+
+def split_at_onsets(notes: list[NoteEvent], onsets: np.ndarray, y: np.ndarray, sr: int,
+                    min_duration: float = 0.07, guard: float = 0.15, rise_ratio: float = 2.0,
+                    hop: int = 256) -> list[NoteEvent]:
+    """同一個音高的長段內若有起音、且「這個音自己的頻帶」能量在起音處明顯上升，就切成兩個音。
+
+    看自己的頻帶而不是整體音量：伴奏和弦每拍重擊不會切到旋律的長音，
+    抖音、顫音的小幅起伏也不會被切碎；鋼琴這種衰減音色只要重新彈奏就會被抓到。
+    """
+    if not notes:
+        return notes
+    C, t_c, fmin_midi = band_energy(y, sr, hop)
     out: list[NoteEvent] = []
     for n in notes:
-        in_note = rms[(t_rms >= n.onset) & (t_rms < n.offset)]
-        ref = float(np.median(in_note)) if len(in_note) else 0.0
+        b = n.midi - fmin_midi
+        if not (0 <= b < C.shape[0]):
+            out.append(n)
+            continue
+        e = C[max(b - 1, 0):b + 2].sum(axis=0)  # ±1 半音，容忍音準偏差與抖音
         cuts = []
         for t in onsets:
             if not (n.onset + guard <= t <= n.offset - min_duration):
                 continue
-            w = rms[(t_rms >= t - 0.1) & (t_rms <= t)]
-            if len(w) and ref > 0 and w.min() < dip_ratio * ref:
+            before = e[(t_c >= t - 0.12) & (t_c <= t - 0.01)]
+            after = e[(t_c >= t) & (t_c <= t + 0.08)]
+            # 起音前的谷底 vs 起音後的峰值：重新起音一定會有「先降再升」
+            if len(before) and len(after) and after.max() >= rise_ratio * (before.min() + 1e-9) \
+                    and before.min() < 0.7 * before.max():
                 cuts.append(float(t))
         start = n.onset
         for t in cuts:
@@ -191,7 +207,7 @@ def transcribe_basic_pitch(wav_path: Path, min_duration: float = 0.07, split_rep
         onset_threshold=0.5, frame_threshold=0.3,
         minimum_note_length=min_duration * 1000, minimum_frequency=FMIN_HZ, maximum_frequency=FMAX_HZ,
     )
-    cands = [NoteEvent(float(s), float(e), int(p), float(a)) for (s, e, p, a, *_) in events]
+    cands = remove_octave_ghosts([NoteEvent(float(s), float(e), int(p), float(a)) for (s, e, p, a, *_) in events])
     if return_cands:
         return cands
     notes = select_melody(cands, min_duration=min_duration)
@@ -300,18 +316,54 @@ def skyline(cands: list[NoteEvent], min_duration: float = 0.07, pitch_weight: fl
     return clean_notes(chosen, min_duration=min_duration)
 
 
+HARMONIC_INTERVALS = {0, 12, 19, 24, 28, 31, 36}
+
+
+def remove_octave_ghosts(cands: list[NoteEvent], tol: float = 0.05) -> list[NoteEvent]:
+    """移除「高八度 / 兩個八度、起迄時間幾乎相同、比較小聲」的候選：這是泛音被誤判成音符。"""
+    cands = sorted(cands, key=lambda n: n.onset)
+    keep = []
+    for i, n in enumerate(cands):
+        ghost = False
+        for m in cands:
+            if m.onset > n.onset + tol:
+                break
+            interval = n.midi - m.midi
+            if m is n or interval not in (12, 24):
+                continue
+            # 兩個八度的殘影很常見、而且明顯小聲；一個八度上方常是真的旋律，只在非常小聲時才視為殘影
+            max_ratio = 0.6 if interval == 24 else 0.4
+            if abs(m.onset - n.onset) <= tol and abs(m.offset - n.offset) <= 2 * tol \
+                    and n.confidence <= max_ratio * m.confidence:
+                ghost = True
+                break
+        if not ghost:
+            keep.append(n)
+    return keep
+
+
 def polyphony_ratio(cands: list[NoteEvent], frame: float = 0.05) -> float:
-    """有 ≥2 個音同時在響的時間占有聲時間的比例。"""
+    """有 ≥2 個「非泛音關係」的音同時在響的時間，占有聲時間的比例。
+
+    同度 / 八度 / 十二度這類重疊多半是泛音殘影，不算多音。
+    """
     if not cands:
         return 0.0
     t_end = max(n.offset for n in cands)
     n_frames = int(np.ceil(t_end / frame)) + 1
-    count = np.zeros(n_frames, dtype=int)
+    active: list[list[int]] = [[] for _ in range(n_frames)]
     for n in cands:
         f0, f1 = int(n.onset / frame), max(int(np.ceil(n.offset / frame)), int(n.onset / frame) + 1)
-        count[f0:f1] += 1
-    voiced = count > 0
-    return float(np.sum(count >= 2) / max(np.sum(voiced), 1))
+        for f in range(f0, min(f1, n_frames)):
+            active[f].append(n.midi)
+    voiced = poly = 0
+    for midis in active:
+        if not midis:
+            continue
+        voiced += 1
+        if any(abs(a - b) not in HARMONIC_INTERVALS for i, a in enumerate(midis) for b in midis[i + 1:]):
+            poly += 1
+    return poly / max(voiced, 1)
 
 
 # ---------------------------------------------------------------- 入口

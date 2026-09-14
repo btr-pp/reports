@@ -22,21 +22,21 @@
     </scaling>
   </defaults>
   <part-list>
-    <score-part id="Pf25e071e15be162ca88c87f25e5a9648">
+    <score-part id="Pb7e4734f034e47ee06d32f4fc76a60d1">
       <part-name>Bb Trumpet</part-name>
       <part-abbreviation>Tpt</part-abbreviation>
-      <score-instrument id="I62db3848fd02ae6c97638bc238751dea">
+      <score-instrument id="I07c7bc48d35f466fc473040cbe0e7287">
         <instrument-name>Trumpet</instrument-name>
         <instrument-abbreviation>Tpt</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I62db3848fd02ae6c97638bc238751dea">
+      <midi-instrument id="I07c7bc48d35f466fc473040cbe0e7287">
         <midi-channel>1</midi-channel>
         <midi-program>57</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
   <!--=========================== Part 1 ===========================-->
-  <part id="Pf25e071e15be162ca88c87f25e5a9648">
+  <part id="Pb7e4734f034e47ee06d32f4fc76a60d1">
     <!--========================= Measure 1 ==========================-->
     <measure implicit="no" number="1">
       <attributes>
@@ -161,9 +161,16 @@
           <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>15120</duration>
+        <duration>10080</duration>
         <type>quarter</type>
-        <dot />
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <type>eighth</type>
       </note>
     </measure>
     <!--========================= Measure 4 ==========================-->

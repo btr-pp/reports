@@ -22,21 +22,21 @@
     </scaling>
   </defaults>
   <part-list>
-    <score-part id="P11dd6a9c79187ecfa40263a4efb9d204">
+    <score-part id="Pa8798120df56a30787a309a114cc78ba">
       <part-name>Bb Trumpet</part-name>
       <part-abbreviation>Tpt</part-abbreviation>
-      <score-instrument id="Iee98a9e7ffbb7aa9e4d84ea49b503591">
+      <score-instrument id="I73229f02ec84f86593f620cf6ee89030">
         <instrument-name>Trumpet</instrument-name>
         <instrument-abbreviation>Tpt</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="Iee98a9e7ffbb7aa9e4d84ea49b503591">
+      <midi-instrument id="I73229f02ec84f86593f620cf6ee89030">
         <midi-channel>1</midi-channel>
         <midi-program>57</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
   <!--=========================== Part 1 ===========================-->
-  <part id="P11dd6a9c79187ecfa40263a4efb9d204">
+  <part id="Pa8798120df56a30787a309a114cc78ba">
     <!--========================= Measure 1 ==========================-->
     <measure implicit="no" number="1">
       <attributes>
