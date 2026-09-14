@@ -78,10 +78,10 @@ output/歌名/
 | --- | --- | --- |
 | `--start` / `--end` | 整首 | 裁切秒數 |
 | `--stem` | `auto` | 旋律來源：`auto` 依人聲能量占比自動選 / `vocals` 人聲 / `other` 旋律樂器 / `none` 不分離 |
-| `--pitch` | `auto` | `pyin`（單音，人聲軌預設）/ `basic-pitch`（多音，器樂預設，需安裝） |
+| `--pitch` | `auto` | `pyin`（單音，人聲軌預設）/ `basic-pitch`（多音，混音與器樂預設，需安裝） |
 | `--range` | `intermediate` | 記譜音域：`beginner` C4–G5、`intermediate` G3–C6、`advanced` F#3–E6，或自訂 `G3-C6` |
 | `--transpose` | `0` | 整首移調半音數。`0` 保留原調；`auto` 在 ±6 半音內挑「不超音域、調號最少、移最少」的調 |
-| `--bpm` / `--offset` | 自動偵測 | 手動固定速度與第一個強拍的秒數 |
+| `--bpm` / `--offset` | 自動偵測 | 手動固定速度與第一個強拍的秒數。自動模式會先用節拍器抓，再用旋律起音校正速度倍率（一半 / 兩倍 / 1.5 倍）與相位，並讓拍點跟著速度漂移 |
 | `--downbeat` | 自動猜 | 自動抓拍時，第幾個拍點（0～拍數-1）是第一個強拍。小節線歪一拍時用這個修 |
 | `--time` | `4/4` | 拍號 |
 | `--grid` | `4` | 每拍最小等分：4 = 十六分音符，2 = 八分音符，3 = 三連音 |
@@ -107,7 +107,7 @@ output/歌名/
 | 譜上抓到伴奏、和聲，不是主旋律 | `--stem vocals`（唱歌）或 `--stem other`（器樂）；只裁旋律清楚的段落 `--start/--end` |
 | 音符碎成一堆十六分音符 | `--grid 2`、`--min-note 120` |
 | 速度抓成兩倍 / 一半 | `--bpm` 直接指定 |
-| 小節線位置錯一拍 | `--downbeat 1`（或 2、3）試到對為止；或改用 `--bpm` + `--offset` |
+| 小節線位置錯一拍 | `--downbeat 1`（或 2、3）試到對為止；或改用 `--bpm` + `--offset`。沒有鼓的音樂強拍只能從旋律猜，錯一拍很常見 |
 | 高八度 / 低八度不對 | `--range advanced` 放寬，或 `--transpose` 手動 |
 | 純音樂抓不到旋律 | 安裝 `[polyphonic]` 後用 `--pitch basic-pitch` |
 | 中文標題在 PDF 變空白 | 系統缺中文字型；設環境變數 `YT2TRUMPET_FONT="Microsoft JhengHei"`（或 `PingFang TC`） |
@@ -129,6 +129,29 @@ tests/            pytest（用合成的原創旋律做端到端驗證）
 ```
 
 測試：`pip install -e ".[dev]" && pytest`
+
+### 基準測試（bench/）
+
+沙盒裡拿不到真實錄音，所以用 music21 內建的公有領域民謠（Essen 民歌集）當標準答案，
+合成幾種情境的音訊丟進整條 pipeline，跟原譜比對：
+
+| 情境 | 內容 | 後端 | 音高序列相似度 | 起音+音高 F1 |
+| --- | --- | --- | --- | --- |
+| clean | 純正弦波、無抖音 | pyin | 0.98 | 0.98 |
+| vocal_drift | 人聲式泛音 + 抖音 + 滑音 + 速度漂移 ±3% + 殘響 | pyin | 1.00 | 1.00 |
+| lead_in | 前奏 8 拍只有鼓 | pyin | 0.97 | 0.97 |
+| vocal | 人聲式（不分離） | basic-pitch | 0.93 | 0.93 |
+| band_mix | 人聲 + 和弦伴奏 + 貝斯 + 鼓（不分離） | basic-pitch | 0.88 | 0.87 |
+| piano_solo | 鋼琴旋律 + 同音色和弦伴奏 | basic-pitch | 0.84 | 0.83 |
+
+自動抓速度在全部 24 個測試案例都正確（含節拍器原本抓成 ⅔、4/3 倍的案例）。
+合成音訊畢竟不是真實錄音，實際歌曲請以 MuseScore 校正為準。
+
+```bash
+python bench/run_bench.py --pieces 6 --scenarios clean,vocal_drift --pitch pyin
+python bench/run_bench.py --pieces 6 --scenarios band_mix,piano_solo --pitch basic-pitch
+python bench/run_bench.py --known-bpm   # 給定正確 BPM，只看音高與量化
+```
 
 ## 限制與注意事項
 

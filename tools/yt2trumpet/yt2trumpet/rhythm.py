@@ -92,16 +92,23 @@ def estimate_downbeat_phase(starts_in_beats: np.ndarray, durs: np.ndarray, beats
     scores = scores / (scores.max() + 1e-9)
     if audio_scores is not None and len(audio_scores) == beats_per_bar:
         aligned = np.roll(audio_scores, offset)  # 原拍點 i 對應到補拍後的 i + offset
-        scores = scores + 0.8 * aligned
+        scores = scores + 0.6 * aligned
     return int(np.argmax(scores))
 
 
 def downbeat_scores_from_audio(y: np.ndarray, sr: int, beats: np.ndarray, beats_per_bar: int,
-                               hop: int = 512) -> np.ndarray:
-    """各拍點相位的「起音能量」總和（正規化到 0~1）。鼓 / 貝斯多半在強拍最重。"""
-    import librosa
+                               hop: int = 512, cutoff_hz: float = 150.0,
+                               min_contrast: float = 1.3) -> np.ndarray | None:
+    """各拍點相位的低頻起音能量（大鼓 / 貝斯多半在強拍最重），正規化到 0~1。
 
-    env = librosa.onset.onset_strength(y=y, sr=sr, hop_length=hop)
+    只有當最強相位明顯高於第二強（min_contrast）時才回傳，否則回 None：
+    沒有鼓的音樂這個線索不可靠，寧可只靠旋律判斷。
+    """
+    import librosa
+    from scipy.signal import butter, sosfilt
+
+    sos = butter(4, cutoff_hz, btype="low", fs=sr, output="sos")
+    env = librosa.onset.onset_strength(y=sosfilt(sos, y), sr=sr, hop_length=hop)
     t = librosa.frames_to_time(np.arange(len(env)), sr=sr, hop_length=hop)
     scores = np.zeros(beats_per_bar)
     counts = np.zeros(beats_per_bar)
@@ -111,7 +118,12 @@ def downbeat_scores_from_audio(y: np.ndarray, sr: int, beats: np.ndarray, beats_
             scores[i % beats_per_bar] += w.max()
             counts[i % beats_per_bar] += 1
     scores = scores / np.maximum(counts, 1)
-    return scores / (scores.max() + 1e-9)
+    if scores.max() <= 0:
+        return None
+    top = np.sort(scores)
+    if len(top) < 2 or top[-1] / (top[-2] + 1e-9) < min_contrast:
+        return None
+    return scores / scores.max()
 
 
 def quantize(

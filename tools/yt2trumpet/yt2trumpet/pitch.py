@@ -180,7 +180,8 @@ def transcribe_pyin(y: np.ndarray, sr: int, split_repeats: bool = True, **kw) ->
 
 # ---------------------------------------------------------------- basic-pitch
 
-def transcribe_basic_pitch(wav_path: Path, min_duration: float = 0.07, split_repeats: bool = True) -> list[NoteEvent]:
+def transcribe_basic_pitch(wav_path: Path, min_duration: float = 0.07, split_repeats: bool = True,
+                           return_cands: bool = False) -> list[NoteEvent]:
     """用 Basic Pitch 做多音轉譜，再用「天際線 + 音量」啟發式挑出單一旋律線。"""
     from basic_pitch import ICASSP_2022_MODEL_PATH
     from basic_pitch.inference import predict
@@ -191,6 +192,8 @@ def transcribe_basic_pitch(wav_path: Path, min_duration: float = 0.07, split_rep
         minimum_note_length=min_duration * 1000, minimum_frequency=FMIN_HZ, maximum_frequency=FMAX_HZ,
     )
     cands = [NoteEvent(float(s), float(e), int(p), float(a)) for (s, e, p, a, *_) in events]
+    if return_cands:
+        return cands
     notes = select_melody(cands, min_duration=min_duration)
     if split_repeats and notes:
         import soundfile as sf
@@ -297,12 +300,28 @@ def skyline(cands: list[NoteEvent], min_duration: float = 0.07, pitch_weight: fl
     return clean_notes(chosen, min_duration=min_duration)
 
 
+def polyphony_ratio(cands: list[NoteEvent], frame: float = 0.05) -> float:
+    """有 ≥2 個音同時在響的時間占有聲時間的比例。"""
+    if not cands:
+        return 0.0
+    t_end = max(n.offset for n in cands)
+    n_frames = int(np.ceil(t_end / frame)) + 1
+    count = np.zeros(n_frames, dtype=int)
+    for n in cands:
+        f0, f1 = int(n.onset / frame), max(int(np.ceil(n.offset / frame)), int(n.onset / frame) + 1)
+        count[f0:f1] += 1
+    voiced = count > 0
+    return float(np.sum(count >= 2) / max(np.sum(voiced), 1))
+
+
 # ---------------------------------------------------------------- 入口
 
 def transcribe(y: np.ndarray, sr: int, wav_for_bp: Path | None, backend: str = "auto",
-               stem_used: str = "mix", min_duration: float = 0.07) -> tuple[list[NoteEvent], str, list[str]]:
+               stem_used: str = "mix", min_duration: float = 0.07,
+               mono_threshold: float = 0.25) -> tuple[list[NoteEvent], str, list[str]]:
     """依 backend 選擇追蹤方式。auto：人聲軌用 pyin，其餘若有 basic-pitch 就用它。"""
     warnings: list[str] = []
+    auto_chosen = backend == "auto"
     if backend == "auto":
         if stem_used == "vocals":
             backend = "pyin"  # 單音、抖音滑音處理較好
@@ -314,6 +333,14 @@ def transcribe(y: np.ndarray, sr: int, wav_for_bp: Path | None, backend: str = "
     if backend == "basic-pitch":
         if wav_for_bp is None:
             raise ValueError("basic-pitch 後端需要 wav 檔路徑")
+        if auto_chosen:
+            # 混音其實是單一旋律（清唱、獨奏）時，pyin 的音高與同音反覆更準
+            cands = transcribe_basic_pitch(wav_for_bp, min_duration=min_duration, return_cands=True)
+            ratio = polyphony_ratio(cands)
+            if ratio < mono_threshold:
+                log.info(f"多音比例 {ratio:.2f} 很低，判斷為單一旋律 → 改用 pyin")
+                return transcribe_pyin(y, sr, min_duration=min_duration), "pyin", warnings
+            log.info(f"多音比例 {ratio:.2f} → 用 basic-pitch 抽旋律線")
         return transcribe_basic_pitch(wav_for_bp, min_duration=min_duration), backend, warnings
     if backend == "pyin":
         return transcribe_pyin(y, sr, min_duration=min_duration), backend, warnings
