@@ -33,6 +33,7 @@ class Config:
     grid: int = 4                    # 每拍等分數（4 = 十六分音符）
     min_note_ms: float = 70.0
     max_rest_bars: int = 2           # 超過這麼多小節的空白會被壓縮
+    legato_beats: float = 1.0        # 短於此拍數的空隙補滿（換氣、音尾衰減不寫成休止符）
     formats: list[str] = field(default_factory=lambda: ["pdf", "png"])
     renderer: str = "auto"           # auto / musescore / verovio
     demucs_model: str = "htdemucs"
@@ -103,7 +104,8 @@ def run(cfg: Config) -> TranscriptionResult:
         log.info(f"速度約 {tempo:.1f} BPM")
         audio_scores = rhythm.downbeat_scores_from_audio(y_mix, cfg.sr, beats, beats_per_bar) if downbeat is None else None
         qnotes, downbeat = rhythm.quantize(events, beats, beats_per_bar=beats_per_bar, grid=cfg.grid,
-                                           downbeat=downbeat, audio_scores=audio_scores)
+                                           downbeat=downbeat, audio_scores=audio_scores,
+                                           legato_beats=cfg.legato_beats)
         log.info(f"第一個強拍：拍點 #{downbeat}（若小節線位置不對，用 --downbeat 0~{beats_per_bar - 1} 調整）")
         qnotes = rhythm.split_long_rests(qnotes, cfg.max_rest_bars, beats_per_bar)
 

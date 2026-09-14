@@ -133,11 +133,13 @@ def quantize(
     grid: int = 4,
     downbeat: int | None = None,
     audio_scores: np.ndarray | None = None,
+    legato_beats: float = 1.0,
 ) -> tuple[list[QNote], int]:
     """把音符起迄對齊到每拍 grid 等分（grid=4 → 十六分音符）。
 
     回傳 (量化音符, 第一個強拍在拍點序列中的索引)。量化音符的 start 以第一個強拍為 0，
     強拍之前的音符會被放進一個完整的弱起小節（start 會加上 beats_per_bar 的倍數）。
+    legato_beats：兩音之間短於此拍數的空隙視為換氣 / 音尾衰減，前一個音延長補滿（0 = 不補）。
     """
     if not notes:
         return [], 0
@@ -173,6 +175,13 @@ def quantize(
                 out[-1] = r
             continue
         out.append(r)
+
+    # 補滿短空隙：音尾延長到下一個音的起點
+    if legato_beats > 0:
+        for a, b in zip(out, out[1:]):
+            gap = b[0] - a[1]
+            if 0 < gap < legato_beats:
+                a[1] = b[0]
 
     if downbeat is None:
         starts = np.array([r[0] for r in out])

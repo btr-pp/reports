@@ -49,3 +49,13 @@ def test_end_to_end_auto_beats_and_beginner(synth_wav, tmp_path):
     assert res.transpose == -2 and res.written_key.name == "C major"
     assert all(60 <= n.midi <= 79 for n in res.notes)
     assert len(res.notes) == len(expected_written())
+
+
+def test_notes_crossing_barlines_do_not_overlap_rests(tmp_path):
+    # 3 拍起、長 2 拍 → 跨小節；下一小節開頭不該同時有休止符與連結音
+    notes = [QNote(0, 1, 62), QNote(3, 2, 64), QNote(6, 1, 66)]
+    sc = score.build_score(notes, 120, KeyInfo(0, "major"), "4/4", title="tie")
+    for m in sc.parts[0].getElementsByClass("Measure"):
+        offsets = [float(el.offset) for el in m.notesAndRests]
+        assert len(offsets) == len(set(offsets)), f"小節 {m.number} 有重疊：{offsets}"
+        assert sum(float(el.quarterLength) for el in m.notesAndRests) == 4.0

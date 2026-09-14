@@ -64,8 +64,8 @@ def build_score(
         part.insert(Fraction(q.start).limit_denominator(grid * 3), n)
 
     part.makeMeasures(inPlace=True)
+    part.makeTies(inPlace=True)  # 先把跨小節的音切開，再補休止符，否則連結音會和休止符疊在一起
     part.makeRests(fillGaps=True, inPlace=True, timeRangeFromBarDuration=True)
-    part.makeTies(inPlace=True)
     part.makeBeams(inPlace=True)
     part.makeAccidentals(inPlace=True)
     sc.insert(0, part)

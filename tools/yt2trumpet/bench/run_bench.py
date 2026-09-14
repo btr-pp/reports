@@ -70,11 +70,20 @@ def evaluate(truth, got, bpb=4, tol=0.2):
         if tp > best[1] or (tp == best[1] and abs(shift) < abs(best[0])):
             best = (float(shift), tp)
     shift, tp = best
+    dur_ok = dur_n = 0
+    used = set()
+    for s, d, m in truth:
+        for j, (gs, gd, gm) in enumerate(got):
+            if j not in used and gm == m and abs(gs - shift - s) <= tol:
+                used.add(j)
+                dur_n += 1
+                dur_ok += abs(gd - d) <= 0.26
+                break
     prec = tp / max(len(got), 1)
     rec = tp / max(len(truth), 1)
     f1 = 2 * prec * rec / max(prec + rec, 1e-9)
     return {"seq": seq, "f1": f1, "prec": prec, "rec": rec, "shift": shift, "n_truth": len(truth), "n_got": len(got),
-            "bar_ok": float(shift % bpb == 0)}
+            "bar_ok": float(shift % bpb == 0), "dur": dur_ok / max(dur_n, 1)}
 
 
 def main():
@@ -107,18 +116,18 @@ def main():
                 ev = evaluate(truth, got, bpb)
                 ev["tempo"] = res.tempo
             except Exception as e:
-                ev = {"seq": 0, "f1": 0, "prec": 0, "rec": 0, "shift": 0, "n_truth": len(truth), "n_got": 0, "bar_ok": 0.0, "err": str(e)[:60]}
+                ev = {"seq": 0, "f1": 0, "prec": 0, "rec": 0, "shift": 0, "n_truth": len(truth), "n_got": 0, "bar_ok": 0.0, "dur": 0.0, "err": str(e)[:60]}
             ev.update(scenario=sc_name, piece=name, bpb=bpb, secs=time.time() - t0)
             rows.append(ev)
             print(f"{sc_name:12s} {name[:34]:34s} {bpb}/4 seq={ev['seq']:.2f} f1={ev['f1']:.2f} "
-                  f"shift={ev['shift']:+.2f} n={ev['n_got']}/{ev['n_truth']} tempo={ev.get('tempo', 0):.0f} "
+                  f"dur={ev['dur']:.2f} shift={ev['shift']:+.2f} n={ev['n_got']}/{ev['n_truth']} tempo={ev.get('tempo', 0):.0f} "
                   f"{ev.get('err', '')}", flush=True)
 
     print("\n=== 各情境平均 ===")
     for sc_name in args.scenarios.split(","):
         rs = [r for r in rows if r["scenario"] == sc_name]
         print(f"{sc_name:12s} seq={np.mean([r['seq'] for r in rs]):.3f} f1={np.mean([r['f1'] for r in rs]):.3f} "
-              f"bar_ok={np.mean([r['bar_ok'] for r in rs]):.2f} secs={np.mean([r['secs'] for r in rs]):.1f}")
+              f"dur={np.mean([r['dur'] for r in rs]):.3f} bar_ok={np.mean([r['bar_ok'] for r in rs]):.2f} secs={np.mean([r['secs'] for r in rs]):.1f}")
     if args.json:
         args.json.write_text(json.dumps(rows, ensure_ascii=False, indent=1))
 

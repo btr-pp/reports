@@ -186,11 +186,32 @@ def split_at_onsets(notes: list[NoteEvent], onsets: np.ndarray, y: np.ndarray, s
     return out
 
 
+def refine_onsets(notes: list[NoteEvent], onsets: np.ndarray, before: float = 0.08, after: float = 0.02) -> list[NoteEvent]:
+    """pYIN 的起音會比真正的起音晚幾十毫秒（要等整個分析窗都有聲音）。
+    若起音偵測在 [onset-before, onset+after] 內有一個起音點，就把音符起點移過去；前一個音的尾巴跟著截短。"""
+    if not len(onsets) or not notes:
+        return notes
+    out = [NoteEvent(n.onset, n.offset, n.midi, n.confidence) for n in notes]
+    for i, n in enumerate(out):
+        cands = onsets[(onsets >= n.onset - before) & (onsets <= n.onset + after)]
+        if not len(cands):
+            continue
+        t = float(cands[np.argmin(np.abs(cands - n.onset))])
+        if i and out[i - 1].offset > t:
+            out[i - 1].offset = t
+        if t < n.offset:
+            n.onset = t
+    return [n for n in out if n.offset > n.onset]
+
+
 def transcribe_pyin(y: np.ndarray, sr: int, split_repeats: bool = True, **kw) -> list[NoteEvent]:
     times, f0, prob = track_f0_pyin(y, sr)
     notes = f0_to_notes(times, f0, prob, **kw)
-    if split_repeats and notes:
-        notes = split_at_onsets(notes, detect_onsets(y, sr), y, sr, min_duration=kw.get("min_duration", 0.07))
+    if notes:
+        onsets = detect_onsets(y, sr)
+        notes = refine_onsets(notes, onsets)
+        if split_repeats:
+            notes = split_at_onsets(notes, onsets, y, sr, min_duration=kw.get("min_duration", 0.07))
     return notes
 
 

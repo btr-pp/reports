@@ -42,6 +42,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--grid", type=int, default=4, help="每拍等分數：4 = 十六分音符，2 = 八分音符，3 = 三連音")
     p.add_argument("--min-note", type=float, default=70.0, help="最短音符（毫秒），更短的視為雜訊")
     p.add_argument("--max-rest-bars", type=int, default=2, help="超過此小節數的空白會被壓縮（0 = 不壓縮）")
+    p.add_argument("--legato", type=float, default=1.0,
+                   help="短於此拍數的空隙視為換氣，前一個音延長補滿；0 = 忠實保留所有休止符（預設 1）")
     p.add_argument("--formats", default="pdf,png", help="輸出格式，逗號分隔：pdf,png（MusicXML 一定會輸出）")
     p.add_argument("--renderer", choices=["auto", "musescore", "verovio"], default="auto")
     p.add_argument("--demucs-model", default="htdemucs")
@@ -63,7 +65,7 @@ def main(argv: list[str] | None = None) -> int:
         source=args.source, out_dir=args.out, title=args.title, start=args.start, end=args.end,
         stem=args.stem, pitch_backend=args.pitch, range_spec=args.range, transpose=args.transpose,
         bpm=args.bpm, beat_offset=args.offset, downbeat=args.downbeat, time_signature=args.time, grid=args.grid,
-        min_note_ms=args.min_note, max_rest_bars=args.max_rest_bars,
+        min_note_ms=args.min_note, max_rest_bars=args.max_rest_bars, legato_beats=args.legato,
         formats=[f.strip() for f in args.formats.split(",") if f.strip()],
         renderer=args.renderer, demucs_model=args.demucs_model, device=args.device, keep_temp=args.keep_temp,
     )

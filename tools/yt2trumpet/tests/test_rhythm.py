@@ -23,8 +23,16 @@ def test_quantize_pickup_goes_to_previous_bar():
 def test_quantize_removes_overlap_and_min_duration():
     beats = rhythm.fixed_grid(4.0, 120.0)
     notes = [NoteEvent(0.0, 1.2, 60), NoteEvent(1.0, 1.02, 62), NoteEvent(1.5, 2.0, 64)]
-    q, _ = rhythm.quantize(notes, beats, grid=4, downbeat=0)
+    q, _ = rhythm.quantize(notes, beats, grid=4, downbeat=0, legato_beats=0)
     assert [(n.start, n.dur, n.midi) for n in q] == [(0.0, 2.0, 60), (2.0, 0.25, 62), (3.0, 1.0, 64)]
+
+
+def test_quantize_legato_fills_short_gaps_only():
+    beats = rhythm.fixed_grid(8.0, 120.0)
+    # 音尾提早 0.1 秒（換氣）→ 補滿；第三個音之後空 1.5 拍 → 保留休止
+    notes = [NoteEvent(0.0, 0.4, 60), NoteEvent(0.5, 0.9, 62), NoteEvent(1.0, 1.4, 64), NoteEvent(2.25, 2.75, 65)]
+    q, _ = rhythm.quantize(notes, beats, grid=4, downbeat=0, legato_beats=1.0)
+    assert [(n.start, n.dur) for n in q] == [(0.0, 1.0), (1.0, 1.0), (2.0, 0.75), (4.5, 1.0)]
 
 
 def test_split_long_rests():
