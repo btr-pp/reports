@@ -9,7 +9,7 @@ from pathlib import Path
 
 import soundfile as sf
 
-from . import audio, pitch, rhythm, score, separate, trumpet
+from . import audio, backing, pitch, rhythm, score, separate, trumpet
 from .model import KeyInfo, TranscriptionResult
 
 log = logging.getLogger(__name__)
@@ -18,7 +18,8 @@ log = logging.getLogger(__name__)
 @dataclass
 class Config:
     source: str                      # YouTube 網址或本機音檔
-    out_dir: Path | None = None      # 預設 ./output/<標題>/
+    out_dir: Path | None = None      # 預設 <out_root>/<標題>/
+    out_root: Path | None = None     # 預設 ./output
     title: str | None = None
     start: float | None = None       # 裁切起點（秒）
     end: float | None = None
@@ -40,6 +41,17 @@ class Config:
     device: str | None = None        # cpu / cuda / mps
     keep_temp: bool = False
     sr: int = 22050
+    backing: bool = True             # 產生去掉主旋律的伴唱 / 伴奏音檔
+    backing_format: str = "mp3"      # mp3 / wav
+    progress: object = None          # callable(str)，給 UI 顯示進度用
+
+
+def _report(cfg: "Config", msg: str) -> None:
+    if cfg.progress:
+        try:
+            cfg.progress(msg)
+        except Exception:
+            pass
 
 
 def run(cfg: Config) -> TranscriptionResult:
@@ -58,7 +70,7 @@ def run(cfg: Config) -> TranscriptionResult:
             src_wav = src
             title = cfg.title or src.stem
         safe_title = audio.safe_filename(title)
-        out_dir = Path(cfg.out_dir) if cfg.out_dir else Path("output") / safe_title
+        out_dir = Path(cfg.out_dir) if cfg.out_dir else Path(cfg.out_root or "output") / safe_title
         out_dir.mkdir(parents=True, exist_ok=True)
 
         # 2. 裁切 + 轉成分析用 wav（44.1k 立體聲留給 demucs；分析用單聲道 22.05k）
@@ -67,7 +79,8 @@ def run(cfg: Config) -> TranscriptionResult:
         log.info(f"音訊長度 {sf.info(str(clip)).duration:.1f} 秒")
 
         # 3. 選軌（分離）
-        y_mel, stem_used, w = separate.select_melody_audio(
+        _report(cfg, "分離人聲 / 伴奏…" if cfg.stem != "none" else "讀取音訊…")
+        y_mel, stem_used, w, stems = separate.select_melody_audio(
             clip, tmp, mode=cfg.stem, sr=cfg.sr, model=cfg.demucs_model, device=cfg.device)
         warnings += w
         mel_wav = tmp / "melody_source.wav"
@@ -75,6 +88,7 @@ def run(cfg: Config) -> TranscriptionResult:
 
         # 4. 音高追蹤
         log.info(f"追蹤音高（來源軌：{stem_used}）…")
+        _report(cfg, f"追蹤音高（來源軌：{stem_used}）…")
         events, backend, w = pitch.transcribe(
             y_mel, cfg.sr, mel_wav, backend=cfg.pitch_backend, stem_used=stem_used,
             min_duration=cfg.min_note_ms / 1000.0)
@@ -84,6 +98,7 @@ def run(cfg: Config) -> TranscriptionResult:
         log.info(f"偵測到 {len(events)} 個音符事件")
 
         # 5. 節拍與量化（節拍用原始混音抓比較穩）
+        _report(cfg, "偵測節拍與量化…")
         y_mix, _ = audio.load_mono(clip, cfg.sr)
         beats_per_bar = int(cfg.time_signature.split("/")[0])
         if cfg.bpm:
@@ -131,6 +146,7 @@ def run(cfg: Config) -> TranscriptionResult:
                 f"{fold.notes_shifted_individually} 個音逐音移八度。")
 
         # 8. 樂譜
+        _report(cfg, "排版樂譜…")
         sc = score.build_score(written, tempo, written_key, cfg.time_signature,
                                title=f"{title}（Bb 小號）", grid=cfg.grid)
         base = out_dir / safe_title
@@ -138,6 +154,18 @@ def run(cfg: Config) -> TranscriptionResult:
         rendered, w, renderer = score.render(base.with_suffix(".musicxml"), base, cfg.formats, cfg.renderer)
         files.update(rendered)
         warnings += w
+
+        # 9. 伴唱 / 伴奏
+        if cfg.backing:
+            _report(cfg, "產生伴奏音檔…")
+            try:
+                suffix = "伴唱" if stem_used == "vocals" else "伴奏"
+                bpath, w = backing.make_backing(stems, stem_used, clip, out_dir / f"{safe_title}_{suffix}",
+                                                transpose=shift, fmt=cfg.backing_format)
+                files["backing"] = str(bpath)
+                warnings += w
+            except Exception as e:
+                warnings.append(f"伴奏音檔產生失敗：{e}")
         if cfg.keep_temp:
             keep = out_dir / "work"
             shutil.copytree(tmp, keep, dirs_exist_ok=True)

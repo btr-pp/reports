@@ -11,9 +11,23 @@ YouTube 網址 ──yt-dlp──▶ 音訊 ──Demucs──▶ 人聲 / 旋�
 > 自動扒譜不會 100% 正確。設計目標是「拿到一份八九成對、可以直接在 MuseScore 裡修的譜」，
 > 而不是完全免修。每次輸出都會附 `.musicxml`，請把它丟進 MuseScore 校正。
 
-## 安裝
+## Mac 使用者：三步驟
 
-需要 Python 3.10 以上。
+1. 下載這個資料夾（`tools/yt2trumpet`）。
+2. 打開終端機，執行 `bash install_mac.sh`（第一次會下載 2～3 GB 的模型與套件）。
+3. 之後在 Finder **雙擊 `YT2Trumpet.command`**，瀏覽器會自動打開介面。
+
+介面長這樣：左邊貼 YouTube 網址或上傳音檔、選主旋律來源與吹奏程度，按「開始扒譜」；
+右邊會出現樂譜預覽、伴奏試聽，以及 PDF / MusicXML / 伴奏 mp3 的下載。
+所有檔案也會存到「輸出資料夾」（預設 `output/<標題>/`）。
+
+> 第一次雙擊 `.command` 檔若 macOS 說「無法打開」，對它按右鍵 → 打開 → 打開，之後就不會再問。
+
+指令列版本（`yt2trumpet …`）與網頁介面用的是同一套程式，以下說明兩者通用。
+
+## 安裝（手動 / 其他平台）
+
+需要 Python 3.10～3.12。
 
 ```bash
 cd tools/yt2trumpet
@@ -27,9 +41,14 @@ pip install -e ".[separate]"
 # 選配：多音旋律抽取（純音樂 / 動漫 OST / 器樂混音時明顯較準）。會拉 TensorFlow
 pip install -e ".[polyphonic]"
 
+# 網頁介面
+pip install -e ".[ui]"
+
 # 全部
 pip install -e ".[all]"
 ```
+
+啟動網頁介面：`yt2trumpet-ui`（會自動開瀏覽器；`--port` 改埠號、`--no-browser` 不自動開）。
 
 其他工具：
 
@@ -64,11 +83,19 @@ yt2trumpet waltz.mp3 --time 3/4 --grid 2
 
 ```
 output/歌名/
-├── 歌名.musicxml   ← 丟進 MuseScore 修正
+├── 歌名.musicxml     ← 丟進 MuseScore 修正
 ├── 歌名.pdf
-├── 歌名-1.png      ← 每頁一張
-└── 歌名-1.svg      （verovio 路線才有）
+├── 歌名-1.png        ← 每頁一張
+├── 歌名-1.svg        （verovio 路線才有）
+└── 歌名_伴唱.mp3     ← 去掉主旋律的伴奏（人聲為主旋律時叫「伴唱」，樂器時叫「伴奏」）
 ```
+
+### 伴唱 / 伴奏音檔
+
+- 有 Demucs 時：把主旋律那一軌（人聲或旋律樂器）從四軌裡拿掉，其餘相加。
+- 沒有 Demucs 時：退而求其次用左右聲道相消（只對混在正中央的人聲有效，品質有限）。
+- 若樂譜有整首移調（`--transpose auto` 或手動指定），伴奏會用相同半音數變調，跟著譜一起吹就對得上。
+- `--no-backing` 關閉；`--backing-format wav` 改輸出 wav。
 
 跑完會印出摘要：速度、實音調性、小號記譜調性、旋律來自哪一軌、音域折疊了幾個音。
 
@@ -120,6 +147,8 @@ output/歌名/
 ```
 yt2trumpet/
 ├── audio.py      下載（yt-dlp）、ffmpeg 轉檔、裁切
+├── backing.py    伴唱 / 伴奏：去掉主旋律軌、跟著移調、輸出 mp3
+├── ui.py         Gradio 網頁介面（yt2trumpet-ui）
 ├── separate.py   Demucs 分離、人聲占比判斷
 ├── pitch.py      pYIN / Basic Pitch 音高追蹤 → 音符事件；多音→單旋律的天際線啟發式
 ├── rhythm.py     節拍偵測、量化到拍點格線、強拍推測、長休止壓縮
@@ -128,6 +157,8 @@ yt2trumpet/
 ├── pipeline.py   串接
 └── cli.py        命令列
 tests/            pytest（用合成的原創旋律做端到端驗證）
+install_mac.sh    Mac 一鍵安裝
+YT2Trumpet.command  Mac 雙擊啟動介面
 ```
 
 測試：`pip install -e ".[dev]" && pytest`

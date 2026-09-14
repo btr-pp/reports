@@ -24,11 +24,13 @@ dependencies = [
 [project.optional-dependencies]
 separate = ["demucs", "torch", "torchaudio"]
 polyphonic = ["basic-pitch"]
-all = ["yt2trumpet[separate,polyphonic]"]
-dev = ["pytest"]
+ui = ["gradio>=5"]
+all = ["yt2trumpet[separate,polyphonic,ui]"]
+dev = ["pytest", "playwright"]
 
 [project.scripts]
 yt2trumpet = "yt2trumpet.cli:main"
+yt2trumpet-ui = "yt2trumpet.ui:main"
 
 [tool.setuptools.packages.find]
 include = ["yt2trumpet*"]

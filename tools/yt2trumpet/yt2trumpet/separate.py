@@ -74,7 +74,7 @@ def select_melody_audio(
     sr: int = 22050,
     model: str = "htdemucs",
     device: str | None = None,
-) -> tuple[np.ndarray, str, list[str]]:
+) -> tuple[np.ndarray, str, list[str], dict[str, Path] | None]:
     """依 mode 決定拿哪一軌來追旋律。
 
     mode:
@@ -82,17 +82,17 @@ def select_melody_audio(
       vocals - 強制用人聲軌。
       other  - 強制用 other 軌（鋼琴、合成器、吉他、弦樂…）。
       none   - 不分離，直接用原始混音。
-    回傳 (單聲道音訊, 實際使用的軌名, 警告列表)。
+    回傳 (單聲道音訊, 實際使用的軌名, 警告列表, Demucs 四軌路徑或 None)。
     """
     warnings: list[str] = []
     if mode == "none":
         y, _ = load_mono(wav, sr)
-        return y, "mix", warnings
+        return y, "mix", warnings, None
 
     if not demucs_available():
         warnings.append("未安裝 demucs/torch，改用原始混音追旋律；流行歌建議 `pip install 'yt2trumpet[separate]'`。")
         y, _ = load_mono(wav, sr)
-        return y, "mix", warnings
+        return y, "mix", warnings, None
 
     stems = run_demucs(wav, work_dir / "stems", model=model, device=device)
     if mode == "auto":
@@ -106,9 +106,9 @@ def select_melody_audio(
 
     if mode == "vocals":
         y, _ = load_mono(stems["vocals"], sr)
-        return y, "vocals", warnings
+        return y, "vocals", warnings, stems
     if mode == "other":
         # other + vocals：純音樂裡偶爾有少量人聲/合唱也一併保留
         y = mix_stems([stems["other"], stems["vocals"]], sr)
-        return y, "other", warnings
+        return y, "other", warnings, stems
     raise ValueError(f"未知的 stem 模式：{mode}")

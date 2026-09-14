@@ -48,6 +48,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--renderer", choices=["auto", "musescore", "verovio"], default="auto")
     p.add_argument("--demucs-model", default="htdemucs")
     p.add_argument("--device", help="demucs 裝置：cpu / cuda / mps")
+    p.add_argument("--no-backing", action="store_true", help="不要產生去掉主旋律的伴唱 / 伴奏音檔")
+    p.add_argument("--backing-format", choices=["mp3", "wav"], default="mp3")
     p.add_argument("--keep-temp", action="store_true", help="保留下載與分離的中間檔到輸出資料夾 work/")
     p.add_argument("-v", "--verbose", action="store_true")
     p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
@@ -68,6 +70,7 @@ def main(argv: list[str] | None = None) -> int:
         min_note_ms=args.min_note, max_rest_bars=args.max_rest_bars, legato_beats=args.legato,
         formats=[f.strip() for f in args.formats.split(",") if f.strip()],
         renderer=args.renderer, demucs_model=args.demucs_model, device=args.device, keep_temp=args.keep_temp,
+        backing=not args.no_backing, backing_format=args.backing_format,
     )
     try:
         res = run(cfg)
