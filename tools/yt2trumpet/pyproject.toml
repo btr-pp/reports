@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yt2trumpet"
+version = "0.1.0"
+description = "把 YouTube / 音檔的主旋律扒成 Bb 小號五線譜"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "scipy",
+    "librosa>=0.10",
+    "soundfile",
+    "music21>=9",
+    "yt-dlp",
+    "imageio-ffmpeg",
+    "verovio",
+    "cairosvg",
+    "pypdf",
+]
+
+[project.optional-dependencies]
+separate = ["demucs", "torch", "torchaudio"]
+polyphonic = ["basic-pitch"]
+all = ["yt2trumpet[separate,polyphonic]"]
+dev = ["pytest"]
+
+[project.scripts]
+yt2trumpet = "yt2trumpet.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["yt2trumpet*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
