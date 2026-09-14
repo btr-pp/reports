@@ -22,21 +22,21 @@
     </scaling>
   </defaults>
   <part-list>
-    <score-part id="P44b52139f158efd3abda9ca7879db46f">
+    <score-part id="P83ef09c7e1db3b7b5385c6afa87fbe98">
       <part-name>Bb Trumpet</part-name>
       <part-abbreviation>Tpt</part-abbreviation>
-      <score-instrument id="I633bd5a46b2af9274caf5e7a5d2c2cdc">
+      <score-instrument id="I172f18c21948d6345a1d5a874ef5f16e">
         <instrument-name>Trumpet</instrument-name>
         <instrument-abbreviation>Tpt</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I633bd5a46b2af9274caf5e7a5d2c2cdc">
+      <midi-instrument id="I172f18c21948d6345a1d5a874ef5f16e">
         <midi-channel>1</midi-channel>
         <midi-program>57</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
   <!--=========================== Part 1 ===========================-->
-  <part id="P44b52139f158efd3abda9ca7879db46f">
+  <part id="P83ef09c7e1db3b7b5385c6afa87fbe98">
     <!--========================= Measure 1 ==========================-->
     <measure implicit="no" number="1">
       <attributes>
@@ -61,10 +61,10 @@
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
-            <per-minute>99</per-minute>
+            <per-minute>100</per-minute>
           </metronome>
         </direction-type>
-        <sound tempo="99" />
+        <sound tempo="100" />
       </direction>
       <note>
         <rest />
@@ -126,8 +126,19 @@
           <step>E</step>
           <octave>5</octave>
         </pitch>
-        <duration>40320</duration>
-        <type>whole</type>
+        <duration>37800</duration>
+        <type>half</type>
+        <dot />
+        <dot />
+        <dot />
+      </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
       </note>
     </measure>
     <!--========================= Measure 5 ==========================-->

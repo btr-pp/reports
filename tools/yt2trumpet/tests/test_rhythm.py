@@ -41,3 +41,10 @@ def test_estimate_beats_on_synth(synth_audio):
     tempo, beats = rhythm.estimate_beats(y, sr)
     assert abs(tempo - 120) < 5 or abs(tempo - 60) < 3 or abs(tempo - 240) < 6
     assert len(beats) > 10
+
+
+def test_quantize_drops_leading_empty_bars():
+    beats = rhythm.fixed_grid(12.0, 120.0)
+    notes = [NoteEvent(4.0, 4.5, 60), NoteEvent(4.5, 5.0, 62)]  # 第 8 拍才開始 = 前面 2 個空小節
+    q, _ = rhythm.quantize(notes, beats, beats_per_bar=4, grid=4, downbeat=0)
+    assert [n.start for n in q] == [0.0, 1.0]

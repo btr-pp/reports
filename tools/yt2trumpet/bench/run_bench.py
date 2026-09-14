@@ -56,7 +56,7 @@ def evaluate(truth, got, bpb=4, tol=0.2):
     seq = difflib.SequenceMatcher(a=t_m, b=g_m).ratio()
     # 最佳整體拍位偏移（以 0.25 拍為單位，-8..8 拍）：模擬小節線 / 弱起判斷錯誤
     best = (0, -1)
-    for shift in np.arange(-8, 8.01, 0.25):
+    for shift in np.arange(-16, 16.01, 0.25):
         used = set()
         tp = 0
         for s, d, m in truth:

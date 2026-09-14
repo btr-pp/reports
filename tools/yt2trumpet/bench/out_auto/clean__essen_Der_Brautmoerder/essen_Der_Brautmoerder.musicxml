@@ -22,21 +22,21 @@
     </scaling>
   </defaults>
   <part-list>
-    <score-part id="P4b72e4a96801ae30ac2be6cf99d1f50c">
+    <score-part id="P03dc2fd89b69a2d56dd44d4598afae9e">
       <part-name>Bb Trumpet</part-name>
       <part-abbreviation>Tpt</part-abbreviation>
-      <score-instrument id="I6758f8eb3c3ef3328b46852b5791b880">
+      <score-instrument id="I09cf0595f4877760ddc10cbd9fef0da3">
         <instrument-name>Trumpet</instrument-name>
         <instrument-abbreviation>Tpt</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I6758f8eb3c3ef3328b46852b5791b880">
+      <midi-instrument id="I09cf0595f4877760ddc10cbd9fef0da3">
         <midi-channel>1</midi-channel>
         <midi-program>57</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
   <!--=========================== Part 1 ===========================-->
-  <part id="P4b72e4a96801ae30ac2be6cf99d1f50c">
+  <part id="P03dc2fd89b69a2d56dd44d4598afae9e">
     <!--========================= Measure 1 ==========================-->
     <measure implicit="no" number="1">
       <attributes>
@@ -61,10 +61,10 @@
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
-            <per-minute>99</per-minute>
+            <per-minute>100</per-minute>
           </metronome>
         </direction-type>
-        <sound tempo="99" />
+        <sound tempo="100" />
       </direction>
       <note>
         <rest />

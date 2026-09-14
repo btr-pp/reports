@@ -94,10 +94,11 @@ def run(cfg: Config) -> TranscriptionResult:
             tempo, beats = rhythm.track_beats(env, cfg.sr)
             beats, info = rhythm.refine_beats(beats, events, onset_env=env, sr=cfg.sr)
             if info:
-                if info["factor"] != 1.0 or info["phase"]:
-                    log.info(f"依旋律起音校正拍點：速度 ×{info['factor']:.2f}，相位 {info['phase']:.3f} 拍"
-                             f"（{info['base_bpm']:.0f} → {info['bpm']:.0f} BPM，吻合度 {info['fit']:.2f}）")
+                if abs(info["factor"] - 1.0) > 0.02 or info["phase"]:
+                    log.info(f"依旋律起音校正拍點：{info['base_bpm']:.0f} → {info['bpm']:.0f} BPM（來源 {info['source']}），"
+                             f"相位 {info['phase']:.3f} 拍，吻合度 {info['fit']:.2f}")
                 tempo = info["bpm"]
+            beats = rhythm.snap_grid_to_onsets(beats, events)
             downbeat = cfg.downbeat
         log.info(f"速度約 {tempo:.1f} BPM")
         audio_scores = rhythm.downbeat_scores_from_audio(y_mix, cfg.sr, beats, beats_per_bar) if downbeat is None else None

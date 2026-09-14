@@ -22,21 +22,21 @@
     </scaling>
   </defaults>
   <part-list>
-    <score-part id="P6a61c5ebe110d7e70830ebd78168605a">
+    <score-part id="Pf8dd41e5f01cf07a3ad109ef4fba2ddf">
       <part-name>Bb Trumpet</part-name>
       <part-abbreviation>Tpt</part-abbreviation>
-      <score-instrument id="Idc453c86c625884b3db0cb5e9c000a18">
+      <score-instrument id="I3c8db465075de2c22f87dbd8d28c7157">
         <instrument-name>Trumpet</instrument-name>
         <instrument-abbreviation>Tpt</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="Idc453c86c625884b3db0cb5e9c000a18">
+      <midi-instrument id="I3c8db465075de2c22f87dbd8d28c7157">
         <midi-channel>1</midi-channel>
         <midi-program>57</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
   <!--=========================== Part 1 ===========================-->
-  <part id="P6a61c5ebe110d7e70830ebd78168605a">
+  <part id="Pf8dd41e5f01cf07a3ad109ef4fba2ddf">
     <!--========================= Measure 1 ==========================-->
     <measure implicit="no" number="1">
       <attributes>
@@ -61,14 +61,46 @@
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
-            <per-minute>99</per-minute>
+            <per-minute>100</per-minute>
           </metronome>
         </direction-type>
-        <sound tempo="99" />
+        <sound tempo="100" />
       </direction>
       <note>
-        <rest measure="yes" />
-        <duration>40320</duration>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <type>quarter</type>
       </note>
     </measure>
     <!--========================= Measure 2 ==========================-->
@@ -93,42 +125,22 @@
       </note>
       <note>
         <pitch>
-          <step>C</step>
-          <alter>1</alter>
+          <step>A</step>
           <octave>4</octave>
         </pitch>
-        <duration>10080</duration>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>10080</duration>
-        <type>quarter</type>
+        <duration>20160</duration>
+        <type>half</type>
       </note>
     </measure>
     <!--========================= Measure 3 ==========================-->
     <measure implicit="no" number="3">
       <note>
         <pitch>
-          <step>C</step>
-          <alter>1</alter>
+          <step>A</step>
           <octave>4</octave>
         </pitch>
-        <duration>10080</duration>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>10080</duration>
-        <type>quarter</type>
+        <duration>20160</duration>
+        <type>half</type>
       </note>
       <note>
         <pitch>
@@ -143,8 +155,9 @@
     <measure implicit="no" number="4">
       <note>
         <pitch>
-          <step>A</step>
-          <octave>4</octave>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
         </pitch>
         <duration>20160</duration>
         <type>half</type>
@@ -162,26 +175,6 @@
     <measure implicit="no" number="5">
       <note>
         <pitch>
-          <step>C</step>
-          <alter>1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>20160</duration>
-        <type>half</type>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>20160</duration>
-        <type>half</type>
-      </note>
-    </measure>
-    <!--========================= Measure 6 ==========================-->
-    <measure implicit="no" number="6">
-      <note>
-        <pitch>
           <step>E</step>
           <octave>5</octave>
         </pitch>
@@ -193,8 +186,8 @@
         </notations>
       </note>
     </measure>
-    <!--========================= Measure 7 ==========================-->
-    <measure implicit="no" number="7">
+    <!--========================= Measure 6 ==========================-->
+    <measure implicit="no" number="6">
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
@@ -212,8 +205,8 @@
         </notations>
       </note>
     </measure>
-    <!--========================= Measure 8 ==========================-->
-    <measure implicit="no" number="8">
+    <!--========================= Measure 7 ==========================-->
+    <measure implicit="no" number="7">
       <note>
         <pitch>
           <step>C</step>
@@ -241,8 +234,8 @@
         <type>half</type>
       </note>
     </measure>
-    <!--========================= Measure 9 ==========================-->
-    <measure implicit="no" number="9">
+    <!--========================= Measure 8 ==========================-->
+    <measure implicit="no" number="8">
       <note>
         <pitch>
           <step>F</step>
@@ -261,8 +254,8 @@
         <type>half</type>
       </note>
     </measure>
-    <!--========================= Measure 10 =========================-->
-    <measure implicit="no" number="10">
+    <!--========================= Measure 9 ==========================-->
+    <measure implicit="no" number="9">
       <note>
         <pitch>
           <step>G</step>
@@ -282,8 +275,8 @@
         <type>half</type>
       </note>
     </measure>
-    <!--========================= Measure 11 =========================-->
-    <measure implicit="no" number="11">
+    <!--========================= Measure 10 =========================-->
+    <measure implicit="no" number="10">
       <note>
         <pitch>
           <step>F</step>
@@ -294,8 +287,8 @@
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 12 =========================-->
-    <measure implicit="no" number="12">
+    <!--========================= Measure 11 =========================-->
+    <measure implicit="no" number="11">
       <note>
         <pitch>
           <step>E</step>
@@ -305,8 +298,8 @@
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 13 =========================-->
-    <measure implicit="no" number="13">
+    <!--========================= Measure 12 =========================-->
+    <measure implicit="no" number="12">
       <note>
         <pitch>
           <step>C</step>
@@ -334,8 +327,8 @@
         <type>half</type>
       </note>
     </measure>
-    <!--========================= Measure 14 =========================-->
-    <measure implicit="no" number="14">
+    <!--========================= Measure 13 =========================-->
+    <measure implicit="no" number="13">
       <note>
         <pitch>
           <step>C</step>
@@ -355,8 +348,8 @@
         <type>half</type>
       </note>
     </measure>
-    <!--========================= Measure 15 =========================-->
-    <measure implicit="no" number="15">
+    <!--========================= Measure 14 =========================-->
+    <measure implicit="no" number="14">
       <note>
         <pitch>
           <step>D</step>
@@ -377,8 +370,8 @@
         <type>half</type>
       </note>
     </measure>
-    <!--========================= Measure 16 =========================-->
-    <measure implicit="no" number="16">
+    <!--========================= Measure 15 =========================-->
+    <measure implicit="no" number="15">
       <note>
         <pitch>
           <step>E</step>
@@ -392,8 +385,8 @@
         </notations>
       </note>
     </measure>
-    <!--========================= Measure 17 =========================-->
-    <measure implicit="no" number="17">
+    <!--========================= Measure 16 =========================-->
+    <measure implicit="no" number="16">
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
@@ -411,8 +404,8 @@
         </notations>
       </note>
     </measure>
-    <!--========================= Measure 18 =========================-->
-    <measure implicit="no" number="18">
+    <!--========================= Measure 17 =========================-->
+    <measure implicit="no" number="17">
       <note>
         <pitch>
           <step>C</step>
@@ -440,8 +433,8 @@
         <type>half</type>
       </note>
     </measure>
-    <!--========================= Measure 19 =========================-->
-    <measure implicit="no" number="19">
+    <!--========================= Measure 18 =========================-->
+    <measure implicit="no" number="18">
       <note>
         <pitch>
           <step>C</step>
@@ -464,8 +457,8 @@
         </notations>
       </note>
     </measure>
-    <!--========================= Measure 20 =========================-->
-    <measure implicit="no" number="20">
+    <!--========================= Measure 19 =========================-->
+    <measure implicit="no" number="19">
       <note>
         <rest />
         <duration>20160</duration>
@@ -493,8 +486,8 @@
         <type>half</type>
       </note>
     </measure>
-    <!--========================= Measure 21 =========================-->
-    <measure implicit="no" number="21">
+    <!--========================= Measure 20 =========================-->
+    <measure implicit="no" number="20">
       <note>
         <pitch>
           <step>B</step>
@@ -504,8 +497,8 @@
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 22 =========================-->
-    <measure implicit="no" number="22">
+    <!--========================= Measure 21 =========================-->
+    <measure implicit="no" number="21">
       <note>
         <pitch>
           <step>A</step>
@@ -515,8 +508,8 @@
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 23 =========================-->
-    <measure implicit="no" number="23">
+    <!--========================= Measure 22 =========================-->
+    <measure implicit="no" number="22">
       <note>
         <pitch>
           <step>C</step>
@@ -548,8 +541,8 @@
         </notations>
       </note>
     </measure>
-    <!--========================= Measure 24 =========================-->
-    <measure implicit="no" number="24">
+    <!--========================= Measure 23 =========================-->
+    <measure implicit="no" number="23">
       <note>
         <rest />
         <duration>30240</duration>
@@ -579,8 +572,8 @@
         <type>quarter</type>
       </note>
     </measure>
-    <!--========================= Measure 25 =========================-->
-    <measure implicit="no" number="25">
+    <!--========================= Measure 24 =========================-->
+    <measure implicit="no" number="24">
       <note>
         <pitch>
           <step>E</step>
@@ -590,8 +583,8 @@
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 26 =========================-->
-    <measure implicit="no" number="26">
+    <!--========================= Measure 25 =========================-->
+    <measure implicit="no" number="25">
       <note>
         <pitch>
           <step>C</step>
@@ -602,8 +595,8 @@
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 27 =========================-->
-    <measure implicit="no" number="27">
+    <!--========================= Measure 26 =========================-->
+    <measure implicit="no" number="26">
       <note>
         <pitch>
           <step>B</step>
@@ -613,8 +606,8 @@
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 28 =========================-->
-    <measure implicit="no" number="28">
+    <!--========================= Measure 27 =========================-->
+    <measure implicit="no" number="27">
       <note>
         <pitch>
           <step>G</step>
@@ -647,8 +640,8 @@
         <type>half</type>
       </note>
     </measure>
-    <!--========================= Measure 29 =========================-->
-    <measure implicit="no" number="29">
+    <!--========================= Measure 28 =========================-->
+    <measure implicit="no" number="28">
       <note>
         <pitch>
           <step>A</step>
@@ -656,6 +649,25 @@
         </pitch>
         <duration>40320</duration>
         <type>whole</type>
+      </note>
+    </measure>
+    <!--========================= Measure 29 =========================-->
+    <measure implicit="no" number="29">
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>20160</duration>
+        <type>half</type>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>20160</duration>
+        <type>half</type>
       </note>
     </measure>
     <!--========================= Measure 30 =========================-->
@@ -670,7 +682,7 @@
       </note>
       <note>
         <pitch>
-          <step>A</step>
+          <step>B</step>
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
@@ -681,25 +693,6 @@
     <measure implicit="no" number="31">
       <note>
         <pitch>
-          <step>A</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>20160</duration>
-        <type>half</type>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>20160</duration>
-        <type>half</type>
-      </note>
-    </measure>
-    <!--========================= Measure 32 =========================-->
-    <measure implicit="no" number="32">
-      <note>
-        <pitch>
           <step>C</step>
           <alter>1</alter>
           <octave>5</octave>
@@ -708,8 +701,8 @@
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 33 =========================-->
-    <measure implicit="no" number="33">
+    <!--========================= Measure 32 =========================-->
+    <measure implicit="no" number="32">
       <note>
         <pitch>
           <step>B</step>
@@ -719,8 +712,8 @@
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 34 =========================-->
-    <measure implicit="no" number="34">
+    <!--========================= Measure 33 =========================-->
+    <measure implicit="no" number="33">
       <note>
         <pitch>
           <step>C</step>
@@ -748,8 +741,8 @@
         <type>half</type>
       </note>
     </measure>
-    <!--========================= Measure 35 =========================-->
-    <measure implicit="no" number="35">
+    <!--========================= Measure 34 =========================-->
+    <measure implicit="no" number="34">
       <note>
         <pitch>
           <step>A</step>
@@ -767,8 +760,8 @@
         <type>half</type>
       </note>
     </measure>
-    <!--========================= Measure 36 =========================-->
-    <measure implicit="no" number="36">
+    <!--========================= Measure 35 =========================-->
+    <measure implicit="no" number="35">
       <note>
         <pitch>
           <step>B</step>
@@ -778,8 +771,8 @@
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 37 =========================-->
-    <measure implicit="no" number="37">
+    <!--========================= Measure 36 =========================-->
+    <measure implicit="no" number="36">
       <note>
         <pitch>
           <step>C</step>
@@ -817,8 +810,8 @@
         <accidental>natural</accidental>
       </note>
     </measure>
-    <!--========================= Measure 38 =========================-->
-    <measure implicit="no" number="38">
+    <!--========================= Measure 37 =========================-->
+    <measure implicit="no" number="37">
       <note>
         <pitch>
           <step>E</step>
@@ -828,8 +821,8 @@
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 39 =========================-->
-    <measure implicit="no" number="39">
+    <!--========================= Measure 38 =========================-->
+    <measure implicit="no" number="38">
       <note>
         <pitch>
           <step>C</step>
@@ -857,12 +850,32 @@
         <type>half</type>
       </note>
     </measure>
-    <!--========================= Measure 40 =========================-->
-    <measure implicit="no" number="40">
+    <!--========================= Measure 39 =========================-->
+    <measure implicit="no" number="39">
       <note>
         <pitch>
           <step>E</step>
           <octave>5</octave>
+        </pitch>
+        <duration>20160</duration>
+        <type>half</type>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>20160</duration>
+        <type>half</type>
+      </note>
+    </measure>
+    <!--========================= Measure 40 =========================-->
+    <measure implicit="no" number="40">
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
         </pitch>
         <duration>20160</duration>
         <type>half</type>
@@ -884,32 +897,12 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>20160</duration>
-        <type>half</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>20160</duration>
-        <type>half</type>
-      </note>
-    </measure>
-    <!--========================= Measure 42 =========================-->
-    <measure implicit="no" number="42">
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
         <duration>40320</duration>
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 43 =========================-->
-    <measure implicit="no" number="43">
+    <!--========================= Measure 42 =========================-->
+    <measure implicit="no" number="42">
       <note>
         <pitch>
           <step>A</step>
@@ -919,8 +912,8 @@
         <type>whole</type>
       </note>
     </measure>
-    <!--========================= Measure 44 =========================-->
-    <measure implicit="no" number="44">
+    <!--========================= Measure 43 =========================-->
+    <measure implicit="no" number="43">
       <note>
         <pitch>
           <step>C</step>
