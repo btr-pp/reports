@@ -22,21 +22,21 @@
     </scaling>
   </defaults>
   <part-list>
-    <score-part id="Pe5019289c0b21ea31989c2989605b354">
+    <score-part id="P3f9aa044bfac7b0cefee53345113528a">
       <part-name>Bb Trumpet</part-name>
       <part-abbreviation>Tpt</part-abbreviation>
-      <score-instrument id="Iee4d417375fcf750984a1ee3011033de">
+      <score-instrument id="I3c3466ee0a8554accc7b62fd6ea9ac1d">
         <instrument-name>Trumpet</instrument-name>
         <instrument-abbreviation>Tpt</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="Iee4d417375fcf750984a1ee3011033de">
+      <midi-instrument id="I3c3466ee0a8554accc7b62fd6ea9ac1d">
         <midi-channel>1</midi-channel>
         <midi-program>57</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
   <!--=========================== Part 1 ===========================-->
-  <part id="Pe5019289c0b21ea31989c2989605b354">
+  <part id="P3f9aa044bfac7b0cefee53345113528a">
     <!--========================= Measure 1 ==========================-->
     <measure implicit="no" number="1">
       <attributes>
@@ -249,10 +249,33 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>17640</duration>
-        <type>quarter</type>
+        <duration>7560</duration>
+        <type>eighth</type>
         <dot />
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2520</duration>
+        <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">backward hook</beam>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>7560</duration>
+        <type>eighth</type>
         <dot />
+        <stem>down</stem>
+        <beam number="1">begin</beam>
       </note>
       <note>
         <pitch>
@@ -261,6 +284,9 @@
         </pitch>
         <duration>2520</duration>
         <type>16th</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">backward hook</beam>
       </note>
     </measure>
     <!--========================= Measure 6 ==========================-->
@@ -322,11 +348,21 @@
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>17640</duration>
+        <duration>10080</duration>
         <type>quarter</type>
-        <dot />
-        <dot />
         <accidental>flat</accidental>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>7560</duration>
+        <type>eighth</type>
+        <dot />
+        <stem>down</stem>
+        <beam number="1">begin</beam>
       </note>
       <note>
         <pitch>
@@ -337,6 +373,9 @@
         <duration>2520</duration>
         <type>16th</type>
         <accidental>natural</accidental>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">backward hook</beam>
       </note>
     </measure>
     <!--========================= Measure 8 ==========================-->

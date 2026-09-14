@@ -22,21 +22,21 @@
     </scaling>
   </defaults>
   <part-list>
-    <score-part id="P6fdead3d6a4c2dd0f28efa4cb02f5648">
+    <score-part id="Pf35a9630eeb6e504383fb5d26d4ccec1">
       <part-name>Bb Trumpet</part-name>
       <part-abbreviation>Tpt</part-abbreviation>
-      <score-instrument id="I0cb83080f2ace9345f4de4cd64b31d36">
+      <score-instrument id="I711c15a4b04350ca3750a69ee6bfd245">
         <instrument-name>Trumpet</instrument-name>
         <instrument-abbreviation>Tpt</instrument-abbreviation>
       </score-instrument>
-      <midi-instrument id="I0cb83080f2ace9345f4de4cd64b31d36">
+      <midi-instrument id="I711c15a4b04350ca3750a69ee6bfd245">
         <midi-channel>1</midi-channel>
         <midi-program>57</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
   <!--=========================== Part 1 ===========================-->
-  <part id="P6fdead3d6a4c2dd0f28efa4cb02f5648">
+  <part id="Pf35a9630eeb6e504383fb5d26d4ccec1">
     <!--========================= Measure 1 ==========================-->
     <measure implicit="no" number="1">
       <attributes>
@@ -161,17 +161,8 @@
           <alter>1</alter>
           <octave>5</octave>
         </pitch>
-        <duration>10080</duration>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <alter>1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>10080</duration>
-        <type>quarter</type>
+        <duration>20160</duration>
+        <type>half</type>
       </note>
     </measure>
     <!--========================= Measure 5 ==========================-->
@@ -274,11 +265,6 @@
     <!--========================= Measure 8 ==========================-->
     <measure implicit="no" number="8">
       <note>
-        <rest />
-        <duration>10080</duration>
-        <type>quarter</type>
-      </note>
-      <note>
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -305,8 +291,16 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>20160</duration>
-        <type>half</type>
+        <duration>10080</duration>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <type>quarter</type>
       </note>
     </measure>
     <!--========================= Measure 9 ==========================-->
@@ -316,8 +310,16 @@
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>20160</duration>
-        <type>half</type>
+        <duration>10080</duration>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>10080</duration>
+        <type>quarter</type>
       </note>
       <note>
         <pitch>
