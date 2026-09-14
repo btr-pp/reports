@@ -90,10 +90,19 @@ def run(cfg: Config) -> TranscriptionResult:
             beats = rhythm.fixed_grid(len(y_mix) / cfg.sr, cfg.bpm, cfg.beat_offset)
             downbeat = 0 if cfg.downbeat is None else cfg.downbeat  # offset 就是強拍
         else:
-            tempo, beats = rhythm.estimate_beats(y_mix, cfg.sr)
+            env = rhythm.onset_envelope(y_mix, cfg.sr)
+            tempo, beats = rhythm.track_beats(env, cfg.sr)
+            beats, info = rhythm.refine_beats(beats, events, onset_env=env, sr=cfg.sr)
+            if info:
+                if info["factor"] != 1.0 or info["phase"]:
+                    log.info(f"依旋律起音校正拍點：速度 ×{info['factor']:.2f}，相位 {info['phase']:.3f} 拍"
+                             f"（{info['base_bpm']:.0f} → {info['bpm']:.0f} BPM，吻合度 {info['fit']:.2f}）")
+                tempo = info["bpm"]
             downbeat = cfg.downbeat
         log.info(f"速度約 {tempo:.1f} BPM")
-        qnotes, downbeat = rhythm.quantize(events, beats, beats_per_bar=beats_per_bar, grid=cfg.grid, downbeat=downbeat)
+        audio_scores = rhythm.downbeat_scores_from_audio(y_mix, cfg.sr, beats, beats_per_bar) if downbeat is None else None
+        qnotes, downbeat = rhythm.quantize(events, beats, beats_per_bar=beats_per_bar, grid=cfg.grid,
+                                           downbeat=downbeat, audio_scores=audio_scores)
         log.info(f"第一個強拍：拍點 #{downbeat}（若小節線位置不對，用 --downbeat 0~{beats_per_bar - 1} 調整）")
         qnotes = rhythm.split_long_rests(qnotes, cfg.max_rest_bars, beats_per_bar)
 
