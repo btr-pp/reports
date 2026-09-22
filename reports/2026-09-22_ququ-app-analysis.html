@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>趣趣 / 去趣 App 競品研究 — 2026-09-22</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: "Microsoft JhengHei", "PingFang TC", sans-serif; margin: 0; padding: 20px; background: #0d1117; color: #e6edf3; line-height: 1.65; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  h1 { color: #58a6ff; margin-bottom: 5px; }
+  h2 { color: #e6edf3; border-bottom: 1px solid #30363d; padding-bottom: 8px; margin-top: 36px; }
+  h3 { color: #c9d1d9; margin-top: 22px; }
+  .subtitle { color: #8b949e; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.95em; }
+  th { background: #161b22; color: #8b949e; font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 2px solid #30363d; vertical-align: top; }
+  td { padding: 8px 12px; border-bottom: 1px solid #21262d; vertical-align: top; }
+  tr:hover { background: #161b22; }
+  .good { color: #3fb950; font-weight: 600; }
+  .bad { color: #f85149; font-weight: 600; }
+  .warn { color: #d29922; font-weight: 600; }
+  .muted { color: #8b949e; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px 18px; margin: 12px 0; }
+  .card.verdict { border-left: 4px solid #58a6ff; }
+  .card.alert { border-left: 4px solid #d29922; }
+  .card.attack { border-left: 4px solid #f85149; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 14px; }
+  .tag { display: inline-block; font-size: 0.75em; padding: 2px 8px; border-radius: 12px; font-weight: 600; margin-right: 4px; }
+  .tag.p1 { background: #461220; color: #f85149; }
+  .tag.p2 { background: #3d2a00; color: #d29922; }
+  .tag.p3 { background: #1b4332; color: #3fb950; }
+  .tag.src { background: #1f2937; color: #8b949e; font-weight: 400; }
+  ul { padding-left: 22px; }
+  li { margin: 5px 0; }
+  a { color: #58a6ff; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 14px 0; }
+  .kpi { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi .n { font-size: 1.6em; font-weight: 700; color: #58a6ff; }
+  .kpi .l { font-size: 0.8em; color: #8b949e; }
+  .small { font-size: 0.85em; }
+  code { background: #161b22; padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>趣趣 / 去趣 App 競品研究</h1>
+<div class="subtitle">2026-09-22 · 目標：找出優點、弱點，以及可以「幹爆」它的切入點</div>
+
+<div class="card alert">
+  <strong>先釐清你要打的是哪一個「ㄑㄩˋㄑㄩˋ」</strong><br>
+  台灣市場上有兩個同音的 App：
+  <ul>
+    <li><strong>趣趣 TreaTrip</strong>（新竹「創意數位科技 GCreate」出品）：本質是台灣景點／美食的 SEO 內容站加一個殼 App。App Store 台灣區只有 1 則評分、1.0 星，評論寫「一直轉圈圈，嚴重懷疑是有問題的 App」；Android 最後版本 2.0.3 停在 2024-07。Facebook 粉絲約 1.3 萬，官網主要在徵「合作部落客」。這個不需要幹爆，它已經不是一個產品，是一個內容農場。</li>
+    <li><strong>去趣 chicTrip</strong>（和泰汽車新創事業部，2023 年上線）：台灣下載量最大的行程規劃 App，350 萬下載、235 萬會員，App Store 4.5 星、Google Play 100 萬+ 安裝、多次入選 App Store 編輯精選。<strong>這個才是值得打的對手。</strong></li>
+  </ul>
+  本報告以「去趣 chicTrip」為主要分析對象，TreaTrip 只在第 1 節做對照。若你指的真的是 TreaTrip，第 1 節的結論就夠了。
+</div>
+
+<h2>1. 兩個候選一覽</h2>
+<table>
+  <tr><th style="width:18%">項目</th><th>趣趣 TreaTrip</th><th>去趣 chicTrip</th></tr>
+  <tr><td>開發者</td><td>GCreate 創意數位科技（新竹網頁設計／SEO 公司）</td><td>和泰汽車 HOTAI MOTOR（TOYOTA 台灣總代理）新創事業部</td></tr>
+  <tr><td>定位</td><td>台灣景點、美食、住宿資訊整理，「提供一種旅行態度」</td><td>AI 行程規劃 + 社群 + 交通住宿預訂 + eSIM + 優惠券的一站式旅遊入口</td></tr>
+  <tr><td>上線</td><td>2021 年（部落客交流會 2021-11）</td><td>2023 年</td></tr>
+  <tr><td>規模</td><td>App Store 1 則評分（1.0 星）；FB 約 1.3 萬粉絲；Android 最後更新 2024-07（v2.0.3）</td><td>350 萬下載、235 萬會員（2026-02）；App Store 4.5 星；Google Play 100 萬+；早期 MAU 30 萬+，Google 案例稱 120 萬活躍用戶</td></tr>
+  <tr><td>營收模式</td><td>部落客業配、內容導流</td><td>和泰 Points 生態、旅遊商城、自有 eSIM、Agoda/KKday 導購回饋、日本優惠券、與 CyberAgent 合作的跨境廣告方案</td></tr>
+  <tr><td>結論</td><td class="bad">近乎停更，非競爭對手</td><td class="warn">真正的市場領導者，也是本報告的分析主體</td></tr>
+</table>
+
+<h2>2. 去趣 chicTrip 基本盤</h2>
+<div class="kpi-row">
+  <div class="kpi"><div class="n">350萬+</div><div class="l">累計下載（2026-02）</div></div>
+  <div class="kpi"><div class="n">235萬</div><div class="l">註冊會員（2026-02）</div></div>
+  <div class="kpi"><div class="n">4.5</div><div class="l">App Store 評分</div></div>
+  <div class="kpi"><div class="n">100萬+</div><div class="l">Google Play 安裝</div></div>
+  <div class="kpi"><div class="n">40%</div><div class="l">用戶行程目的地為日本</div></div>
+  <div class="kpi"><div class="n">100萬+</div><div class="l">日本行程筆數</div></div>
+</div>
+
+<h3>成長時間軸</h3>
+<table>
+  <tr><th style="width:16%">時間</th><th>事件</th></tr>
+  <tr><td>2023</td><td>和泰推出「去趣」，串接 iRent 共享汽車、yoxi 計程車、和泰產險旅平險、HOTAI 購旅遊館。UI 由果思設計，地圖以 Google Maps Platform（Maps / Routes / Places API）為底，系統整合夥伴 Master Concept。</td></tr>
+  <tr><td>2024</td><td>上線一年：150 萬下載、100 萬會員、MAU 30 萬+。推出電腦版；行程轉「旅遊小書」PDF；Google Maps 清單一鍵匯入。</td></tr>
+  <tr><td>2025</td><td>280 萬下載、190 萬會員。推出日文版介面、翻譯、Naver Map 導航（韓國）。自有品牌「去趣 eSIM」上線。Places API 升級後 API 成本降 30%。Google Maps Platform 官方案例（2025-07）。測試 Gemini 做推薦、情緒分析、內容審核。</td></tr>
+  <tr><td>2026-02</td><td>330 萬到 350 萬下載、230 萬到 235 萬會員。與日本最大數位廣告代理商 CyberAgent 戰略合作，用「百萬筆日本行程數據」做跨境廣告方案。</td></tr>
+  <tr><td>2026 上半年</td><td>定位型優惠推播（經過合作店家自動推優惠）、行程列表改版（複製行程改為儲存行程／靈感庫）、「分享與匯出」新增 AI 繪圖提示詞、行程發佈到「行程靈感」供他人複製與留言。閃退修正、停止支援 iOS 15.5 以下。</td></tr>
+</table>
+
+<h3>產品架構</h3>
+<ul>
+  <li><strong>規劃</strong>：建立行程（目的地 + 天數）、地圖找景點（同步 Google 評論、營業時間）、拖曳排序、「AI 路順推薦」一鍵排序、點對點交通（自駕／大眾運輸、轉乘方式、車資、時間，路線顏色區分）。</li>
+  <li><strong>協作</strong>：連結或 QR Code 邀請共編，即時同步，10 人以上團體實測穩定。</li>
+  <li><strong>內容／社群</strong>：達人（KOL／YouTuber）行程、熱門行程、熱門影音、社群動態牆、用戶推薦；可搜尋行程名稱或人名。</li>
+  <li><strong>旅程中／後</strong>：旅遊小書（PDF、含 QR Code）、AI 繪圖提示詞、影音分享。</li>
+  <li><strong>變現</strong>：旅遊商城（和泰 Points 1 點 = 1 元，無門檻）、去趣 eSIM、Agoda 最高 3% + 中信和泰聯名卡加碼 2%、KKday 3% 回饋、日本優惠券（唐吉軻德、BicCamera、成田免稅店）、定位推播優惠、CyberAgent 廣告。</li>
+  <li><strong>登入</strong>：建立行程必須登入（Google / LINE / Apple / 和泰會員）。</li>
+</ul>
+
+<h2>3. 優點（它為什麼贏）</h2>
+<div class="grid2">
+  <div class="card">
+    <strong class="good">1. 排程體驗真的順</strong><br>
+    「輸入想去的點，自動排最順路線 + 點對點交通時間車資」是所有部落客和 Dcard 用戶最常提的核心價值。PTT 用戶直接說「去趣功能大概是照抄 Funliday，但介面比 Funliday 清爽，Funliday 廣告太多」。
+  </div>
+  <div class="card">
+    <strong class="good">2. 免費、無廣告干擾</strong><br>
+    和泰把它當生態入口養，不靠 App 內廣告或訂閱賺錢。對比 Funliday（廣告多、進階功能要訂閱）和 Wanderlog（Pro 39.99 美元／年才有離線地圖、PDF 匯出、路線最佳化），去趣把競品的付費功能全部免費送。
+  </div>
+  <div class="card">
+    <strong class="good">3. 共編是真的能用</strong><br>
+    連結／QR 一鍵邀請、加入即通知、看得到幾個人在編、即時同步。情侶、家庭、10 人以上團體都有實測回報穩定。這是 LINE 旅遊最大的賣點，去趣也做到了。
+  </div>
+  <div class="card">
+    <strong class="good">4. 內容冷啟動靠 KOL 解決</strong><br>
+    達人行程可直接複製再改，Dcard 大量業配貼文與部落格教學把「照抄達人行程」變成新手入口。100 萬筆以上日本行程是很硬的資料資產。
+  </div>
+  <div class="card">
+    <strong class="good">5. 和泰生態的補貼與通路</strong><br>
+    和泰 Points、聯名卡回饋、iRent、yoxi、產險、TOYOTA 車主基礎，加上 CyberAgent 的日本廣告資源。這是新創抄不來的東西。
+  </div>
+  <div class="card">
+    <strong class="good">6. 迭代速度與客服態度不差</strong><br>
+    多位評測者提到「提了建議真的有改」，App Store 開發者會回覆評論，App 內會員中心和 service 信箱都有回饋管道。2026 年上半年就推了定位推播、儲存行程、AI 繪圖提示詞三個功能。
+  </div>
+  <div class="card">
+    <strong class="good">7. 旅遊小書是差異化小亮點</strong><br>
+    行程一鍵轉 PDF 小書，可加貼紙照片、印出來有 QR Code，也順便解決了沒網路時的查閱需求。這個功能在 Dcard 上被反覆拿來當推薦理由。
+  </div>
+  <div class="card">
+    <strong class="good">8. 多地區、多地圖來源</strong><br>
+    台、日、韓、港、澳、泰、越；韓國接 Naver Map；日文版介面。以台灣 App 來說覆蓋算完整。
+  </div>
+</div>
+
+<h2>4. 可以改善的地方（它的弱點）</h2>
+<p class="muted small">P1 = 用戶已在公開評論抱怨；P2 = 結構性弱點、用戶尚未大聲抱怨；P3 = 錦上添花。</p>
+<table>
+  <tr><th style="width:6%">級別</th><th style="width:24%">弱點</th><th>證據與說明</th></tr>
+  <tr><td><span class="tag p1">P1</span></td><td>「AI」名不符實</td><td>所謂 AI 行程規劃實際只有「一鍵排序」（路線最佳化）和「AI 繪圖提示詞」（叫你自己貼到 Gemini / ChatGPT）。沒有對話式生成、沒有依預算／體力／天氣／營業時間的行程生成。Funliday 已推「AI 行程一鍵生成」和 ChatGPT 檢查行程，Wanderlog 有 AI 對話。去趣在 2026 年還在賣提示詞，是最大的產品空窗。</td></tr>
+  <tr><td><span class="tag p1">P1</span></td><td>內容老舊且同質化</td><td>App Store 評論：「搜尋只會顯示達人行程，有些行程滿舊的不符合近期需求」、「大多行程都很像，少有隱藏景點或在地體驗」。用戶要求看到一般用戶的公開行程，去趣直到 2026 年才開放「行程發佈」。內容飛輪至今靠 KOL 業配撐。</td></tr>
+  <tr><td><span class="tag p1">P1</span></td><td>改版拿掉功能、更新後閃退</td><td>評論抱怨「更新後地圖路線規劃功能被刪掉了」；官方多次在評論回覆「更新後閃退請整個刪除重裝」；2026 年版本說明直接寫「閃退問題修正」、「不再支援 iOS 15.5 以下」。</td></tr>
+  <tr><td><span class="tag p1">P1</span></td><td>筆記與記錄能力弱</td><td>小書只能貼圖片貼紙、不能加文字；用戶要求每天行程上方加筆記區；地圖取消連線後線不消失要重新縮放。旅程中「記錄」這條線基本沒做。</td></tr>
+  <tr><td><span class="tag p2">P2</span></td><td>交通引擎完全依賴 Google Maps</td><td>日本電車轉乘資料 Google 明顯弱於乘換案內、NAVITIME、Japan Transit Planner（PTT Japan_Travel 板共識）。去趣 40% 行程在日本，卻用最弱的日本交通資料源。韓國雖接了 Naver 導航，但仍是跳出去導航，不是在 App 內算轉乘。</td></tr>
+  <tr><td><span class="tag p2">P2</span></td><td>沒有真正的離線模式</td><td>離線只能靠「先轉成 PDF 小書」。出國沒網路時無法看地圖、無法改行程。Wanderlog Pro 有離線地圖，這是去趣「免費打敗付費」的漏洞。</td></tr>
+  <tr><td><span class="tag p2">P2</span></td><td>商業化開始侵入體驗</td><td>2026 年主打功能是「經過合作店家自動推優惠」，需要常駐定位 + 通知權限。商城、eSIM、優惠券、Agoda／KKday 導購全塞進首頁。與 CyberAgent 的合作說白了是把百萬筆行程數據拿去做廣告。這是大公司 KPI 導向的必然，也是被攻擊的縫。</td></tr>
+  <tr><td><span class="tag p2">P2</span></td><td>強制登入、生態鎖定</td><td>第一次建行程就被導去登入。整個變現綁在和泰 Points 與聯名卡上，非 TOYOTA 車主、非和泰會員的回饋沒有吸引力。中立比價（Agoda vs Booking vs 官網）不存在。</td></tr>
+  <tr><td><span class="tag p2">P2</span></td><td>旅程中的功能空白</td><td>沒有分帳、沒有行李清單、沒有機票／訂房確認信匯入（Funliday 有分帳與票券匯入，TripIt 靠 email 解析建立行程）、沒有班機延誤或下雨時的即時重排。去趣是「出發前」工具，不是「旅途中」工具。</td></tr>
+  <tr><td><span class="tag p2">P2</span></td><td>匯出／互通性差</td><td>只能匯出 PDF 小書和 AI 繪圖提示詞。沒有行事曆（ICS）、Notion、Google Maps 清單回寫、CSV。用戶資料進得去出不來。</td></tr>
+  <tr><td><span class="tag p2">P2</span></td><td>市場天花板是台灣</td><td>用戶幾乎全是台灣人；日文版 2025 才推，海外沒有品牌。和泰的策略是「台灣人赴日」的跨境廣告，不是全球產品。</td></tr>
+  <tr><td><span class="tag p3">P3</span></td><td>社群功能像貼上去的</td><td>動態牆、熱門影音、留言都有，但沒有追蹤、沒有創作者分潤、沒有旅程結束後的自動回顧（Funliday 有年度回顧）。Google 案例裡 PM 自己說「還在努力把它變成真正的社群」。</td></tr>
+  <tr><td><span class="tag p3">P3</span></td><td>電腦版是後補的</td><td>2024 年才推網頁版，功能與 App 不對等（多篇部落格提到）。深度規劃者（Excel／Notion 派）仍未被接住。</td></tr>
+</table>
+
+<h2>5. 競品定位圖</h2>
+<table>
+  <tr><th>面向</th><th>去趣 chicTrip</th><th>Funliday</th><th>LINE 旅遊</th><th>Wanderlog</th><th>Google Maps</th></tr>
+  <tr><td>價格</td><td class="good">免費、無廣告</td><td class="warn">免費 + 廣告多 + 訂閱</td><td class="good">免費（LINE 內建）</td><td class="warn">免費 + Pro 39.99 美元/年</td><td class="good">免費</td></tr>
+  <tr><td>路線最佳化</td><td class="good">免費一鍵排序</td><td class="good">有，時間計算精準</td><td class="warn">基本</td><td class="warn">Pro 才有</td><td class="bad">無</td></tr>
+  <tr><td>生成式 AI</td><td class="bad">只有提示詞</td><td class="good">AI 一鍵生成 + ChatGPT 檢查</td><td class="bad">無</td><td class="good">AI 對話（免費 5 則/行程）</td><td class="bad">無</td></tr>
+  <tr><td>共編</td><td class="good">連結/QR，穩定</td><td class="good">有，可留言</td><td class="good">綁 LINE 帳號最方便</td><td class="good">有</td><td class="warn">只能共享清單</td></tr>
+  <tr><td>日本轉乘資料</td><td class="warn">Google 資料</td><td class="warn">Google 資料</td><td class="warn">Google 資料</td><td class="warn">Google 資料</td><td class="warn">本身就是 Google</td></tr>
+  <tr><td>離線</td><td class="bad">PDF 小書</td><td class="bad">弱</td><td class="bad">無</td><td class="good">Pro 有離線地圖</td><td class="good">離線地圖</td></tr>
+  <tr><td>分帳 / 行李清單</td><td class="bad">無</td><td class="good">都有</td><td class="bad">無</td><td class="good">有預算/分帳</td><td class="bad">無</td></tr>
+  <tr><td>票券匯入</td><td class="bad">無</td><td class="good">機票/飯店匯入</td><td class="warn">自家訂單</td><td class="good">Email 解析</td><td class="bad">無</td></tr>
+  <tr><td>中文介面</td><td class="good">繁中</td><td class="good">繁中</td><td class="good">繁中</td><td class="bad">英文為主</td><td class="good">繁中</td></tr>
+  <tr><td>內容供給</td><td class="good">KOL 行程多、但舊</td><td class="warn">公開行程多</td><td class="warn">整合票券/機票</td><td class="warn">英文內容</td><td class="good">評論最多</td></tr>
+  <tr><td>變現</td><td>和泰生態導購</td><td>廣告 + 訂閱 + 導購</td><td>訂房機票抽成 + LINE Points</td><td>訂閱 + 訂房導購</td><td>廣告</td></tr>
+</table>
+<div class="card verdict">
+  <strong>結論：</strong>去趣贏在「免費 + 乾淨 + 排程順 + 內容多」。它輸在「AI 是假的、交通資料是借的、離線沒有、旅途中沒東西、資料出不去、商業化正在變重」。市場上目前沒有一個產品同時做到「繁中、免費核心、真 AI、真離線、好交通資料、旅途中工具」。這就是空位。
+</div>
+
+<h2>6. 幹爆它的切入點</h2>
+<div class="card attack">
+  <strong>核心策略：不要正面打「行程規劃工具」，打它的四個結構性弱點，並利用它「大企業 + 導購 KPI」的節奏慢與利益衝突。</strong>
+</div>
+
+<h3>6.1 四個攻擊向量</h3>
+<table>
+  <tr><th style="width:22%">攻擊點</th><th>怎麼打</th><th style="width:22%">為什麼去趣跟不上</th></tr>
+  <tr><td><strong>A. 真正的 AI 行程</strong></td><td>對話式生成整趟行程；輸入預算、步行耐受、帶小孩／長輩、想避開人潮，直接產出可編輯行程。行程中每個點自帶「為什麼選它」與營業時間衝突檢查。旅途中一句話重排（「下雨了，下午改室內」、「班機延誤 2 小時」）。</td><td>去趣 2026 年還在賣「複製提示詞去 ChatGPT」。和泰內部 AI 仍在「測試 Gemini 做推薦與審核」階段，且要過大企業法務、資安流程。</td></tr>
+  <tr><td><strong>B. 交通資料贏在日本</strong></td><td>日本接乘換案內／NAVITIME／Japan Transit Planner 級資料（或 Yahoo 路線、ODPT 開放資料），韓國接 Kakao／Naver 路線 API，台灣接 TDX。做到「在 App 內算轉乘、月台、末班車」，不是跳出去導航。</td><td>去趣的技術棧在 Google Maps Platform 上，還拿了 Google 官方案例；換資料源等於推翻架構。它 40% 行程在日本，這裡一贏就贏在主戰場。</td></tr>
+  <tr><td><strong>C. 離線優先</strong></td><td>行程、地圖切片、景點資訊、票券全部本機快取；沒網路照樣改行程與看地圖；上線後自動同步共編。把 Wanderlog 收費 39.99 美元的功能免費給。</td><td>去趣的離線解法是 PDF，架構是線上優先。補離線需要重做資料層。</td></tr>
+  <tr><td><strong>D. 旅途中與旅途後</strong></td><td>票券／訂房確認信自動匯入（Gmail 授權或轉寄解析）、分帳、行李清單、每日筆記與照片自動歸位到景點、旅程結束自動生成回顧與可公開的行程。行程可匯出 ICS、Notion、Google Maps 清單、CSV。</td><td>去趣的產品重心是「出發前規劃 + 導購」。旅途中功能不帶轉單，不會是它的 KPI。</td></tr>
+</table>
+
+<h3>6.2 利用它的利益衝突</h3>
+<ul>
+  <li><strong>中立比價</strong>：去趣只能推 Agoda／KKday／自家商城。你可以做 Agoda、Booking、官網、樂天、Jalan 全比價，並明說「我們不綁任何生態」。這是它結構上做不到的。</li>
+  <li><strong>隱私與無登入試用</strong>：去趣建第一個行程就要登入，2026 年主打常駐定位推優惠。你做「不登入可規劃、匿名分享、定位只在導航時使用、不賣資料」。對照它與 CyberAgent 的「百萬筆旅遊數據做廣告」，這個對比訊息很好打。</li>
+  <li><strong>內容新鮮度</strong>：它的 KOL 行程被抱怨舊且同質。你用「最近 30 天有人實際走過」排序，景點資料標示最後驗證日期，開放一般用戶公開行程並給創作者曝光或分潤。</li>
+  <li><strong>更新不砍功能</strong>：它有「改版拿掉地圖路線」與「更新後閃退請重裝」的紀錄。你的更新紀錄要乾淨，功能只加不減，這在評論區會被拿來對比。</li>
+</ul>
+
+<h3>6.3 不要打的地方</h3>
+<ul>
+  <li><strong>別打補貼戰</strong>：和泰 Points、聯名卡、eSIM 折扣、優惠券是燒錢換來的，新創燒不過。</li>
+  <li><strong>別靠 KOL 業配冷啟動</strong>：去趣已經把台灣旅遊 KOL 掃過一輪，價格被抬高，而且產出的內容就是它現在被抱怨的「同質化行程」。</li>
+  <li><strong>別做「又一個排程工具」</strong>：純排程去趣已經免費且夠好，PTT 用戶連 Funliday 都覺得是同一套。沒有 A 到 D 的差異，就只是第四個 Funliday。</li>
+</ul>
+
+<h3>6.4 建議的 90 天 MVP 優先序</h3>
+<table>
+  <tr><th style="width:12%">順序</th><th style="width:28%">功能</th><th>理由</th></tr>
+  <tr><td>1</td><td>對話式 AI 生成 + 旅途中一句話重排（向量 A）</td><td>最大空窗、最容易在 Dcard／Threads 上做出「去趣做不到」的對比影片。</td></tr>
+  <tr><td>2</td><td>日本轉乘引擎（向量 B）</td><td>去趣 40% 行程在日本，這是主戰場；資料源是護城河。</td></tr>
+  <tr><td>3</td><td>離線優先 + 共編同步（向量 C）</td><td>把 Wanderlog 的付費功能免費化，出國時的口碑場景。</td></tr>
+  <tr><td>4</td><td>確認信匯入 + 分帳 + 匯出（向量 D）</td><td>把用戶從「出發前」留到「旅途中」與「旅途後」，提高留存與回訪。</td></tr>
+  <tr><td>5</td><td>無登入試用 + 中立比價 + 公開行程新鮮度排序</td><td>訊息層面的差異化，成本低，但要在 1 到 4 站穩後再放大。</td></tr>
+</table>
+
+<h2>7. 資料來源</h2>
+<ul class="small">
+  <li>和泰汽車官方新聞〈百萬用戶信賴！去趣 APP 打造台灣最大旅遊規劃平台〉：<a href="https://www.hotaimotor.com.tw/News/Details/10">hotaimotor.com.tw</a></li>
+  <li>Google Maps Platform 官方案例（2025-07）：<a href="https://mapsplatform.google.com/resources/blog/hotai-group-building-a-more-complete-travel-experience-app-with-google-maps-platform/">mapsplatform.google.com</a>；iThome 中文版：<a href="https://www.ithome.com.tw/pr/165766">ithome.com.tw</a></li>
+  <li>自由財經〈去趣 chicTrip 以百萬筆旅遊數據進軍日本跨境旅遊市場〉：<a href="https://ec.ltn.com.tw/article/breakingnews/5341235">ec.ltn.com.tw</a>；工商時報〈去趣 CyberAgent 戰略合作〉（2026-02-28）：<a href="https://www.chinatimes.com/newspapers/20260228000251-260204">chinatimes.com</a>；TCar：<a href="https://www.tcar.tv/article.php?infoid=13065&pmid=5">tcar.tv</a></li>
+  <li>經濟日報〈去趣 chicTrip 推出自有 eSIM〉：<a href="https://money.udn.com/money/story/122328/9153038">money.udn.com</a></li>
+  <li>發燒車訊〈和泰集團推出旅遊規劃 APP「去趣」〉：<a href="https://autos.udn.com/autos/story/7825/7346256">autos.udn.com</a></li>
+  <li>Yahoo 新聞〈去趣 chicTrip 透過 AI 打造一站式旅遊行程規劃〉：<a href="https://tw.news.yahoo.com/">tw.news.yahoo.com</a></li>
+  <li>去趣官網 landing、eSIM、旅遊商城：<a href="https://www.chictrip.com.tw/landing">chictrip.com.tw/landing</a>、<a href="https://www.chictrip.com.tw/esim">chictrip.com.tw/esim</a>、<a href="https://travel.hotaigo.com.tw/">travel.hotaigo.com.tw</a></li>
+  <li>App Store 去趣 chicTrip（含評論）：<a href="https://apps.apple.com/tw/app/id6443825385">apps.apple.com</a>；Google Play：<a href="https://play.google.com/store/apps/details?id=com.hotaimotor.chicTrip">play.google.com</a></li>
+  <li>App Store 趣趣 TreaTrip：<a href="https://apps.apple.com/tw/app/id1564435182">apps.apple.com</a>；Google Play：<a href="https://play.google.com/store/apps/details?id=com.gcreate.treatrip">play.google.com</a>；官網：<a href="https://treatrip.com/about/">treatrip.com</a>；GCreate 案例：<a href="https://www.gcreate.com.tw/success-case/treatrip%E8%B6%A3%E8%B6%A3/">gcreate.com.tw</a></li>
+  <li>果思設計去趣 App 案例：<a href="https://goonsdesign.com/portfolio/chictrip">goonsdesign.com</a></li>
+  <li>104 學習〈去趣在紅什麼？優缺點一次看〉：<a href="https://nabi.104.com.tw/posts/nabi_post_1fc9e6b1-f279-45ba-a8aa-e3a75614cc37">nabi.104.com.tw</a></li>
+  <li>部落格評測：莓姬貝利 <a href="https://beri.tw/chictrip/">beri.tw</a>、莎莉哈 <a href="https://salihaha.com/chictrip/">salihaha.com</a>、膽小鬼與冒險王 <a href="https://vjjourney.com/chictrip-app-review/">vjjourney.com</a>、蘇摸摸 <a href="https://sumomo.com.tw/">sumomo.com.tw</a>、pkstep <a href="https://www.pkstep.com/chictrip-app/">pkstep.com</a>、塔科女子 <a href="https://www.tech-girlz.com/2023/09/chictrip-app.html">tech-girlz.com</a></li>
+  <li>PTT iOS 板〈[討論] 旅遊規劃 app〉：<a href="https://www.ptt.cc/bbs/iOS/M.1693902155.A.8D4.html">ptt.cc</a>；PTT Japan_Travel 板〈[問題] 行程規劃 APP 推薦〉：<a href="https://www.ptt.cc/bbs/Japan_Travel/M.1709453416.A.9A0.html">ptt.cc</a></li>
+  <li>Dcard 旅遊板〈規劃旅遊大家會用到哪些 APP〉：<a href="https://www.dcard.tw/f/travel/p/258355995">dcard.tw</a>、〈大家都用什麼工具規劃旅行〉：<a href="https://www.dcard.tw/f/travel/p/255301744">dcard.tw</a></li>
+  <li>競品：Funliday 功能總覽 <a href="https://www.funliday.com/posts/funliday-function/">funliday.com</a>、Funliday × ChatGPT <a href="https://www.funliday.com/posts/funliday-chatgpt-itinerary/">funliday.com</a>；LINE 旅遊 <a href="https://travel.line.me/">travel.line.me</a>、Medium 設計分析 <a href="https://medium.com/@designpayfun/f3288e782fc4">medium.com</a>；Wanderlog 定價 <a href="https://monkeyeatingmango.com/blog/wanderlog-pricing-2026/">monkeyeatingmango.com</a></li>
+</ul>
+
+<div class="card">
+  <strong>資料限制</strong><br>
+  本次研究環境的網路代理擋掉了 App Store、Google Play、PTT、Dcard、多數新聞站與部落格的直接抓取，只有 Google Cloud 官方部落格可直接讀取。其餘數字與評論內容來自搜尋引擎摘要與官方新聞稿的轉述，下載數與會員數以和泰 2026-02 對外新聞稿為準。App Store 具體評分則數、Google Play 精確評分與近期一星評論全文未能取得，建議你自己打開兩個商店的評論頁，用「最新」排序看最近三個月的一星評論，那是最直接的攻擊素材。Google 官方案例日文版寫「1 億 2000 萬活躍用戶」是翻譯錯誤，英文原文為 120 萬。
+</div>
+
+</div>
+</body>
+</html>
